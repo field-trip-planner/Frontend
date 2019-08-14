@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "production": "fieldtripplanner-dd4dc",
+    "staging": "fieldtripplannerstaging"
+  }
+}
