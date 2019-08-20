@@ -1,21 +1,22 @@
 import React from 'react';
 import {
-  Container,
-  Divider,
-  Dropdown,
-  Grid,
-  Header,
-  Image,
-  List,
-  Menu,
-  Segment,
+  Menu
 } from 'semantic-ui-react'
 
 function AppHeader() {
   return (
   <>
     <div>
-    AppHeader
+    <Menu>
+        <Menu.Item header>MyFieldTripp</Menu.Item>
+        <Menu.Item
+          name='aboutUs'
+        />
+        <Menu.Item name='jobs' />
+        <Menu.Item
+          name='locations'
+        />
+      </Menu>
     </div>
   </>
   );
