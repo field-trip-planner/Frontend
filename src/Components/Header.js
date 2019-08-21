@@ -1,35 +1,30 @@
 import React from 'react';
-import museum from '../img/museum.jpg';
 
 import {
   Container,
   Menu,
   Button,
   Icon,
-  Header,
   Image,
   Divider,
   Embed,
   Grid,
-  
+
 } from 'semantic-ui-react';
 
 function AppHeader() {
   return (
   <>
-  
-    <div >
-
-    <Menu borderless>
-        <Menu.Item header>MyFieldTripp</Menu.Item>
-        <Menu.Menu position="right">
-          <Menu.Item name='AboutUs'/>
-          <Menu.Item name='How it works' />
-          <Menu.Item name='login'/>
-        </Menu.Menu>
+    <div>
+      <Menu borderless>
+          <Menu.Item header>MyFieldTripp</Menu.Item>
+          <Menu.Menu position="right">
+            <Menu.Item name='AboutUs'/>
+            <Menu.Item name='How it works' />
+            <Menu.Item name='login'/>
+          </Menu.Menu>
       </Menu>
-      </div>
-
+    </div>
 
     <div className="hero">
       <Container>
@@ -41,7 +36,7 @@ function AppHeader() {
         </Button>
       </Container>
     </div>
-    
+
     <Container >
       <Embed id='125292332' placeholder='/images/vimeo-example.jpg' source='vimeo' aspectRatio='21:9'/>
     </Container>
@@ -51,22 +46,28 @@ function AppHeader() {
     </Container>
 
     <Container>
-   
-    <Grid>   
+    <Grid>
       <Grid.Row columns={3}>
-      <Grid.Column >
-        <Image src='https://via.placeholder.com/150' />
-        
-        <p>Manage field trips using an all in one dashboard</p>
-      </Grid.Column>
-      <Grid.Column>
-        <Image src='https://via.placeholder.com/150' />
-        <p>e-sign permission and integrated payment</p>
-      </Grid.Column>
-      <Grid.Column>
-        <Image src='https://via.placeholder.com/150' />
-        <p>Real-time trips updates and notifications </p>
-      </Grid.Column>
+        <Grid.Column>
+         <div className="landing-page-img-wrapper">
+           <Image src='https://via.placeholder.com/200' />
+           <p>Manage field trips using an all in one dashboard</p>
+         </div>
+        </Grid.Column>
+
+        <Grid.Column>
+          <div className="landing-page-img-wrapper">
+            <Image src='https://via.placeholder.com/200' />
+            <p>e-sign permission and integrated payment</p>
+          </div>
+        </Grid.Column>
+
+        <Grid.Column>
+          <div className="landing-page-img-wrapper">
+            <Image src='https://via.placeholder.com/200' />
+            <p>Real-time trips updates and notifications </p>
+          </div>
+        </Grid.Column>
       </Grid.Row>
     </Grid>
     </Container>
