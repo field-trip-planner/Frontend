@@ -1,15 +1,21 @@
-.hero{
-    background-image: url('./img/museum.jpg');
-    width: 100%;
-    height: 380px;
+.hero {
+    background-image: url('./img/museum_dino.jpg');
+    height: 780px;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: top;
+    position: relative;
 }
 
-.hero p{
- font-size: 24px;
- width: 520px;
+.hero p {
+    font-size: 30px;
+    font-weight: bold;
+    width: 520px;
+}
+
+.hero-text-wrapper {
+    position: absolute;
+    top: 280px;
+    left: 200px;
 }
 
 .landing-page-img-wrapper {

@@ -27,14 +27,16 @@ function AppHeader() {
     </div>
 
     <div className="hero">
-      <Container>
-        <p className="hero-text">TAKE CONTROL OF THE MADNESS BY USING SCHOOL
-        FIELD TRIP PLANNER TO PLAN AND ORGANIZE YOUR NEXT FIELD TRIP</p>
-        <Button primary size='huge'>
-          Get Started
-        <Icon name='right arrow' />
-        </Button>
-      </Container>
+        <div className="hero-text-wrapper">
+          <p className="hero-text">
+            TAKE CONTROL OF THE MADNESS BY USING OUR
+            APP TO PLAN AND ORGANIZE YOUR NEXT FIELD TRIP
+          </p>
+          <Button primary size='huge'>
+            Get Started
+            <Icon name='right arrow' />
+          </Button>
+        </div>
     </div>
 
     <Container >
