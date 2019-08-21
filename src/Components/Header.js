@@ -1,23 +1,43 @@
 import React from 'react';
 import {
-  Menu
+  Container,
+  Menu,
+  Button,
+  Icon,
+  Header,
 } from 'semantic-ui-react'
 
 function AppHeader() {
   return (
   <>
     <div>
-    <Menu>
+    <Menu borderless>
         <Menu.Item header>MyFieldTripp</Menu.Item>
-        <Menu.Item
-          name='aboutUs'
-        />
-        <Menu.Item name='jobs' />
-        <Menu.Item
-          name='locations'
-        />
+        <Menu.Menu position="right">
+          <Menu.Item name='AboutUs'/>
+          <Menu.Item name='How it works' />
+          <Menu.Item name='login'/>
+        </Menu.Menu>
       </Menu>
     </div>
+    <Container text>
+    <Header
+      as='h1'
+      content='Imagine-a-Company'
+      inverted
+      
+    />
+    <Header
+      as='h2'
+      content='Do whatever you want when you want to.'
+      inverted
+      
+    />
+    <Button primary size='huge'>
+      Get Started
+      <Icon name='right arrow' />
+    </Button>
+  </Container>
   </>
   );
 }
