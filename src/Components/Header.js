@@ -39,11 +39,11 @@ function AppHeader() {
         </div>
     </div>
 
-    <Container >
+    <Container style={{ marginTop: '70px', marginBottom: '70px' }}>
       <Embed id='125292332' placeholder='/images/vimeo-example.jpg' source='vimeo' aspectRatio='21:9'/>
     </Container>
 
-    <Container>
+    <Container style={{ marginTop: '70px', marginBottom: '70px' }}>
       <Divider/>
     </Container>
 
