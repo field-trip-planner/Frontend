@@ -1,3 +1,11 @@
+.contentContainer{
+  height: 300px;
+  padding-top: 90px;
+}
+.contentContainer p{
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
 .modal {
   height: 500px;
 }
@@ -13,4 +21,7 @@
 .gridColumn{
   text-align: center;
   margin: 100px 0px 100px 0px;
+}
+.schoolLookUpSearchBar{
+  width: 50%
 }

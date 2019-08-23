@@ -19,7 +19,9 @@ const RegistrationModal = () => {
             <Header>
               For Teachers
         </Header>
-            <SchoolLookupModal />
+            <Modal.Actions>
+              <SchoolLookupModal />
+            </Modal.Actions>
 
           </Grid.Column>
 
