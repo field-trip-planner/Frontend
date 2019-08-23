@@ -1,0 +1,16 @@
+.modal {
+  height: 500px;
+}
+
+.modalHeader {
+  text-align: center
+}
+
+.gridContainer{
+  height: 300px;
+}
+
+.gridColumn{
+  text-align: center;
+  margin: 100px 0px 100px 0px;
+}
