@@ -1,4 +1,5 @@
 import React from 'react';
+import RegistrationModal from '../RegistrationModal';
 
 import {
   Container,
@@ -26,18 +27,21 @@ function AppHeader() {
       </Menu>
     </div>
 
-    <div className="hero">
-        <div className="hero-text-wrapper">
+      <div className="hero">
+        <div className="overlay"></div>
+          <div className="hero-text-wrapper">
           <p className="hero-text">
-            TAKE CONTROL OF THE MADNESS BY USING OUR
-            APP TO PLAN AND ORGANIZE YOUR NEXT FIELD TRIP
-          </p>
-          <Button primary size='huge'>
-            Get Started
-            <Icon name='right arrow' />
-          </Button>
-        </div>
-    </div>
+              TAKE CONTROL OF THE MADNESS BY USING OUR
+              APP TO PLAN AND ORGANIZE YOUR NEXT FIELD TRIP
+            </p>
+            {/* <Button primary size='huge'>
+              Get Started
+              <Icon name='right arrow' />
+            </Button> */}
+            <RegistrationModal/>
+          </div>
+      </div>
+
 
     <Container style={{ marginTop: '70px', marginBottom: '70px' }}>
       <Embed id='125292332' placeholder='/images/vimeo-example.jpg' source='vimeo' aspectRatio='21:9'/>
