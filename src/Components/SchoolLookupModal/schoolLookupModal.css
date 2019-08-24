@@ -6,22 +6,15 @@
   margin-top: 20px;
   margin-bottom: 40px;
 }
-.modal {
-  height: 500px;
-}
 
-.modalHeader {
+ .modalHeader {
   text-align: center
 }
 
-.gridContainer{
-  height: 300px;
-}
-
-.gridColumn{
-  text-align: center;
-  margin: 100px 0px 100px 0px;
-}
 .schoolLookUpSearchBar{
   width: 50%
+} 
+
+.modal {
+  height: 500px;
 }

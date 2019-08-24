@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Header, Modal, Grid, Icon } from 'semantic-ui-react';
 import SchoolLookupModal from '../SchoolLookupModal';
-import './index.css';
+import './registrationModal.css';
 
 const RegistrationModal = () => {
   return (
 
-    <Modal size="large" trigger={<Button primary size='huge'>
+    <Modal className="modal" size="large" trigger={<Button primary size='huge'>
       Get Started
   <Icon name='right arrow' />
     </Button>}>

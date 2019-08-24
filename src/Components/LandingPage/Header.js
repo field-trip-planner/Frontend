@@ -1,6 +1,6 @@
 import React from 'react';
 import RegistrationModal from '../RegistrationModal';
-import './index.css';
+import './landingPage.css';
 
 import {
   Container,
