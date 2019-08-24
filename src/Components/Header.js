@@ -17,20 +17,28 @@ import {
 function AppHeader() {
   return (
   <>
-  
-    <div >
-
-    <Menu borderless>
+  <div className="nav">
+    <Container>
+      <div className="navbar">
+        <div className="brand">
+          <h2>MyFieldTripp.com</h2>
+        </div>
+        <div className="nav_menu">
+          <h3>About Us</h3>
+          <h3>How it works</h3>
+          <h3>Log in</h3>
+        </div>
+      </div>
+    </Container>
+    {/* <Menu borderless color="blue">
         <Menu.Item header>MyFieldTripp</Menu.Item>
         <Menu.Menu position="right">
           <Menu.Item name='AboutUs'/>
           <Menu.Item name='How it works' />
           <Menu.Item name='login'/>
         </Menu.Menu>
-      </Menu>
-      </div>
-
-
+      </Menu> */}
+    </div>
     <div className="hero">
       <Container>
         <p className="hero-text">TAKE CONTROL OF THE MADNESS BY USING SCHOOL
@@ -40,23 +48,18 @@ function AppHeader() {
         <Icon name='right arrow' />
         </Button>
       </Container>
-    </div>
-    
+    </div> 
     <Container >
       <Embed id='125292332' placeholder='/images/vimeo-example.jpg' source='vimeo' aspectRatio='21:9'/>
     </Container>
-
     <Container>
       <Divider/>
     </Container>
-
     <Container>
-   
     <Grid>   
       <Grid.Row columns={3}>
       <Grid.Column >
         <Image src='https://via.placeholder.com/150' />
-        
         <p>Manage field trips using an all in one dashboard</p>
       </Grid.Column>
       <Grid.Column>
@@ -70,7 +73,6 @@ function AppHeader() {
       </Grid.Row>
     </Grid>
     </Container>
-
   </>
   );
 }
