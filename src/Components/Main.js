@@ -24,11 +24,9 @@ function AppMain() {
       </Container>
     </div> 
     <Container>
-      <Divider horizontal>
-        <Header as='h4' color='violet' size='huge'>
+        <Header as='h4' color='violet' size='huge' textAlign="center">
           features
         </Header>
-      </Divider>
     </Container>
     <Container>
     <Grid className="features">   
@@ -49,11 +47,10 @@ function AppMain() {
     </Grid>
     </Container>
     <Container>
-      <Divider horizontal>
-        <Header as='h4' color='violet' size='huge'>
+        <Divider></Divider>
+        <Header as='h4' color='violet' size='huge' textAlign="center">
           How it Works
         </Header>
-      </Divider>
     </Container>
     <Container >
       <div className="explainer">
