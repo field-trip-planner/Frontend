@@ -29,8 +29,8 @@ export default () => {
         Click here</span>}>
         <Modal.Header className='modalHeader'>School Registration</Modal.Header>
         <Modal.Content>
-          <Container className="contentContainer" textAlign="center">
-            <Form>
+          <Container className="schoolFormContainer" textAlign="center">
+            <Form className="schoolForm"> 
               <Form.Field>
                 <input placeholder="School Name" />
               </Form.Field>
