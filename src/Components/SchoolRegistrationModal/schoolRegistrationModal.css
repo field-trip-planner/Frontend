@@ -1,0 +1,22 @@
+.contentContainer{
+  height: 300px;
+  padding-top: 90px;
+}
+
+.modalHeader {
+  text-align: center
+}
+
+.modal {
+  height: 500px;
+}
+
+.schoolRegRedirect{
+  color: rgb(150,0,150);
+  margin-left: 10px;
+}
+
+.schoolRegRedirect:hover{
+  cursor: pointer;
+  color: rgb(250, 0, 250);
+}
