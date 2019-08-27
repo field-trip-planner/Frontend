@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Modal, Container, Input } from 'semantic-ui-react';
+import SchoolRegistrationModal from '../SchoolRegistrationModal';
 import './schoolLookupModal.css';
+
 
 
 export default () => {
@@ -12,10 +14,11 @@ export default () => {
     </Button>}>
         <Modal.Header className='modalHeader'>School Look Up</Modal.Header>
         <Modal.Content>
-          <Container className="contentContainer"textAlign="center">
+          <Container className="contentContainer" textAlign="center">
             <Input className="schoolLookUpSearchBar" size="large" icon='building' iconPosition='left' placeholder='Search Schools...' />
-            
-            <p>Don't see your school? <a href="#">Click here</a>
+
+            <p>Don't see your school?
+              <SchoolRegistrationModal />
             </p>
 
             <Button>Continue</Button>
