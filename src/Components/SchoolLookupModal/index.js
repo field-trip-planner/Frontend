@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Modal, Container, Input } from 'semantic-ui-react';
 import SchoolRegistrationModal from '../SchoolRegistrationModal';
 import './schoolLookupModal.css';
+import TeacherRegistrationForm from '../TeacherRegistrationModal/index.js'
 
 
 
@@ -21,7 +22,7 @@ export default () => {
               <SchoolRegistrationModal />
             </p>
 
-            <Button>Continue</Button>
+            <Button><TeacherRegistrationForm /></Button>
           </Container>
         </Modal.Content>
       </Modal>
