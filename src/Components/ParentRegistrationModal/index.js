@@ -29,7 +29,7 @@ export default () => {
   return (
     <>
       <Modal trigger={<Button>Sign Up</Button>}>
-        <Modal.Header>Parent Registration</Modal.Header>
+        <Modal.Header className="modalHeader">Parent Registration</Modal.Header>
         <Modal.Content>
           <Container>
             <Form onSubmit={_handleSubmit}>
@@ -37,7 +37,6 @@ export default () => {
                 <Form.Input
                   fluid
                   label="First Name"
-                  placeholder="First Name"
                   name="first_name"
                   value={info.first_name}
                   onChange={_handleChange}
@@ -45,46 +44,46 @@ export default () => {
                 <Form.Input
                   fluid
                   label="Last Name"
-                  placeholder="Last Name"
                   name="last_name"
                   value={info.last_name}
                   onChange={_handleChange}
                 />
               </Form.Group>
-              <Form.Input
-                fluid
-                label="Username"
-                placeholder="Username"
-                name="username"
-                value={info.username}
-                onChange={_handleChange}
-              />
-              <Form.Input
-                fluid
-                label="Email"
-                placeholder="Email"
-                name="email"
-                value={info.email}
-                onChange={_handleChange}
-              />
-              <Form.Input
-                fluid
-                label="Password"
-                placeholder="Password"
-                type="password"
-                name="password"
-                value={info.password}
-                onChange={_handleChange}
-              />
-              <Form.Input
-                fluid
-                label="Confirm Password"
-                placeholder="Password"
-                type="password"
-                name="confirm_password"
-                value={info.confirm_password}
-                onChange={_handleChange}
-              />
+              <Form.Group widths="equal">
+                <Form.Input
+                  fluid
+                  label="Username"
+                  name="username"
+                  value={info.username}
+                  onChange={_handleChange}
+                />
+                <Form.Input
+                  fluid
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={info.email}
+                  onChange={_handleChange}
+                />
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Input
+                  fluid
+                  label="Password"
+                  type="password"
+                  name="password"
+                  value={info.password}
+                  onChange={_handleChange}
+                />
+                <Form.Input
+                  fluid
+                  label="Confirm Password"
+                  type="password"
+                  name="confirm_password"
+                  value={info.confirm_password}
+                  onChange={_handleChange}
+                />
+              </Form.Group>
               <Form.Input
                 fluid
                 label="Phone"
@@ -92,8 +91,9 @@ export default () => {
                 name="phone"
                 value={info.phone}
                 onChange={_handleChange}
+                width="7"
               />
-              <Form.Button>Submit</Form.Button>
+              <Form.Button primary>Submit</Form.Button>
             </Form>
           </Container>
         </Modal.Content>
