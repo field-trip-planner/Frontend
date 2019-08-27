@@ -1,0 +1,20 @@
+.contentContainer{
+  height: 300px;
+  padding-top: 90px;
+}
+.contentContainer p{
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+ .modalHeader {
+  text-align: center
+}
+
+.schoolLookUpSearchBar{
+  width: 50%
+} 
+
+.modal {
+  height: 500px;
+}

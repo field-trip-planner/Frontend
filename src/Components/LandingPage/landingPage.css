@@ -1,0 +1,7 @@
+.menutItem{
+  transition: opacity 0.2s;
+}
+
+.siblingFade:hover span:not(:hover) {
+  opacity: 0.5;
+}

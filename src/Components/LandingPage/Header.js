@@ -1,11 +1,10 @@
 import React from 'react';
 import RegistrationModal from '../RegistrationModal';
+import './landingPage.css';
 
 import {
   Container,
   Menu,
-  Button,
-  Icon,
   Image,
   Divider,
   Embed,
@@ -19,10 +18,10 @@ function AppHeader() {
     <div>
       <Menu borderless>
           <Menu.Item header>MyFieldTripp</Menu.Item>
-          <Menu.Menu position="right">
-            <Menu.Item name='AboutUs'/>
-            <Menu.Item name='How it works' />
-            <Menu.Item name='login'/>
+          <Menu.Menu className = "siblingFade" position="right">
+            <Menu.Item as="span" className="menuItem" name='AboutUs'/>
+            <Menu.Item as="span" className="menuItem" name='How it works' />
+            <Menu.Item as="span" className="menuItem" name='login'/>
           </Menu.Menu>
       </Menu>
     </div>
@@ -34,10 +33,6 @@ function AppHeader() {
               TAKE CONTROL OF THE MADNESS BY USING OUR
               APP TO PLAN AND ORGANIZE YOUR NEXT FIELD TRIP
             </p>
-            {/* <Button primary size='huge'>
-              Get Started
-              <Icon name='right arrow' />
-            </Button> */}
             <RegistrationModal/>
           </div>
       </div>
