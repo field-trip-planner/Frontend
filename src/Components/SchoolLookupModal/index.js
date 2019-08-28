@@ -5,20 +5,27 @@ import './schoolLookupModal.css';
 import TeacherRegistrationForm from '../TeacherRegistrationModal/index.js'
 
 
-
-export default () => {
+export default props => {
   return (
     <>
-
-      <Modal className="modal" size="large" trigger={<Button>
-        Sign Up
-    </Button>}>
-        <Modal.Header className='modalHeader'>School Look Up</Modal.Header>
+      <Modal
+        className="modal"
+        size="large"
+        trigger={<Button onClick={props.test}>Sign Up</Button>}
+      >
+        <Modal.Header className="modalHeader">School Look Up</Modal.Header>
         <Modal.Content>
           <Container className="contentContainer" textAlign="center">
-            <Input className="schoolLookUpSearchBar" size="large" icon='building' iconPosition='left' placeholder='Search Schools...' />
+            <Input
+              className="schoolLookUpSearchBar"
+              size="large"
+              icon="building"
+              iconPosition="left"
+              placeholder="Search Schools..."
+            />
 
-            <p>Don't see your school?
+            <p>
+              Don't see your school?
               <SchoolRegistrationModal />
             </p>
 
@@ -26,7 +33,6 @@ export default () => {
           </Container>
         </Modal.Content>
       </Modal>
-
     </>
-  )
-}
+  );
+};
