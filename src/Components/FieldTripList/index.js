@@ -7,7 +7,8 @@ import {
   Input,
   Button,
   Header,
-  Icon
+  Icon,
+  Container
 } from "semantic-ui-react";
 
 import TripItem from "./TripItem";
@@ -71,38 +72,39 @@ const fieldTripList = [
 
 export default () => {
   return (
-    <div>
+    <>
       <Menu>
-        <Menu.Item name="home" />
+        <Menu.Item header>FieldTripp</Menu.Item>
         <Menu.Menu position="right">
           <Menu.Item name="logout" />
         </Menu.Menu>
       </Menu>
 
-      <Grid>
-        <Grid.Column floated="left" width={1}>
+      <Container>
+        <div>
           <Input
             size="large"
             icon="bus"
             iconPosition="left"
             placeholder="Search trips..."
+            floated="left"
           />
-        </Grid.Column>
-        <Grid.Column floated="right" width={3}>
-          <Button>
+
+          <Button floated="right" primary>
             <Icon name="add" />
             Create Trip
           </Button>
-        </Grid.Column>
-      </Grid>
-      <Header>UPCOMING FIELD TRIPS</Header>
+        </div>
 
-      <Divider />
-      <Card.Group itemsPerRow={3} style={{ margin: "0 6rem" }}>
-        {fieldTripList.map(trip => (
-          <TripItem key={trip.id} trip={trip} />
-        ))}
-      </Card.Group>
-    </div>
+        <Header>UPCOMING FIELD TRIPS</Header>
+
+        <Divider />
+        <Card.Group itemsPerRow={3}>
+          {fieldTripList.map(trip => (
+            <TripItem key={trip.id} trip={trip} />
+          ))}
+        </Card.Group>
+      </Container>
+    </>
   );
 };
