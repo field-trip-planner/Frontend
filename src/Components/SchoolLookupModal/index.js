@@ -22,7 +22,7 @@ export default () => {
               <SchoolRegistrationModal />
             </p>
 
-            <Button><TeacherRegistrationForm /></Button>
+            <TeacherRegistrationForm />
           </Container>
         </Modal.Content>
       </Modal>

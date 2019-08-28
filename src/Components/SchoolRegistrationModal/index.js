@@ -54,7 +54,7 @@ export default () => {
               />
             </Form>
 
-            <Button><TeacherRegistrationForm /></Button>
+            <TeacherRegistrationForm />
           </Container>
         </Modal.Content>
       </Modal>
