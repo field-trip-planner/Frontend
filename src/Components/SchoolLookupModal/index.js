@@ -5,13 +5,13 @@ import './schoolLookupModal.css';
 import TeacherRegistrationForm from '../TeacherRegistrationModal/index.js'
 
 
-export default props => {
+export default () => {
   return (
     <>
       <Modal
         className="modal"
         size="large"
-        trigger={<Button onClick={props.test}>Sign Up</Button>}
+        trigger={<Button>Sign Up</Button>}
       >
         <Modal.Header className="modalHeader">School Look Up</Modal.Header>
         <Modal.Content>
