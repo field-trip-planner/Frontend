@@ -1,12 +1,14 @@
-import React from 'react';
-import LandingPage from '../src/Components/LandingPage';
-import './App.css';
+import React from "react";
+import { Route } from "react-router-dom";
+import LandingPage from "../src/Components/LandingPage";
+import FieldTripList from "./Components/FieldTripList";
+import "./App.css";
 
 function App() {
   return (
     <>
-    <LandingPage/>
-
+      <Route path="/" exact component={LandingPage} />
+      <Route exact path="/dashboard" component={FieldTripList} />
     </>
   );
 }
