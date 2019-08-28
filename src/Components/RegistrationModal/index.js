@@ -1,19 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Header, Modal, Grid, Button, Icon } from "semantic-ui-react";
 import SchoolLookupModal from "../SchoolLookupModal";
 import "./registrationModal.css";
 import ParentRegistrationModal from "../ParentRegistrationModal";
 
-const RegistrationModal = ({ element }) => {
-  const [modalOpen, updateModalOpen] = useState(false);
-
-  const _handleOpen = e => {
-    updateModalOpen(true);
-  };
-
-  const _handleClose = e => {
-    updateModalOpen(false);
-  };
+const RegistrationModal = () => {
 
   return (
     /*We want the open prop to have a false/neutral value before clicking on the trigger.
@@ -25,13 +16,11 @@ const RegistrationModal = ({ element }) => {
       className="modal"
       size="large"
       trigger={
-        <Button onClick={_handleOpen} primary size="huge">
+        <Button primary size="huge">
           Get Started
           <Icon name="right arrow" />
         </Button>
       }
-      open={modalOpen}
-      close={_handleClose}
     >
       <Modal.Header className="modalHeader">Registration</Modal.Header>
       <Modal.Content>
@@ -39,8 +28,7 @@ const RegistrationModal = ({ element }) => {
           <Grid.Column className="gridColumn">
             <Header>For Teachers</Header>
             <Modal.Actions>
-              {/* <button onClick={_handleClose}></button> */}
-              <SchoolLookupModal test={_handleClose} />
+              <SchoolLookupModal />
             </Modal.Actions>
           </Grid.Column>
 
