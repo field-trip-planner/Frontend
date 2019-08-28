@@ -1,7 +1,9 @@
-import React from "react";
-import { Button, Modal, Container, Input } from "semantic-ui-react";
-import SchoolRegistrationModal from "../SchoolRegistrationModal";
-import "./schoolLookupModal.css";
+import React from 'react';
+import { Button, Modal, Container, Input } from 'semantic-ui-react';
+import SchoolRegistrationModal from '../SchoolRegistrationModal';
+import './schoolLookupModal.css';
+import TeacherRegistrationForm from '../TeacherRegistrationModal/index.js'
+
 
 export default props => {
   return (
@@ -27,7 +29,7 @@ export default props => {
               <SchoolRegistrationModal />
             </p>
 
-            <Button>Continue</Button>
+            <TeacherRegistrationForm />
           </Container>
         </Modal.Content>
       </Modal>
