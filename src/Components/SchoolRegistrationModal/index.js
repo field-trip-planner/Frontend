@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Container, Button, Input, Form, Dropdown } from 'semantic-ui-react';
 import './schoolRegistrationModal.css'
+import TeacherRegistrationForm from '../TeacherRegistrationModal/index.js'
 
 const categories = [
   {
@@ -53,7 +54,7 @@ export default () => {
               />
             </Form>
 
-            <Button>Submit</Button>
+            <TeacherRegistrationForm />
           </Container>
         </Modal.Content>
       </Modal>
