@@ -12,6 +12,7 @@ import {
 } from "semantic-ui-react";
 
 import TripItem from "./TripItem";
+import CreateTripModal from '../CreateTripModal/';
 
 const fieldTripList = [
   {
@@ -88,17 +89,15 @@ export default () => {
             iconPosition="left"
             placeholder="Search trips..."
             floated="left"
-          />
-
-          <Button floated="right" primary>
-            <Icon name="add" />
-            Create Trip
-          </Button>
+            />
+            
+            <CreateTripModal size = 'small'/>
         </div>
-
-        <Header>UPCOMING FIELD TRIPS</Header>
-
-        <Divider />
+          
+          <Header>UPCOMING FIELD TRIPS</Header>
+             
+            
+              <Divider />
         <Card.Group itemsPerRow={3}>
           {fieldTripList.map(trip => (
             <TripItem key={trip.id} trip={trip} />
