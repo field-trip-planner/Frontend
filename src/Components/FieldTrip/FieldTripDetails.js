@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 // import { Link } from "react-router-dom";
+
+
 
 import {
   Grid,
@@ -12,8 +14,12 @@ import {
   Container,
   Image,
   Segment,
-  Modal
+  Modal,
+  Form,
+  Info,
+
 } from 'semantic-ui-react'
+
 
 // import mock data
 import { fieldTripList } from '../FieldTripList/index.js';
@@ -21,12 +27,32 @@ import './FieldTripDetails.css';
 
 const FieldTripDetails = ({ match } ) => {
 
-  const tripItemID = match.params.id;
+const tripItemID = match.params.id;
 
-  const fieldTrip = fieldTripList.find((trip) => {
-    return trip.id === Number(tripItemID);
+const fieldTrip = fieldTripList.find((trip) => {
+  return trip.id === Number(tripItemID);
   })
 
+    const [info, setInfo] = useState({
+      first_name: "",
+      last_name: "",
+  
+    });
+
+  const _handleChange = e => {
+    const { name, value } = e.target;
+
+    setInfo({
+      ...fieldTrip,
+      [name]: value
+    });
+
+  };
+  
+  const _handleSubmit = e => {
+    e.preventDefault();
+    console.log(fieldTrip);
+  }; 
 
   return (
 
@@ -71,15 +97,46 @@ const FieldTripDetails = ({ match } ) => {
           </Grid.Row>
         </Grid>
 
-        <Segment basic clearing style={{ padding: "unset", marginTop: "120px" }} >
-          <Button floated="right" primary style={{  }}>
-            <Icon name="add user" />
+        <Segment basic clearing style={{ padding: "unset", marginTop: 120}} > 
+
+        <Modal trigger={
+          <Button floated="right" primary>
+           <Icon name="add" />
             Add Student
-          </Button>
+          </Button>} closeIcon inverted >
+           <Modal.Header className="modalHeader">Add Student!</Modal.Header>
+           <Modal.Content>
+          {/*   <Container>  */}
+               <Form onSubmit={_handleSubmit}>
+                 <Form.Group widths="equal">
+                   <Form.Input
+                     fluid
+                     label="First Name"
+                     name="first_name"
+                     value={fieldTrip.first_name}
+                     onChange={_handleChange}
+                   />
+                 </Form.Group>
+                 <Form.Group widths="equal">
+                   <Form.Input
+                     fluid
+                     label="Last Name"
+                     name="last_name"
+                     value={fieldTrip.last_name}
+                     onChange={_handleChange}
+                   />
+                 </Form.Group>
+   
+                 <Form.Button primary>Submit</Form.Button>
+               </Form>
+           {/*  </Container>  */}
+           </Modal.Content>
+         </Modal>
+
         </Segment>
 
 
-        <Table columns={5} style={{ marginTop: "20px" }}>
+        <Table columns={5} style={{ marginTop: 20, marginBottom: 50 }}>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Student Name</Table.HeaderCell>
@@ -92,8 +149,8 @@ const FieldTripDetails = ({ match } ) => {
 
           <Table.Body>
             <Table.Row>
-              <Table.Cell> John </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
+              <Table.Cell > John </Table.Cell>
+              <Table.Cell> <Icon name="check green"/ > </Table.Cell>
               <Table.Cell> <Icon name="check green"/> </Table.Cell>
               <Table.Cell> <Icon name="minus"/> </Table.Cell>
               <Table.Cell> <Icon name="check green"/> </Table.Cell>
@@ -124,6 +181,45 @@ const FieldTripDetails = ({ match } ) => {
             </Table.Row>
           </Table.Footer>
         </Table>
+
+        <Modal trigger={
+          <Button floated="right" primary>
+           <Icon name="add" />
+            Add Chaperone
+          </Button>} closeIcon >
+           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
+           <Modal.Content>
+          {/*   <Container>  */}
+               <Form onSubmit={_handleSubmit}>
+                 <Form.Group widths="equal">
+                   <Form.Input
+                     fluid
+                     label="First Name"
+                     name="first_name"
+                     value={fieldTrip.first_name}
+                     onChange={_handleChange}
+                   />
+                 </Form.Group>
+                 <Form.Group widths="equal">
+                   <Form.Input
+                     fluid
+                     label="Last Name"
+                     name="last_name"
+                     value={fieldTrip.last_name}
+                     onChange={_handleChange}
+                   />
+                 </Form.Group>
+   
+                 <Form.Button primary>Submit</Form.Button>
+               </Form>
+           {/*  </Container>  */}
+           </Modal.Content>
+         </Modal>  
+
+
+
+
+
 
       </Container>
 
