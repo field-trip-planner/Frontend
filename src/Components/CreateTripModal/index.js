@@ -21,16 +21,16 @@ export default () => {
   };
   const _handleSubmit = e => {
     e.preventDefault();
-    
+
     // if (info.password !== info.confirm_password) {
     //   throw new Error("Invalid Password"); // Not Ideal but we need to implement way to check
     // }
-    
+
     console.log(info);
   };
   return (
     <>
-      <Modal trigger={ 
+      <Modal trigger={
        <Button floated="right" primary>
         <Icon name="add" />
       Create Trip
@@ -55,8 +55,8 @@ export default () => {
                   name="date"
                   value={info.date}
                   onChange={_handleChange}
-                />            
-   
+                />
+
                 <Form.Input
                   fluid
                   label="Address"
@@ -76,23 +76,23 @@ export default () => {
                   onChange={_handleChange}
                 />
                 <Form.Input
-                fluid
-                label="Cost"
-                type="text"
-                name="cost"
-                value={info.cost}
+                  fluid
+                  label="Cost"
+                  type="text"
+                  name="cost"
+                  value={info.cost}
+                  onChange={_handleChange}
+                  width="7"
+                />
+              </Form.Group>
+              {/* adding 'fluid' in Form.TextArea causes error */}
+              <Form.TextArea
+                label="Field Trip Details"
+                name="field_trip_details"
+                value={info.field_trip_details}
                 onChange={_handleChange}
                 width="7"
               />
-              </Form.Group>
-              <Form.TextArea
-              fluid
-              label="Field Trip Details"
-              name="field_trip_details"
-              value={info.field_trip_details}
-              onChange={_handleChange}
-              width="7"
-            />
               <Form.Button primary>Submit</Form.Button>
             </Form>
           </Container>
