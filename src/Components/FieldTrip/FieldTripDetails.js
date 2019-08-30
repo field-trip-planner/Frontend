@@ -126,7 +126,7 @@ const FieldTripDetails = ({ match } ) => {
         </Table>
 
       </Container>
-      
+
     </>
   );
 };
