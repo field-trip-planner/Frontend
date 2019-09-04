@@ -63,6 +63,12 @@ export default () => {
                     <Button color="teal" fluid size="large">
                       Login
                     </Button>
+
+                    <button className="googleLoginButton" color="teal" fluid size="large">
+                    {/* Need to run backend on separate port locally to work. Need to update to use staging auth url once everything is pushed 
+                    to staging */}
+                    <a href="http://localhost:5000/auth/google">Log in with Google</a>
+                    </button>
                   </Segment>
                 </Form>
                 <Message>

@@ -1,5 +1,6 @@
 import React from "react";
 import RegistrationModal from "../RegistrationModal";
+import { useGlobal } from 'reactn';
 import "./landingPage.css";
 
 import {
@@ -15,6 +16,7 @@ import {
 import LoginModal from "../LoginModal";
 
 function AppHeader() {
+
   return (
     <>
       <div>
