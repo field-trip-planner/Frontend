@@ -14,8 +14,9 @@ import {
 import TripItem from "./TripItem";
 import CreateTripModal from '../CreateTripModal/';
 
-const fieldTripList = [
+export const fieldTripList = [
   {
+    id: 1,
     name: "Test TRip1",
     address: "123 main st",
     date: "Sep 21, 2019",
@@ -25,6 +26,7 @@ const fieldTripList = [
     field_trip_details: "eat ya vegetables"
   },
   {
+    id: 2,
     name: "Trip 2",
     address: "321 south st",
     date: "Sep 21, 2019",
@@ -34,6 +36,7 @@ const fieldTripList = [
     field_trip_details: "no smoking"
   },
   {
+    id: 3,
     name: "Test TRip3",
     address: "chernobyl",
     date: "Sep 21, 2019",
@@ -43,6 +46,7 @@ const fieldTripList = [
     field_trip_details: "half life"
   },
   {
+    id: 4,
     name: "Trip 4",
     address: "321  st",
     date: "Sep 21, 2019",
@@ -52,6 +56,7 @@ const fieldTripList = [
     field_trip_details: "eat ya vegetables"
   },
   {
+    id: 5,
     name: "Trip 5",
     address: "South pole",
     date: "Sep 21, 2019",
@@ -61,6 +66,7 @@ const fieldTripList = [
     field_trip_details: "happy feet"
   },
   {
+    id: 6,
     name: "Trip 6",
     address: "The moon",
     date: "Sep 21, 2019",
@@ -90,13 +96,13 @@ export default () => {
             placeholder="Search trips..."
             floated="left"
             />
-            
+
             <CreateTripModal size = 'small'/>
         </div>
-          
+
           <Header>UPCOMING FIELD TRIPS</Header>
-             
-            
+
+
               <Divider />
         <Card.Group itemsPerRow={3}>
           {fieldTripList.map(trip => (

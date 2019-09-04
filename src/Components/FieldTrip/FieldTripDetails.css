@@ -1,0 +1,19 @@
+.trip-details-wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.wrapper-border{
+    border: 1px solid lightgray;
+    border-radius: 8px;
+
+}
+
+.trip-summary-wrapper {
+    margin-top: 40px;
+    /*border: 1px solid lightgray;*/
+}
+
+.content-wrapper {
+    margin-top: 60px;
+}
