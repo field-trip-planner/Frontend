@@ -10,3 +10,7 @@
 .login-signup:hover {
   color: lightblue;
 }
+
+.googleLoginButton {
+  margin-top: 20px;
+}
