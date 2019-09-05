@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from 'axios';
+import { useGlobal } from 'reactn';
 import {
   Grid,
   Menu,
@@ -78,6 +80,22 @@ export const fieldTripList = [
 ];
 
 export default () => {
+
+  const [ trips, setTrips ] = useGlobal('trips');
+
+  useEffect(() => {
+    const url = `http://localhost:5000/fieldtrips`;
+
+    const request = axios.get(url);
+    request
+      .then(({ data }) => {
+        console.log("TRIP-LIST:", data);
+        return setTrips(data);
+
+      })
+      .catch(err => err);
+  }, []);
+
   return (
     <>
       <Menu>
@@ -95,17 +113,17 @@ export default () => {
             iconPosition="left"
             placeholder="Search trips..."
             floated="left"
-            />
+          />
 
-            <CreateTripModal size = 'small'/>
+          <CreateTripModal size = 'small'/>
         </div>
 
-          <Header>UPCOMING FIELD TRIPS</Header>
+        <Header>UPCOMING FIELD TRIPS</Header>
 
+        <Divider />
 
-              <Divider />
         <Card.Group itemsPerRow={3}>
-          {fieldTripList.map(trip => (
+          {trips.map(trip => (
             <TripItem key={trip.id} trip={trip} />
           ))}
         </Card.Group>
