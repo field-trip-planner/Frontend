@@ -28,6 +28,7 @@ import './FieldTripDetails.css';
 const FieldTripDetails = ({ match } ) => {
              
   const [ trip, setTrip ] = useState({});   // local state
+  const [students, setStudents] = useState([]);
 
   useEffect(() => {
     const tripItemID = match.params.id;
@@ -43,23 +44,30 @@ const FieldTripDetails = ({ match } ) => {
         .catch(err => err);  
 }, [match.params.id] )    // explain why this works & tripItemID breaks it   
 
+  useEffect(() => {
+    const url = `http://localhost:5000/students`;
 
+    const request = axios.get(url);
+      request
+        .then(({data}) => {
+        console.log('students ALL ', data); 
+        return setStudents(data);
 
-const fieldTrip = fieldTripList.find((trip) => {
- // return trip.id === Number(tripItemID);
-  })
+        })
+        .catch(err => err);  
+  }, [] ) 
 
-    const [info, setInfo] = useState({
+    const [studentInfo, setStudentInfo] = useState({
       first_name: "",
       last_name: "",
-  
+      id: 6,
     });
 
   const _handleChange = e => {
     const { name, value } = e.target;
 
-    setInfo({
-      ...fieldTrip,
+    setStudentInfo({
+      ...studentInfo,
       [name]: value
     });
 
@@ -67,7 +75,18 @@ const fieldTrip = fieldTripList.find((trip) => {
   
   const _handleSubmit = e => {
     e.preventDefault();
-    console.log(fieldTrip);
+
+    const url = `http://localhost:5000/students`;
+    
+    const request = axios.post(url, studentInfo);
+      request
+        .then(({data}) => {
+        console.log('students ALL ', data); 
+        return data;
+
+        })
+        .catch(err => err);
+    
   }; 
 
   return (
@@ -120,7 +139,7 @@ const fieldTrip = fieldTripList.find((trip) => {
           <Button floated="right" primary>
            <Icon name="add" />
             Add Student
-          </Button>} closeIcon inverted >
+          </Button>} closeIcon>
            <Modal.Header className="modalHeader">Add Student!</Modal.Header>
            <Modal.Content>
           {/*   <Container>  */}
@@ -165,32 +184,24 @@ const fieldTrip = fieldTripList.find((trip) => {
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell > John </Table.Cell>
-              <Table.Cell> <Icon name="check green"/ > </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-              <Table.Cell> <Icon name="minus"/> </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell> Jamie </Table.Cell>
-              <Table.Cell> <Icon name="times red"/> </Table.Cell>
-              <Table.Cell> <Icon name="question yellow"/> </Table.Cell>
-              <Table.Cell> <Icon name="minus"/> </Table.Cell>
-              <Table.Cell> <Icon name="question red"/> </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell> Jill </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-              <Table.Cell> <Icon name="minus"/> </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-            </Table.Row>
+      
+            { students.map((student) => {
+              return (
+                <Table.Row key = {student.id}>
+                  <Table.Cell > {student.first_name}  </Table.Cell>
+                  <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
+                  <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
+                  <Table.Cell> <Icon name="minus" color = "red"/> </Table.Cell>
+                  <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
+                </Table.Row>
+              )
+          })}
+
           </Table.Body>
 
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell>2 Students Going</Table.HeaderCell>
+              <Table.HeaderCell> {students.length} Students Going</Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
               <Table.HeaderCell />
@@ -232,9 +243,7 @@ const fieldTrip = fieldTripList.find((trip) => {
            {/*  </Container>  */}
            </Modal.Content>
          </Modal>  
-
       </Container>
-
     </>
   );
 };

@@ -83,6 +83,7 @@ export default () => {
        //  state, setter          // property in GlobalState
   const [ trips, setTrips ] = useGlobal('trips');
 
+
   useEffect(() => {
     const url = `http://localhost:5000/fieldtrips`;
 
