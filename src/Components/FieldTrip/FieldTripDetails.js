@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // don't forget to add useEffect here!
 // import { Link } from "react-router-dom";
-
+import axios from 'axios';
 
 
 import {
@@ -26,11 +26,27 @@ import { fieldTripList } from '../FieldTripList/index.js';
 import './FieldTripDetails.css';
 
 const FieldTripDetails = ({ match } ) => {
+             
+  const [ trip, setTrip ] = useState({});   // local state
 
-const tripItemID = match.params.id;
+  useEffect(() => {
+    const tripItemID = match.params.id;
+    const url = `http://localhost:5000/fieldtrips/${tripItemID}`;
+
+    const request = axios.get(url);
+      request
+        .then(({data}) => {
+        console.log('trip item ', data); 
+        return setTrip(data);
+
+        })
+        .catch(err => err);  
+}, [match.params.id] )    // explain why this works & tripItemID breaks it   
+
+
 
 const fieldTrip = fieldTripList.find((trip) => {
-  return trip.id === Number(tripItemID);
+ // return trip.id === Number(tripItemID);
   })
 
     const [info, setInfo] = useState({
@@ -64,8 +80,9 @@ const fieldTrip = fieldTripList.find((trip) => {
         </Menu.Menu>
       </Menu>
 
+      {/* trip is our local state instead of fieldtrips dummy data */}
       <Container style={{ marginTop: "60px" }}>
-        <Header>{fieldTrip.name.toUpperCase()}</Header>
+        { trip.length && <Header>{trip.name.toUpperCase()}</Header>}
 
         <Divider style={{ marginBottom: "80px" }} />
 
@@ -73,10 +90,10 @@ const fieldTrip = fieldTripList.find((trip) => {
           <Grid.Row columns={2}>
             <Grid.Column className="wrapper-border">
               <div className="trip-details-wrapper content-wrapper">
-                <h2>Location: {fieldTrip.address}</h2>
-                <h2>Date of Trip: {fieldTrip.date}</h2>
-                <h2>Supplies: {fieldTrip.supplies}</h2>
-                <h2>Cost: {fieldTrip.cost}</h2>
+                <h2>Location: {trip.address}</h2>
+                <h2>Date of Trip: {trip.date}</h2>
+                <h2>Supplies: {trip.supplies}</h2>
+                <h2>Cost: {trip.cost}</h2>
               </div>
             </Grid.Column>
 
@@ -91,7 +108,7 @@ const fieldTrip = fieldTripList.find((trip) => {
           <Grid.Row columns={1}>
             <Grid.Column>
               <div className="trip-summary-wrapper">
-                <h2>Additional Notes / Trip Summary: {fieldTrip.field_trip_details}</h2>
+                <h2>Additional Notes / Trip Summary: {trip.field_trip_details}</h2>
               </div>
             </Grid.Column>
           </Grid.Row>
@@ -113,7 +130,7 @@ const fieldTrip = fieldTripList.find((trip) => {
                      fluid
                      label="First Name"
                      name="first_name"
-                     value={fieldTrip.first_name}
+                     value={trip.first_name}
                      onChange={_handleChange}
                    />
                  </Form.Group>
@@ -122,7 +139,7 @@ const fieldTrip = fieldTripList.find((trip) => {
                      fluid
                      label="Last Name"
                      name="last_name"
-                     value={fieldTrip.last_name}
+                     value={trip.last_name}
                      onChange={_handleChange}
                    />
                  </Form.Group>
@@ -196,7 +213,7 @@ const fieldTrip = fieldTripList.find((trip) => {
                      fluid
                      label="First Name"
                      name="first_name"
-                     value={fieldTrip.first_name}
+                     value={trip.first_name}
                      onChange={_handleChange}
                    />
                  </Form.Group>
@@ -205,7 +222,7 @@ const fieldTrip = fieldTripList.find((trip) => {
                      fluid
                      label="Last Name"
                      name="last_name"
-                     value={fieldTrip.last_name}
+                     value={trip.last_name}
                      onChange={_handleChange}
                    />
                  </Form.Group>
@@ -215,11 +232,6 @@ const fieldTrip = fieldTripList.find((trip) => {
            {/*  </Container>  */}
            </Modal.Content>
          </Modal>  
-
-
-
-
-
 
       </Container>
 
