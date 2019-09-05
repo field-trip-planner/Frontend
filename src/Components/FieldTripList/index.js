@@ -94,7 +94,7 @@ export default () => {
 
       })
       .catch(err => err);
-  }, [setTrips]);
+  }, []);
 
   return (
     <>
