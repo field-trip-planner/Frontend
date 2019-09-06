@@ -4,7 +4,7 @@ import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 
 const CreateTripModal= () => {
   const [ fieldTripInfo, setfieldTripInfo ] = useState({
-    id:4,
+    //id:5,
     name: "",
     date: "",
     address: "",
@@ -28,6 +28,14 @@ const CreateTripModal= () => {
       const request = axios.post(url,fieldTripInfo);
       request
         .then(({ data }) => {
+          setfieldTripInfo({
+            name: "",
+            date: "",
+            address: "",
+            supplies: "",
+            cost: "",
+            field_trip_details: "",
+          })
           return data;
         })
         .catch(err => err);
