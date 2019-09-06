@@ -20,8 +20,6 @@ import {
 
 } from 'semantic-ui-react'
 
-// import mock data
-import { fieldTripList } from '../FieldTripList/index.js';
 import './FieldTripDetails.css';
 
 const FieldTripDetails = ({ match } ) => {
@@ -57,9 +55,6 @@ const FieldTripDetails = ({ match } ) => {
   }, [] )
 
   const [studentInfo, setStudentInfo] = useState({
-    // 'id' does not seem to autoincrement in the backend,
-      // so for now we manually add 'id'
-    // id: 13,
     first_name: "",
     last_name: "",
   });
