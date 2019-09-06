@@ -1,37 +1,46 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
+import axios from 'axios';
 import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 
-export default () => {
-  const [info, setInfo] = useState({
+const CreateTripModal= () => {
+  const [ fieldTripInfo, setfieldTripInfo ] = useState({
+    id:4,
     name: "",
     date: "",
     address: "",
     supplies: "",
     cost: "",
     field_trip_details: "",
-
   });
 
   const _handleChange = e => {
     const { name, value } = e.target;
-    setInfo({
-      ...info,
+    console.log('input enter',value)
+    setfieldTripInfo({
+      ...fieldTripInfo,
       [name]: value
     });
   };
+
   const _handleSubmit = e => {
     e.preventDefault();
-
+      const url = `http://localhost:5000/fieldtrips`;
+      const request = axios.post(url,fieldTripInfo);
+      request
+        .then(({ data }) => {
+          return data;
+        })
+        .catch(err => err);
     // if (info.password !== info.confirm_password) {
     //   throw new Error("Invalid Password"); // Not Ideal but we need to implement way to check
     // }
-
-    console.log(info);
+    console.log(fieldTripInfo);
   };
+    
   return (
     <>
       <Modal trigger={
-       <Button floated="right" primary>
+      <Button floated="right" primary>
         <Icon name="add" />
       Create Trip
     </Button>}>
@@ -44,7 +53,7 @@ export default () => {
                   fluid
                   label="Field Trip Name"
                   name="name"
-                  value={info.name}
+                  value={fieldTripInfo.name}
                   onChange={_handleChange}
                 />
               </Form.Group>
@@ -53,16 +62,14 @@ export default () => {
                   fluid
                   label="Date"
                   name="date"
-                  value={info.date}
+                  value={fieldTripInfo.date}
                   onChange={_handleChange}
                 />
-
                 <Form.Input
                   fluid
                   label="Address"
-                  type="text"
                   name="address"
-                  value={info.address}
+                  value={fieldTripInfo.address}
                   onChange={_handleChange}
                 />
               </Form.Group>
@@ -70,17 +77,15 @@ export default () => {
                 <Form.Input
                   fluid
                   label="Supplies"
-                  type="text"
                   name="supplies"
-                  value={info.supplies}
+                  value={fieldTripInfo.supplies}
                   onChange={_handleChange}
                 />
                 <Form.Input
                   fluid
                   label="Cost"
-                  type="text"
                   name="cost"
-                  value={info.cost}
+                  value={fieldTripInfo.cost}
                   onChange={_handleChange}
                   width="7"
                 />
@@ -89,7 +94,7 @@ export default () => {
               <Form.TextArea
                 label="Field Trip Details"
                 name="field_trip_details"
-                value={info.field_trip_details}
+                value={fieldTripInfo.field_trip_details}
                 onChange={_handleChange}
                 width="7"
               />
@@ -101,3 +106,5 @@ export default () => {
     </>
   );
 };
+
+export default CreateTripModal;
