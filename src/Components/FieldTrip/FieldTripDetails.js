@@ -280,7 +280,7 @@ const FieldTripDetails = ({ match } ) => {
         </Table>
 
         <Modal trigger={
-          <Button floated="right" primary>
+          <Button floated="right" primary disabled>
             <Icon name="add" />
             Add Chaperone
           </Button>} closeIcon >
