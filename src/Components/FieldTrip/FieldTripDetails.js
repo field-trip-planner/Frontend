@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"; // don't forget to add useEf
 // import { Link } from "react-router-dom";
 import axios from 'axios';
 
-
 import {
   Grid,
   Menu,
@@ -16,17 +15,17 @@ import {
   Segment,
   Modal,
   Form,
+  Message,
   Info,
 
 } from 'semantic-ui-react'
-
 
 // import mock data
 import { fieldTripList } from '../FieldTripList/index.js';
 import './FieldTripDetails.css';
 
 const FieldTripDetails = ({ match } ) => {
-             
+
   const [ trip, setTrip ] = useState({});   // local state
   const [students, setStudents] = useState([]);
 
@@ -35,36 +34,44 @@ const FieldTripDetails = ({ match } ) => {
     const url = `http://localhost:5000/fieldtrips/${tripItemID}`;
 
     const request = axios.get(url);
-      request
-        .then(({data}) => {
-        console.log('trip item ', data); 
+    request
+      .then(({data}) => {
+        console.log('trip item ', data);
         return setTrip(data);
 
-        })
-        .catch(err => err);  
-}, [match.params.id] )    // explain why this works & tripItemID breaks it   
+      })
+      .catch(err => err);
+  }, [match.params.id] )    // explain why this works & tripItemID breaks it
 
   useEffect(() => {
     const url = `http://localhost:5000/students`;
 
     const request = axios.get(url);
-      request
-        .then(({data}) => {
-        console.log('students ALL ', data); 
+    request
+      .then(({data}) => {
+        console.log('students ALL ', data);
         return setStudents(data);
 
-        })
-        .catch(err => err);  
-  }, [] ) 
+      })
+      .catch(err => err);
+  }, [] )
 
-    const [studentInfo, setStudentInfo] = useState({
-      first_name: "",
-      last_name: "",
-      id: 6,
-    });
+  const [studentInfo, setStudentInfo] = useState({
+    // 'id' does not seem to autoincrement in the backend,
+      // so for now we manually add 'id'
+    // id: 13,
+    first_name: "",
+    last_name: "",
+  });
+
+  // setting state
+  const [isSuccessfullyAdded, setIsSuccessfullyAdded] = useState(false);
+  const [error, setError] = useState({});
 
   const _handleChange = e => {
     const { name, value } = e.target;
+
+    setError(false);
 
     setStudentInfo({
       ...studentInfo,
@@ -72,22 +79,57 @@ const FieldTripDetails = ({ match } ) => {
     });
 
   };
-  
+
   const _handleSubmit = e => {
     e.preventDefault();
 
+    if (!studentInfo.first_name || !studentInfo.last_name) {
+     return setError({
+        message:  !studentInfo.first_name ? 'Please provide a first name': 'Please provide a last name'
+      })
+    }
+
     const url = `http://localhost:5000/students`;
-    
     const request = axios.post(url, studentInfo);
-      request
-        .then(({data}) => {
-        console.log('students ALL ', data); 
+    request
+      .then(({data}) => {
+        console.log('A student added:: ', data);
+
+        setIsSuccessfullyAdded(true);
+        setError(false);
+
+        const request = axios.get(url);
+        request
+          .then(({data}) => {
+            console.log('students ALL ', data);
+            return setStudents(data);
+
+          })
+          .catch(err => err);
+
+        setStudentInfo({
+          first_name: "",
+          last_name: "",
+        })
+
+        setTimeout(() => {
+          setIsSuccessfullyAdded(false);
+
+        }, 2000)
+
         return data;
 
-        })
-        .catch(err => err);
-    
-  }; 
+      })
+      .catch((err) => {
+        // in case of err, here we make sure to set success to false
+        setIsSuccessfullyAdded(false);
+        // in order to add an error message in the modal we set hasError to true
+        console.log("error", err.response.data)
+        setError(err.response.data);
+
+        return err;
+      });
+  };
 
   return (
 
@@ -101,7 +143,7 @@ const FieldTripDetails = ({ match } ) => {
 
       {/* trip is our local state instead of fieldtrips dummy data */}
       <Container style={{ marginTop: "60px" }}>
-        { trip.length && <Header>{trip.name.toUpperCase()}</Header>}
+        {trip.name && <Header>{trip.name.toUpperCase()}</Header>}
 
         <Divider style={{ marginBottom: "80px" }} />
 
@@ -133,44 +175,71 @@ const FieldTripDetails = ({ match } ) => {
           </Grid.Row>
         </Grid>
 
-        <Segment basic clearing style={{ padding: "unset", marginTop: 120}} > 
+        <Segment basic clearing style={{ padding: "unset", marginTop: 120}} >
+          <Modal
+            trigger={
+              <Button floated="right" primary>
+                <Icon name="add" />
+                Add Student
+              </Button>
+            }
+            closeIcon
+            onClose={() => {
+              setStudentInfo({
+                first_name: "",
+                last_name: "",
+              });
+              setIsSuccessfullyAdded(false);
+              setError(false);
+            }}
+          >
+            <Modal.Header className="modalHeader">Add Student</Modal.Header>
+            <Modal.Content>
+              {
+                isSuccessfullyAdded && (
+                  <Message positive>
+                    <Message.Header>Student successfully added!</Message.Header>
+                  </Message>
+                )
 
-        <Modal trigger={
-          <Button floated="right" primary>
-           <Icon name="add" />
-            Add Student
-          </Button>} closeIcon>
-           <Modal.Header className="modalHeader">Add Student!</Modal.Header>
-           <Modal.Content>
-          {/*   <Container>  */}
-               <Form onSubmit={_handleSubmit}>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="First Name"
-                     name="first_name"
-                     value={trip.first_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="Last Name"
-                     name="last_name"
-                     value={trip.last_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-   
-                 <Form.Button primary>Submit</Form.Button>
-               </Form>
-           {/*  </Container>  */}
-           </Modal.Content>
-         </Modal>
+              }
 
+              {
+                Object.keys(error).length > 0 && (
+                  <Message negative>
+                    <Message.Header>
+                      We ran into an issue adding the student. {error.message}. And Please try again.
+                    </Message.Header>
+                  </Message>
+                )
+
+              }
+
+              <Form onSubmit={_handleSubmit}>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="First Name"
+                    name="first_name"
+                    value={studentInfo.first_name}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Last Name"
+                    name="last_name"
+                    value={studentInfo.last_name}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+
+                <Form.Button primary>Submit</Form.Button>
+              </Form>
+            </Modal.Content>
+          </Modal>
         </Segment>
-
 
         <Table columns={5} style={{ marginTop: 20, marginBottom: 50 }}>
           <Table.Header>
@@ -184,10 +253,10 @@ const FieldTripDetails = ({ match } ) => {
           </Table.Header>
 
           <Table.Body>
-      
+
             { students.map((student) => {
               return (
-                <Table.Row key = {student.id}>
+                <Table.Row key={student.id}>
                   <Table.Cell > {student.first_name}  </Table.Cell>
                   <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
                   <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
@@ -195,7 +264,7 @@ const FieldTripDetails = ({ match } ) => {
                   <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
                 </Table.Row>
               )
-          })}
+            })}
 
           </Table.Body>
 
@@ -212,37 +281,37 @@ const FieldTripDetails = ({ match } ) => {
 
         <Modal trigger={
           <Button floated="right" primary>
-           <Icon name="add" />
+            <Icon name="add" />
             Add Chaperone
           </Button>} closeIcon >
-           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
-           <Modal.Content>
-          {/*   <Container>  */}
-               <Form onSubmit={_handleSubmit}>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="First Name"
-                     name="first_name"
-                     value={trip.first_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="Last Name"
-                     name="last_name"
-                     value={trip.last_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-   
-                 <Form.Button primary>Submit</Form.Button>
-               </Form>
-           {/*  </Container>  */}
-           </Modal.Content>
-         </Modal>  
+          <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
+          <Modal.Content>
+            {/*   <Container>  */}
+            <Form onSubmit={_handleSubmit}>
+              <Form.Group widths="equal">
+                <Form.Input
+                  fluid
+                  label="First Name"
+                  name="first_name"
+                  value={trip.first_name}
+                  onChange={_handleChange}
+                />
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Input
+                  fluid
+                  label="Last Name"
+                  name="last_name"
+                  value={trip.last_name}
+                  onChange={_handleChange}
+                />
+              </Form.Group>
+
+              <Form.Button primary>Submit</Form.Button>
+            </Form>
+            {/*  </Container>  */}
+          </Modal.Content>
+        </Modal>
       </Container>
     </>
   );
