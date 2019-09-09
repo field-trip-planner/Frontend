@@ -1,8 +1,8 @@
-import { setGlobal } from 'reactn';
+import { setGlobal } from "reactn";
 
 export default () => {
   setGlobal({
     trips: [],
-
+    user: {}
   });
-}
+};
