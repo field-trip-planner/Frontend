@@ -1,6 +1,7 @@
 import React from "react";
 import RegistrationModal from "../RegistrationModal";
-import { useGlobal } from 'reactn';
+import { Link } from "react-router-dom";
+import { useGlobal } from "reactn";
 import "./landingPage.css";
 
 import {
@@ -16,12 +17,13 @@ import {
 import LoginModal from "../LoginModal";
 
 function AppHeader() {
-
   return (
     <>
       <div>
         <Menu borderless>
-          <Menu.Item header>MyFieldTripp</Menu.Item>
+          <Menu.Item header>
+            <Link to="/">MyFieldTripp</Link>
+          </Menu.Item>
           <Menu.Menu className="siblingFade" position="right">
             <Menu.Item style={{}} as="span" className="menuItem" name="AboutUs">
               <span>About us</span>

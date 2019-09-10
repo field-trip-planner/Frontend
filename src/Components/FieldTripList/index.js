@@ -1,20 +1,18 @@
 import React, { useEffect } from "react";
-import axios from 'axios';
-import { useGlobal } from 'reactn';
+import { withRouter } from "react-router-dom";
+import api from "../../api";
+import { useGlobal } from "reactn";
 import {
-  Grid,
-  Menu,
   Card,
   Divider,
   Input,
-  Button,
   Header,
-  Icon,
   Container
 } from "semantic-ui-react";
 
 import TripItem from "./TripItem";
-import CreateTripModal from '../CreateTripModal/';
+import CreateTripModal from "../CreateTripModal/";
+import MainMenu from "../layout/Menu";
 
 export const fieldTripList = [
   {
@@ -79,33 +77,23 @@ export const fieldTripList = [
   }
 ];
 
-export default () => {
+const FieldTripList = props => {
        //  state, setter          // property in GlobalState
   const [ trips, setTrips ] = useGlobal('trips');
 
-
   useEffect(() => {
-    const url = `http://localhost:5000/fieldtrips`;
-
-    const request = axios.get(url);
-    request
+    api
+      .get("fieldtrips")
       .then(({ data }) => {
         console.log("TRIP-LIST:", data);
-        return setTrips(data);  // like this.setState
-
+        return setTrips(data);
       })
       .catch(err => err);
   }, []);  // 2nd param is arr to stop re-render
 
   return (
     <>
-      <Menu>
-        <Menu.Item header>FieldTripp</Menu.Item>
-        <Menu.Menu position="right">
-          <Menu.Item name="logout" />
-        </Menu.Menu>
-      </Menu>
-
+      <MainMenu />
       <Container>
         <div>
           <Input
@@ -116,7 +104,7 @@ export default () => {
             floated="left"
           />
 
-          <CreateTripModal size = 'small'/>
+          <CreateTripModal size="small" />
         </div>
 
         <Header>UPCOMING FIELD TRIPS</Header>
@@ -132,3 +120,5 @@ export default () => {
     </>
   );
 };
+
+export default withRouter(FieldTripList);

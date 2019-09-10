@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import {
   Grid,
-  Menu,
   Divider,
   Table,
   Button,
@@ -16,15 +15,16 @@ import {
   Modal,
   Form,
   Message,
-  Info,
+} from "semantic-ui-react";
 
-} from 'semantic-ui-react'
+import "./FieldTripDetails.css";
+import MainMenu from "../layout/Menu.js";
 
 import './FieldTripDetails.css';
 
 const FieldTripDetails = ({ match } ) => {
 
-  const [ trip, setTrip ] = useState({});   // local state
+  const [ trip, setTrip ] = useState({});  // local state
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const FieldTripDetails = ({ match } ) => {
 
       })
       .catch(err => err);
-  }, [match.params.id] )    // explain why this works & tripItemID breaks it
+  }, [match.params.id] )  // explain why this works & tripItemID breaks it
 
   useEffect(() => {
     const url = `http://localhost:5000/students`;
@@ -127,16 +127,9 @@ const FieldTripDetails = ({ match } ) => {
   };
 
   return (
-
     <>
-      <Menu>
-        <Menu.Item header>FieldTripp</Menu.Item>
-        <Menu.Menu position="right">
-          <Menu.Item name="logout" />
-        </Menu.Menu>
-      </Menu>
-
-      {/* trip is our local state instead of fieldtrips dummy data */}
+      {/* trip is our local state data */}
+      <MainMenu />
       <Container style={{ marginTop: "60px" }}>
         {trip.name && <Header>{trip.name.toUpperCase()}</Header>}
 
@@ -164,7 +157,10 @@ const FieldTripDetails = ({ match } ) => {
           <Grid.Row columns={1}>
             <Grid.Column>
               <div className="trip-summary-wrapper">
-                <h2>Additional Notes / Trip Summary: {trip.field_trip_details}</h2>
+                <h2>
+                  Additional Notes / Trip Summary: {" "}
+                  {trip.field_trip_details}
+                </h2>
               </div>
             </Grid.Column>
           </Grid.Row>
@@ -209,7 +205,6 @@ const FieldTripDetails = ({ match } ) => {
                 )
 
               }
-
               <Form onSubmit={_handleSubmit}>
                 <Form.Group widths="equal">
                   <Form.Input
@@ -252,10 +247,10 @@ const FieldTripDetails = ({ match } ) => {
             { students.map((student) => {
               return (
                 <Table.Row key={student.id}>
-                  <Table.Cell > {student.first_name}  </Table.Cell>
+                  <Table.Cell>{student.first_name}</Table.Cell>
                   <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
                   <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
-                  <Table.Cell> <Icon name="minus" color = "red"/> </Table.Cell>
+                  <Table.Cell> <Icon name="minus" color="red"/> </Table.Cell>
                   <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
                 </Table.Row>
               )
@@ -265,7 +260,7 @@ const FieldTripDetails = ({ match } ) => {
 
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell> {students.length} Students Going</Table.HeaderCell>
+              <Table.HeaderCell>{students.length} Students Going</Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
               <Table.HeaderCell />
@@ -274,11 +269,15 @@ const FieldTripDetails = ({ match } ) => {
           </Table.Footer>
         </Table>
 
-        <Modal trigger={
-          <Button floated="right" primary disabled>
-            <Icon name="add" />
-            Add Chaperone
-          </Button>} closeIcon >
+        <Modal
+          trigger={
+            <Button floated="right" primary disabled>
+              <Icon name="add" />
+              Add Chaperone
+            </Button>
+          }
+          closeIcon
+        >
           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
           <Modal.Content>
             {/*   <Container>  */}
