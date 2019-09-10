@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // don't forget to add useEffect here!
 // import { Link } from "react-router-dom";
-
-
+import axios from 'axios';
 
 import {
   Grid,
@@ -16,43 +15,116 @@ import {
   Segment,
   Modal,
   Form,
+  Message,
   Info,
 
 } from 'semantic-ui-react'
 
-
-// import mock data
-import { fieldTripList } from '../FieldTripList/index.js';
 import './FieldTripDetails.css';
 
 const FieldTripDetails = ({ match } ) => {
 
-const tripItemID = match.params.id;
+  const [ trip, setTrip ] = useState({});   // local state
+  const [students, setStudents] = useState([]);
 
-const fieldTrip = fieldTripList.find((trip) => {
-  return trip.id === Number(tripItemID);
-  })
+  useEffect(() => {
+    const tripItemID = match.params.id;
+    const url = `http://localhost:5000/fieldtrips/${tripItemID}`;
 
-    const [info, setInfo] = useState({
-      first_name: "",
-      last_name: "",
-  
-    });
+    const request = axios.get(url);
+    request
+      .then(({data}) => {
+        console.log('trip item ', data);
+        return setTrip(data);
+
+      })
+      .catch(err => err);
+  }, [match.params.id] )    // explain why this works & tripItemID breaks it
+
+  useEffect(() => {
+    const url = `http://localhost:5000/students`;
+
+    const request = axios.get(url);
+    request
+      .then(({data}) => {
+        console.log('students ALL ', data);
+        return setStudents(data);
+
+      })
+      .catch(err => err);
+  }, [] )
+
+  const [studentInfo, setStudentInfo] = useState({
+    first_name: "",
+    last_name: "",
+  });
+
+  // setting state
+  const [isSuccessfullyAdded, setIsSuccessfullyAdded] = useState(false);
+  const [error, setError] = useState({});
 
   const _handleChange = e => {
     const { name, value } = e.target;
 
-    setInfo({
-      ...fieldTrip,
+    setError(false);
+
+    setStudentInfo({
+      ...studentInfo,
       [name]: value
     });
 
   };
-  
+
   const _handleSubmit = e => {
     e.preventDefault();
-    console.log(fieldTrip);
-  }; 
+
+    if (!studentInfo.first_name || !studentInfo.last_name) {
+     return setError({
+        message:  !studentInfo.first_name ? 'Please provide a first name': 'Please provide a last name'
+      })
+    }
+
+    const url = `http://localhost:5000/students`;
+    const request = axios.post(url, studentInfo);
+    request
+      .then(({data}) => {
+        console.log('A student added:: ', data);
+
+        setIsSuccessfullyAdded(true);
+        setError(false);
+
+        const request = axios.get(url);
+        request
+          .then(({data}) => {
+            console.log('students ALL ', data);
+            return setStudents(data);
+
+          })
+          .catch(err => err);
+
+        setStudentInfo({
+          first_name: "",
+          last_name: "",
+        })
+
+        setTimeout(() => {
+          setIsSuccessfullyAdded(false);
+
+        }, 2000)
+
+        return data;
+
+      })
+      .catch((err) => {
+        // in case of err, here we make sure to set success to false
+        setIsSuccessfullyAdded(false);
+        // in order to add an error message in the modal we set hasError to true
+        console.log("error", err.response.data)
+        setError(err.response.data);
+
+        return err;
+      });
+  };
 
   return (
 
@@ -64,8 +136,9 @@ const fieldTrip = fieldTripList.find((trip) => {
         </Menu.Menu>
       </Menu>
 
+      {/* trip is our local state instead of fieldtrips dummy data */}
       <Container style={{ marginTop: "60px" }}>
-        <Header>{fieldTrip.name.toUpperCase()}</Header>
+        {trip.name && <Header>{trip.name.toUpperCase()}</Header>}
 
         <Divider style={{ marginBottom: "80px" }} />
 
@@ -73,10 +146,10 @@ const fieldTrip = fieldTripList.find((trip) => {
           <Grid.Row columns={2}>
             <Grid.Column className="wrapper-border">
               <div className="trip-details-wrapper content-wrapper">
-                <h2>Location: {fieldTrip.address}</h2>
-                <h2>Date of Trip: {fieldTrip.date}</h2>
-                <h2>Supplies: {fieldTrip.supplies}</h2>
-                <h2>Cost: {fieldTrip.cost}</h2>
+                <h2>Location: {trip.address}</h2>
+                <h2>Date of Trip: {trip.date}</h2>
+                <h2>Supplies: {trip.supplies}</h2>
+                <h2>Cost: {trip.cost}</h2>
               </div>
             </Grid.Column>
 
@@ -91,50 +164,77 @@ const fieldTrip = fieldTripList.find((trip) => {
           <Grid.Row columns={1}>
             <Grid.Column>
               <div className="trip-summary-wrapper">
-                <h2>Additional Notes / Trip Summary: {fieldTrip.field_trip_details}</h2>
+                <h2>Additional Notes / Trip Summary: {trip.field_trip_details}</h2>
               </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>
 
-        <Segment basic clearing style={{ padding: "unset", marginTop: 120}} > 
+        <Segment basic clearing style={{ padding: "unset", marginTop: 120}} >
+          <Modal
+            trigger={
+              <Button floated="right" primary>
+                <Icon name="add" />
+                Add Student
+              </Button>
+            }
+            closeIcon
+            onClose={() => {
+              setStudentInfo({
+                first_name: "",
+                last_name: "",
+              });
+              setIsSuccessfullyAdded(false);
+              setError(false);
+            }}
+          >
+            <Modal.Header className="modalHeader">Add Student</Modal.Header>
+            <Modal.Content>
+              {
+                isSuccessfullyAdded && (
+                  <Message positive>
+                    <Message.Header>Student successfully added!</Message.Header>
+                  </Message>
+                )
 
-        <Modal trigger={
-          <Button floated="right" primary>
-           <Icon name="add" />
-            Add Student
-          </Button>} closeIcon inverted >
-           <Modal.Header className="modalHeader">Add Student!</Modal.Header>
-           <Modal.Content>
-          {/*   <Container>  */}
-               <Form onSubmit={_handleSubmit}>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="First Name"
-                     name="first_name"
-                     value={fieldTrip.first_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="Last Name"
-                     name="last_name"
-                     value={fieldTrip.last_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-   
-                 <Form.Button primary>Submit</Form.Button>
-               </Form>
-           {/*  </Container>  */}
-           </Modal.Content>
-         </Modal>
+              }
 
+              {
+                Object.keys(error).length > 0 && (
+                  <Message negative>
+                    <Message.Header>
+                      We ran into an issue adding the student. {error.message}. And Please try again.
+                    </Message.Header>
+                  </Message>
+                )
+
+              }
+
+              <Form onSubmit={_handleSubmit}>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="First Name"
+                    name="first_name"
+                    value={studentInfo.first_name}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Last Name"
+                    name="last_name"
+                    value={studentInfo.last_name}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+
+                <Form.Button primary>Submit</Form.Button>
+              </Form>
+            </Modal.Content>
+          </Modal>
         </Segment>
-
 
         <Table columns={5} style={{ marginTop: 20, marginBottom: 50 }}>
           <Table.Header>
@@ -148,32 +248,24 @@ const fieldTrip = fieldTripList.find((trip) => {
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell > John </Table.Cell>
-              <Table.Cell> <Icon name="check green"/ > </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-              <Table.Cell> <Icon name="minus"/> </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell> Jamie </Table.Cell>
-              <Table.Cell> <Icon name="times red"/> </Table.Cell>
-              <Table.Cell> <Icon name="question yellow"/> </Table.Cell>
-              <Table.Cell> <Icon name="minus"/> </Table.Cell>
-              <Table.Cell> <Icon name="question red"/> </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell> Jill </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-              <Table.Cell> <Icon name="minus"/> </Table.Cell>
-              <Table.Cell> <Icon name="check green"/> </Table.Cell>
-            </Table.Row>
+
+            { students.map((student) => {
+              return (
+                <Table.Row key={student.id}>
+                  <Table.Cell > {student.first_name}  </Table.Cell>
+                  <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
+                  <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
+                  <Table.Cell> <Icon name="minus" color = "red"/> </Table.Cell>
+                  <Table.Cell> <Icon name="check" color="green"/> </Table.Cell>
+                </Table.Row>
+              )
+            })}
+
           </Table.Body>
 
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell>2 Students Going</Table.HeaderCell>
+              <Table.HeaderCell> {students.length} Students Going</Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
               <Table.HeaderCell />
@@ -183,46 +275,39 @@ const fieldTrip = fieldTripList.find((trip) => {
         </Table>
 
         <Modal trigger={
-          <Button floated="right" primary>
-           <Icon name="add" />
+          <Button floated="right" primary disabled>
+            <Icon name="add" />
             Add Chaperone
           </Button>} closeIcon >
-           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
-           <Modal.Content>
-          {/*   <Container>  */}
-               <Form onSubmit={_handleSubmit}>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="First Name"
-                     name="first_name"
-                     value={fieldTrip.first_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-                 <Form.Group widths="equal">
-                   <Form.Input
-                     fluid
-                     label="Last Name"
-                     name="last_name"
-                     value={fieldTrip.last_name}
-                     onChange={_handleChange}
-                   />
-                 </Form.Group>
-   
-                 <Form.Button primary>Submit</Form.Button>
-               </Form>
-           {/*  </Container>  */}
-           </Modal.Content>
-         </Modal>  
+          <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
+          <Modal.Content>
+            {/*   <Container>  */}
+            <Form onSubmit={_handleSubmit}>
+              <Form.Group widths="equal">
+                <Form.Input
+                  fluid
+                  label="First Name"
+                  name="first_name"
+                  value={trip.first_name}
+                  onChange={_handleChange}
+                />
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Input
+                  fluid
+                  label="Last Name"
+                  name="last_name"
+                  value={trip.last_name}
+                  onChange={_handleChange}
+                />
+              </Form.Group>
 
-
-
-
-
-
+              <Form.Button primary>Submit</Form.Button>
+            </Form>
+            {/*  </Container>  */}
+          </Modal.Content>
+        </Modal>
       </Container>
-
     </>
   );
 };

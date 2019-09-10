@@ -80,8 +80,9 @@ export const fieldTripList = [
 ];
 
 export default () => {
-
+       //  state, setter          // property in GlobalState
   const [ trips, setTrips ] = useGlobal('trips');
+
 
   useEffect(() => {
     const url = `http://localhost:5000/fieldtrips`;
@@ -90,11 +91,11 @@ export default () => {
     request
       .then(({ data }) => {
         console.log("TRIP-LIST:", data);
-        return setTrips(data);
+        return setTrips(data);  // like this.setState
 
       })
       .catch(err => err);
-  }, []);
+  }, []);  // 2nd param is arr to stop re-render
 
   return (
     <>
