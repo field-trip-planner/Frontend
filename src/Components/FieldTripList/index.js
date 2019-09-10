@@ -89,10 +89,10 @@ const FieldTripList = props => {
       .get("fieldtrips")
       .then(({ data }) => {
         console.log("TRIP-LIST:", data);
-        return setTrips(data);
+        return setTrips(data); // like this.setState
       })
       .catch(err => err);
-  }, []);
+  }, []); // 2nd param is arr to stop re-render
 
   return (
     <>
