@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import { Container, Button, Modal, Form } from "semantic-ui-react";
+import { Container, Button, Modal, Form, Message } from "semantic-ui-react";
+import { withRouter } from "react-router-dom";
+import api from "../../api";
 
-export default () => {
+const ParentRegistrationModal = props => {
+  const [handleState, setHandleState] = useState({
+    success: false,
+    failed: false,
+    message: ""
+  });
   const [info, setInfo] = useState({
     first_name: "",
     last_name: "",
-    username: "",
     email: "",
     password: "",
     confirm_password: "",
-    phone: ""
+    phone_number: ""
   });
 
   const _handleChange = e => {
@@ -20,17 +26,59 @@ export default () => {
     });
   };
   const _handleSubmit = e => {
+    const newUser = { ...info, isTeacher: false };
+    delete newUser.confirm_password;
     e.preventDefault();
     if (info.password !== info.confirm_password) {
-      throw new Error("Invalid Password"); // Not Ideal but we need to implement way to check
+      setHandleState({ failed: true, message: "Invalid Password" });
+      setTimeout(() => {
+        setHandleState({ failed: false, message: "" });
+      }, 2000);
+    } else {
+      api
+        .post("register", newUser)
+        .then(res => {
+          console.log(res);
+          setHandleState({
+            success: true,
+            message: "Account Created Successfully"
+          });
+          setTimeout(() => {
+            setHandleState({ success: false, message: "" });
+            props.history.push("/");
+          }, 2000);
+          setInfo({
+            first_name: "",
+            last_name: "",
+            email: "",
+            password: "",
+            confirm_password: "",
+            phone_number: ""
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          setHandleState({
+            failed: true,
+            message: "Email already in use, Select a different email"
+          });
+          setTimeout(() => {
+            setHandleState({ failed: false, message: "" });
+          }, 2000);
+        });
     }
-    console.log(info);
   };
   return (
     <>
       <Modal trigger={<Button>Sign Up</Button>}>
         <Modal.Header className="modalHeader">Parent Registration</Modal.Header>
         <Modal.Content>
+          {handleState.success && (
+            <Message positive content={handleState.message} />
+          )}
+          {handleState.failed && (
+            <Message negative content={handleState.message} />
+          )}
           <Container>
             <Form onSubmit={_handleSubmit}>
               <Form.Group widths="equal">
@@ -40,6 +88,7 @@ export default () => {
                   name="first_name"
                   value={info.first_name}
                   onChange={_handleChange}
+                  required
                 />
                 <Form.Input
                   fluid
@@ -47,22 +96,25 @@ export default () => {
                   name="last_name"
                   value={info.last_name}
                   onChange={_handleChange}
+                  required
                 />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Input
-                  fluid
-                  label="Username"
-                  name="username"
-                  value={info.username}
-                  onChange={_handleChange}
-                />
                 <Form.Input
                   fluid
                   label="Email"
                   type="email"
                   name="email"
                   value={info.email}
+                  onChange={_handleChange}
+                  required
+                />
+                <Form.Input
+                  fluid
+                  label="Phone"
+                  placeholder="555-222-3423"
+                  name="phone_number"
+                  value={info.phone_number}
                   onChange={_handleChange}
                 />
               </Form.Group>
@@ -74,6 +126,7 @@ export default () => {
                   name="password"
                   value={info.password}
                   onChange={_handleChange}
+                  required
                 />
                 <Form.Input
                   fluid
@@ -82,17 +135,10 @@ export default () => {
                   name="confirm_password"
                   value={info.confirm_password}
                   onChange={_handleChange}
+                  required
                 />
               </Form.Group>
-              <Form.Input
-                fluid
-                label="Phone"
-                placeholder="555-222-3423"
-                name="phone"
-                value={info.phone}
-                onChange={_handleChange}
-                width="7"
-              />
+
               <Form.Button primary>Submit</Form.Button>
             </Form>
           </Container>
@@ -101,3 +147,5 @@ export default () => {
     </>
   );
 };
+
+export default withRouter(ParentRegistrationModal);
