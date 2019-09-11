@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"; // don't forget to add useEffect here!
 // import { Link } from "react-router-dom";
-import axios from 'axios';
+import api from "../../api";
 
 import {
   Grid,
@@ -29,10 +29,10 @@ const FieldTripDetails = ({ match } ) => {
 
   useEffect(() => {
     const tripItemID = match.params.id;
-    const url = `http://localhost:5000/fieldtrips/${tripItemID}`;
+    const url = `fieldtrips/${tripItemID}`;
 
-    const request = axios.get(url);
-    request
+    api
+      .get(url)
       .then(({data}) => {
         console.log('trip item ', data);
         return setTrip(data);
@@ -42,10 +42,8 @@ const FieldTripDetails = ({ match } ) => {
   }, [match.params.id] )  // explain why this works & tripItemID breaks it
 
   useEffect(() => {
-    const url = `http://localhost:5000/students`;
-
-    const request = axios.get(url);
-    request
+    api
+      .get("students")
       .then(({data}) => {
         console.log('students ALL ', data);
         return setStudents(data);
@@ -84,17 +82,17 @@ const FieldTripDetails = ({ match } ) => {
       })
     }
 
-    const url = `http://localhost:5000/students`;
-    const request = axios.post(url, studentInfo);
-    request
+    const url = "students";
+    api
+      .post(url, studentInfo)
       .then(({data}) => {
         console.log('A student added:: ', data);
 
         setIsSuccessfullyAdded(true);
         setError(false);
 
-        const request = axios.get(url);
-        request
+        api
+          .get(url)
           .then(({data}) => {
             console.log('students ALL ', data);
             return setStudents(data);
