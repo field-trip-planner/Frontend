@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useGlobal } from "reactn";
+import { withRouter } from "react-router-dom";
+import api from "../../api";
+
 import "./loginModal.css";
 
-import RegistrationModal from "../RegistrationModal/index";
 import {
   Modal,
   Button,
@@ -13,7 +16,8 @@ import {
   Container
 } from "semantic-ui-react";
 
-export default () => {
+const LoginModal = props => {
+  const [user, setUser] = useGlobal("user");
   const [info, setInfo] = useState({
     email: "",
     password: ""
@@ -28,7 +32,13 @@ export default () => {
   };
   const _handleSubmit = e => {
     e.preventDefault();
-    console.log(info);
+    api
+      .post("login", info)
+      .then(res => {
+        setUser(res.data.user);
+        props.history.push("/dashboard");
+      })
+      .catch(err => err);
   };
   return (
     <>
@@ -64,18 +74,21 @@ export default () => {
                       Login
                     </Button>
 
-                    <button className="googleLoginButton" color="teal" fluid size="large">
-                    {/* Need to run backend on separate port locally to work. Need to update to use staging auth url once everything is pushed 
+                    <button
+                      className="googleLoginButton"
+                      color="teal"
+                      size="large"
+                    >
+                      {/* Need to run backend on separate port locally to work. Need to update to use staging auth url once everything is pushed 
                     to staging */}
-                    <a href="http://localhost:5000/auth/google">Log in with Google</a>
+                      <a href="http://localhost:5000/auth/google">
+                        Log in with Google
+                      </a>
                     </button>
                   </Segment>
                 </Form>
                 <Message>
                   New to us? <a href="#!">Sign up</a>
-                  {/* <RegistrationModal
-                    element={<span className="login-signup">Sign Up</span>}
-                  /> */}
                 </Message>
               </Grid.Column>
             </Grid>
@@ -85,3 +98,5 @@ export default () => {
     </>
   );
 };
+
+export default withRouter(LoginModal);
