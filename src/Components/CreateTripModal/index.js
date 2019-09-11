@@ -1,5 +1,6 @@
-import React, {useState} from "react";
-import axios from 'axios';
+import React, {useState,useEffect} from "react";
+import api from "../../api";
+import { useGlobal } from "reactn";
 import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 
 const CreateTripModal= () => {
@@ -22,11 +23,18 @@ const CreateTripModal= () => {
     });
   };
 
+  const [ trips, setTrips ] = useGlobal("trips") 
+  useEffect(() =>{
+    api.get("fieldtrips")
+    .then(({data})=>{
+      setTrips(data)
+    })
+    console.log("useeffect one",)
+  },[])
+
   const _handleSubmit = e => {
     e.preventDefault();
-      const url = `http://localhost:5000/fieldtrips`;
-      const request = axios.post(url,fieldTripInfo);
-      request
+        api.post("fieldtrips",fieldTripInfo)
         .then(({ data }) => {
           setfieldTripInfo({
             name: "",
@@ -34,16 +42,24 @@ const CreateTripModal= () => {
             address: "",
             supplies: "",
             cost: "",
+            school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",
+            creator_id: "59495f61-f31c-444d-a284-b2233e5aa914",
             field_trip_details: "",
           })
-          return data;
+          //return data;
+          api.get("fieldtrips")
+          .then(({data} )=>{
+            return setTrips(data)
+          })
+          return data
         })
         .catch(err => err);
     // if (info.password !== info.confirm_password) {
     //   throw new Error("Invalid Password"); // Not Ideal but we need to implement way to check
     // }
-    console.log(fieldTripInfo);
+    // console.log(fieldTripInfo);
   };
+
     
   return (
     <>
