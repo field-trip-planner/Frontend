@@ -38,7 +38,6 @@ const ParentRegistrationModal = props => {
       api
         .post("register", newUser)
         .then(res => {
-          console.log(res);
           setHandleState({
             success: true,
             message: "Account Created Successfully"
@@ -57,7 +56,6 @@ const ParentRegistrationModal = props => {
           });
         })
         .catch(err => {
-          console.log(err);
           setHandleState({
             failed: true,
             message: "Email already in use, Select a different email"
