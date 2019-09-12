@@ -11,6 +11,7 @@ const MainMenu = props => {
       .delete("logout")
       .then(res => res)
       .catch(err => err);
+    localStorage.removeItem("state");
     props.history.push("/");
   };
   return (
