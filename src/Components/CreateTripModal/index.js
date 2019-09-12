@@ -42,6 +42,7 @@ const CreateTripModal= (props) => {
         .catch(err => err);
     console.log(fieldTripInfo);
   };
+
     
   return (
     <>
