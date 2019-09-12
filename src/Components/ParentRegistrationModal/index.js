@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Container, Button, Modal, Form, Message } from "semantic-ui-react";
+import { useGlobal } from "reactn";
 import { withRouter } from "react-router-dom";
 import api from "../../api";
 
 const ParentRegistrationModal = props => {
+  const [user, setUser] = useGlobal("user");
   const [handleState, setHandleState] = useState({
     success: false,
     failed: false,
@@ -44,7 +46,11 @@ const ParentRegistrationModal = props => {
           });
           setTimeout(() => {
             setHandleState({ success: false, message: "" });
-            props.history.push("/");
+            api
+              .post("login", { email: info.email, password: info.password })
+              .then(res => setUser(res.data.user))
+              .catch(err => err);
+            props.history.push("/dashboard");
           }, 2000);
           setInfo({
             first_name: "",
