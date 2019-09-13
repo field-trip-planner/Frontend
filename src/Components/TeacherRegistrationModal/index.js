@@ -23,7 +23,6 @@ const TeacherRegistrationForm = props => {
   
   const handleChange = e => {
     const { name, value } = e.target
-    console.log('change is inevitable')
     setTeacherCreds({
       ...teacherCreds,
       [name] : value
@@ -32,18 +31,10 @@ const TeacherRegistrationForm = props => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    
-    console.log(teacherCreds)
     const newTeacher = { ...teacherCreds }
      
     api.post("register",newTeacher)
       .then(res => {
-        console.log(`${newTeacher.first_name} has been registered`)
-        console.log(res)
-        
-       // setUser(teacherCreds)
-        //setInfo({ email:teacherCreds.email, password:teacherCreds.password })
-
         setTimeout(()=> {
           api
             .post("login", { email: newTeacher.email, password: newTeacher.password })
