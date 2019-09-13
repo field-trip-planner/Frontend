@@ -45,13 +45,16 @@ const ParentRegistrationModal = props => {
             message: "Account Created Successfully"
           });
           setTimeout(() => {
+            console.log("top of settime out");
             setHandleState({ success: false, message: "" });
             api
               .post("login", { email: info.email, password: info.password })
               .then(res => setUser(res.data.user))
               .catch(err => err);
+            console.log("before push");
             props.history.push("/dashboard");
-          }, 2000);
+            console.log("after dashboard");
+          }, 3000);
           setInfo({
             first_name: "",
             last_name: "",
