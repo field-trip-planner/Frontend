@@ -86,6 +86,7 @@ const FieldTripList = props => {
       .catch(err => err);
   }, []); // 2nd param is arr to stop re-render
 
+
   const _handleSearch = e => {
     updateSearch(e.target.value);
     console.log(search);
@@ -93,6 +94,17 @@ const FieldTripList = props => {
   const searchTrip = trips.filter(trip => {
     return trip.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;
   });
+
+const onSubmitSuccess = () =>{
+  api
+    .get("fieldtrips")
+    .then(({ data }) => {
+      console.log("TRIP-LIST:", data);
+      return setTrips(data);
+    })
+    .catch(err => err);
+}
+
   return (
     <>
       <MainMenu />
@@ -108,7 +120,7 @@ const FieldTripList = props => {
             value={search}
           />
 
-          <CreateTripModal size="small" />
+          <CreateTripModal size="small"  onSubmitSuccess ={onSubmitSuccess}/>
         </div>
 
         <Header>UPCOMING FIELD TRIPS</Header>

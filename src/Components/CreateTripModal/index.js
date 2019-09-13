@@ -1,10 +1,9 @@
 import React, {useState} from "react";
-import axios from 'axios';
+import api from "../../api";
 import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 
-const CreateTripModal= () => {
+const CreateTripModal= (props) => {
   const [ fieldTripInfo, setfieldTripInfo ] = useState({
-    //id:5,
     name: "",
     date: "",
     address: "",
@@ -24,9 +23,8 @@ const CreateTripModal= () => {
 
   const _handleSubmit = e => {
     e.preventDefault();
-      const url = `http://localhost:5000/fieldtrips`;
-      const request = axios.post(url,fieldTripInfo);
-      request
+      api
+        .post("fieldtrips",fieldTripInfo)
         .then(({ data }) => {
           setfieldTripInfo({
             name: "",
@@ -34,16 +32,17 @@ const CreateTripModal= () => {
             address: "",
             supplies: "",
             cost: "",
+            school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",
+            creator_id: "59495f61-f31c-444d-a284-b2233e5aa914",
             field_trip_details: "",
           })
+          props.onSubmitSuccess();
           return data;
         })
         .catch(err => err);
-    // if (info.password !== info.confirm_password) {
-    //   throw new Error("Invalid Password"); // Not Ideal but we need to implement way to check
-    // }
     console.log(fieldTripInfo);
   };
+
     
   return (
     <>
