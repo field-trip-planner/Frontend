@@ -91,6 +91,15 @@ const FieldTripList = props => {
       .catch(err => err);
   }, []);  // 2nd param is arr to stop re-render
 
+const onSubmitSuccess = () =>{
+  api
+    .get("fieldtrips")
+    .then(({ data }) => {
+      console.log("TRIP-LIST:", data);
+      return setTrips(data);
+    })
+    .catch(err => err);
+}
   return (
     <>
       <MainMenu />
@@ -104,7 +113,7 @@ const FieldTripList = props => {
             floated="left"
           />
 
-          <CreateTripModal size="small" />
+          <CreateTripModal size="small"  onSubmitSuccess ={onSubmitSuccess}/>
         </div>
 
         <Header>UPCOMING FIELD TRIPS</Header>
