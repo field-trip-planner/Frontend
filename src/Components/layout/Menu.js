@@ -16,7 +16,7 @@ const MainMenu = props => {
   return (
     <Menu>
       <Menu.Item header>
-        <Link to="/">MyFieldTripp</Link>
+        <Link to="/dashboard">MyFieldTripp</Link>
       </Menu.Item>
       <Menu.Menu position="right">
         <Menu.Item name={user.first_name} />
