@@ -5,22 +5,24 @@ import { withRouter } from 'react-router-dom'
 import { Button, Checkbox, Modal, Form, Input } from 'semantic-ui-react';
 import './teacherRegistration.css'
 
-const TeacherRegistrationForm = props => {
-  const [user, setUser] = useGlobal("user")
+const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
+  const [user, setUser] = useGlobal("user");
+  const [school] = useGlobal('school');
+
   const [teacherCreds, setTeacherCreds] = useState({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
     isTeacher: true,
-    school_id: "9a3e0d6f-1e1a-4894-ae96-5a1b512483ec",
+    school_id: school,
     phone_number: ""
   });
   const [info, setInfo] = useState({
     email:"",
     password:""
   })
-  
+
   const handleChange = e => {
     const { name, value } = e.target
     setTeacherCreds({
@@ -32,7 +34,7 @@ const TeacherRegistrationForm = props => {
   const handleSubmit = e => {
     e.preventDefault()
     const newTeacher = { ...teacherCreds }
-     
+
     api.post("register",newTeacher)
       .then(res => {
         setTimeout(()=> {
@@ -42,57 +44,64 @@ const TeacherRegistrationForm = props => {
               setUser(res.data.user);
             })
             .catch(err => err)
-            props.history.push("/dashboard")
+            history.push("/dashboard")
         }, 2000 )
       })
       .catch(err=> err,"somethin went wrong")
   }
-   
+
     return (
-        <Modal size="small" 
-        trigger={
+
+        <Modal size="small"
+        trigger=
+          {
+            taco === 'school' ? <Button onClick={onSchoolRegister}>
+                Register School
+              </Button>:
+
             <Button >
             Register
             </Button>
-        }closeIcon>
-      
+
+          } closeIcon>
+
       <Modal.Header className='modalHeader'>Teacher Registration</Modal.Header>
       <Modal.Content>
         <Form onSubmit={handleSubmit}>
             <Form.Field>
             <label>First Name</label>
-            
-            <input 
-              placeholder='First Name' 
+
+            <input
+              placeholder='First Name'
               name="first_name"
               value={teacherCreds.first_name}
-              onChange={handleChange} 
+              onChange={handleChange}
             />
             </Form.Field>
-            
+
             <Form.Field>
             <label>Last Name</label>
-            <input 
+            <input
               placeholder='Last Name'
               name="last_name"
               value={teacherCreds.last_name}
-              onChange={handleChange}  
+              onChange={handleChange}
             />
             </Form.Field>
-            
+
             <Form.Field>
             <label>Email</label>
-            <input 
+            <input
               placeholder='email@domain.com'
               name = "email"
               value = {teacherCreds.email}
-              onChange={handleChange} 
+              onChange={handleChange}
             />
             </Form.Field>
-            
+
             {/* <Form.Field>
             <label>Username</label>
-            <input 
+            <input
               placeholder='Username'
               name="username"
               value = {teacherCreds.username}
@@ -102,8 +111,8 @@ const TeacherRegistrationForm = props => {
 
             <Form.Field>
             <label>Password</label>
-            <Input 
-              type='password' 
+            <Input
+              type='password'
               placeholder='Please dont make it password'
               name = "password"
               value = {teacherCreds.password}
@@ -113,23 +122,23 @@ const TeacherRegistrationForm = props => {
 
             <Form.Field>
             <label>Phone Number</label>
-            <input 
+            <input
               placeholder='(123)456-7890'
               name = "phone_number"
               value = {teacherCreds.phone_number}
-              onChange={handleChange} 
+              onChange={handleChange}
             />
             </Form.Field>
-            
+
             {/* <Form.Field>
             <Checkbox label='I agree to the Terms and Conditions' />
             </Form.Field> */}
-            
+
             <Form.Button primary>Submit</Form.Button>
         </Form>
       </Modal.Content>
     </Modal>
     )
-} 
+}
 
 export default withRouter(TeacherRegistrationForm)

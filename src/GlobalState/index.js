@@ -31,7 +31,7 @@ function saveState(state) {
 // If nothing is saved or the localStorage is cleared upon logout setGlobal is initiated.
 function loadState() {
   try {
-    setGlobal({ trips: [], user: {} });
+    setGlobal({ trips: [], user: {}, school: '' });
     const serializedState = localStorage.getItem("state");
     if (serializedState === null) return undefined;
     const state = JSON.parse(serializedState);
