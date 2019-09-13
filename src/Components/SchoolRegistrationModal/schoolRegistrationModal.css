@@ -1,10 +1,10 @@
 .schoolFormContainer{
-  padding-top: 0px;
-  height: 320px;
+  /*padding-top: 0px;*/
+  /*height: 200px;*/
 }
 
 .modalHeader {
-  text-align: center
+  /*text-align: center*/
 }
 
 .schoolRegRedirect{
@@ -19,5 +19,5 @@
 
 .schoolForm{
   height: 100%;
-  
+
 }
