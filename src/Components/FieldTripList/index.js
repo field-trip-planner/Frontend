@@ -13,6 +13,7 @@ import {
 import TripItem from "./TripItem";
 import CreateTripModal from "../CreateTripModal/";
 import MainMenu from "../layout/Menu";
+import axios from "axios";
 
 export const fieldTripList = [
   {
@@ -80,8 +81,11 @@ export const fieldTripList = [
 const FieldTripList = props => {
        //  state, setter          // property in GlobalState
   const [ trips, setTrips ] = useGlobal('trips');
+  const [ user, setUser ] = useGlobal('user');
+  // const [ googleSession, setGoogleSession ] = useGlobal('googleSession');
 
   useEffect(() => {
+    
     api
       .get("fieldtrips")
       .then(({ data }) => {
@@ -90,6 +94,24 @@ const FieldTripList = props => {
       })
       .catch(err => err);
   }, []);  // 2nd param is arr to stop re-render
+
+  //google oauth
+  useEffect(() => {
+    console.log('before', document.cookie)
+    axios({
+      method: 'get',
+      url: 'http://localhost:5000/auth/profile',
+      withCredentials: true
+      })
+      .then( res => {
+        // console.log('google data here', res)
+        console.log(res.data.user.profile)
+        setUser(res.data.user.profile)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
 
   return (
     <>

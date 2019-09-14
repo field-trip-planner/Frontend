@@ -1,41 +1,24 @@
 import React from "react";
 import RegistrationModal from "../RegistrationModal";
-import { Link } from "react-router-dom";
+import MainMenu from '../layout/Menu';
 import { useGlobal } from "reactn";
 import "./landingPage.css";
 
 import {
   Container,
-  Menu,
   Image,
   Divider,
   Embed,
   Grid,
-  Button,
-  Icon
 } from "semantic-ui-react";
-import LoginModal from "../LoginModal";
 
 function AppHeader() {
+  const [ user ] = useGlobal('user');
+  console.log('user here', user)
   return (
     <>
       <div>
-        <Menu borderless>
-          <Menu.Item header>
-            <Link to="/">MyFieldTripp</Link>
-          </Menu.Item>
-          <Menu.Menu className="siblingFade" position="right">
-            <Menu.Item style={{}} as="span" className="menuItem" name="AboutUs">
-              <span>About us</span>
-            </Menu.Item>
-            <Menu.Item as="span" className="menuItem" name="How it works">
-              <span>How it Works</span>
-            </Menu.Item>
-            <Menu.Item as="span" className="menuItem" name="login">
-              <LoginModal />
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
+        <MainMenu/>
       </div>
 
       <div className="hero">

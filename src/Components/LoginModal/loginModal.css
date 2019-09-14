@@ -11,6 +11,11 @@
   color: lightblue;
 }
 
-.googleLoginButton {
+.googleLoginContainer{
   margin-top: 20px;
+}
+
+.googleRef{
+  text-decoration: none;
+  color: black;
 }

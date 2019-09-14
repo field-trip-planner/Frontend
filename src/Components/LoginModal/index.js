@@ -13,7 +13,8 @@ import {
   Header,
   Message,
   Segment,
-  Container
+  Container,
+  Icon
 } from "semantic-ui-react";
 
 const LoginModal = props => {
@@ -32,6 +33,7 @@ const LoginModal = props => {
   };
   const _handleSubmit = e => {
     e.preventDefault();
+    console.log('hello')
     api
       .post("login", info)
       .then(res => {
@@ -40,6 +42,9 @@ const LoginModal = props => {
       })
       .catch(err => err);
   };
+  // const _handleGoogleLogin = e => {
+  //   props.history.push("http://localhost:5000/auth/google")
+  // }
   return (
     <>
       <Modal size="tiny" trigger={<span>Login</span>}>
@@ -74,17 +79,24 @@ const LoginModal = props => {
                       Login
                     </Button>
 
-                    <button
-                      className="googleLoginButton"
-                      color="teal"
-                      size="large"
-                    >
-                      {/* Need to run backend on separate port locally to work. Need to update to use staging auth url once everything is pushed 
+                    <div className="googleLoginContainer">
+
+                      <Button
+                        className="googleLoginButton"
+                        size="large"
+                        icon
+                        fluid
+                      // onClick={_handleGoogleLogin}
+                      >
+                        {/* Need to run backend on separate port locally to work. Need to update to use staging auth url once everything is pushed 
                     to staging */}
-                      <a href="http://localhost:5000/auth/google">
-                        Log in with Google
+                        <a className="googleRef" href="http://localhost:5000/auth/google">
+                          <Icon name="google" />
+                          Log in with Google
                       </a>
-                    </button>
+                      </Button>
+
+                    </div>
                   </Segment>
                 </Form>
                 <Message>
