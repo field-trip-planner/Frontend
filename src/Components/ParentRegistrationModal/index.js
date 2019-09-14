@@ -27,34 +27,29 @@ const ParentRegistrationModal = props => {
       [name]: value
     });
   };
-  const _handleSubmit = e => {
+  const _handleSubmit = async () => {
     const newUser = { ...info, isTeacher: false };
     delete newUser.confirm_password;
-    e.preventDefault();
     if (info.password !== info.confirm_password) {
       setHandleState({ failed: true, message: "Invalid Password" });
       setTimeout(() => {
         setHandleState({ failed: false, message: "" });
       }, 2000);
     } else {
-      api
-        .post("register", newUser)
-        .then(res => {
+      try {
+        const newRegister = await api.post("register", newUser);
+        if (newRegister) {
           setHandleState({
             success: true,
             message: "Account Created Successfully"
           });
-          setTimeout(() => {
-            console.log("top of settime out");
-            setHandleState({ success: false, message: "" });
-            api
-              .post("login", { email: info.email, password: info.password })
-              .then(res => setUser(res.data.user))
-              .catch(err => err);
-            console.log("before push");
-            props.history.push("/dashboard");
-            console.log("after dashboard");
-          }, 3000);
+        }
+        const newLogin = await api.post("login", {
+          email: info.email,
+          password: info.password
+        });
+        setUser(newLogin.data.user);
+        if (newLogin && props.history.push("/dashboard"))
           setInfo({
             first_name: "",
             last_name: "",
@@ -63,16 +58,16 @@ const ParentRegistrationModal = props => {
             confirm_password: "",
             phone_number: ""
           });
-        })
-        .catch(err => {
-          setHandleState({
-            failed: true,
-            message: "Email already in use, Select a different email"
-          });
-          setTimeout(() => {
-            setHandleState({ failed: false, message: "" });
-          }, 2000);
+      } catch (e) {
+        console.log(e);
+        setHandleState({
+          failed: true,
+          message: "Registration Failed, Try again"
         });
+        setTimeout(() => {
+          setHandleState({ failed: false, message: "" });
+        }, 2000);
+      }
     }
   };
   return (

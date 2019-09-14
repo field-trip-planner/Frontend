@@ -1,45 +1,34 @@
-import React, {useState, useEffect} from 'react';
-import { Button, Modal, Container, Input, Dropdown } from 'semantic-ui-react';
-import api from '../../api';
-import { useGlobal } from 'reactn';
-import SchoolRegistrationModal from '../SchoolRegistrationModal';
-import './schoolLookupModal.css';
-import TeacherRegistrationForm from '../TeacherRegistrationModal/index.js';
-
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Container, Input, Dropdown } from "semantic-ui-react";
+import api from "../../api";
+import { useGlobal } from "reactn";
+import SchoolRegistrationModal from "../SchoolRegistrationModal";
+import "./schoolLookupModal.css";
+import TeacherRegistrationForm from "../TeacherRegistrationModal/index.js";
 
 const SchoolLookUp = () => {
-
-  const [school, setSchool] = useGlobal('school');
+  const [school, setSchool] = useGlobal("school");
   const [schools, setSchools] = useState([]);
 
   useEffect(() => {
     api
-      .get('schools')
+      .get("schools")
       .then(({ data }) => {
         setSchools(data);
-
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
-      })
+      });
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     e.preventDefault();
-
     setSchool(e.target.value);
-    console.log('SCHool TARGET', e.target.value);
-    console.log('SCHOOOL::::', school);
-
-  }
+  };
 
   return (
     <>
-      <Modal
-        className="modal"
-        size="large"
-        trigger={<Button>Sign Up</Button>}
-      >
+      <Modal className="modal" size="large" trigger={<Button>Sign Up</Button>}>
         <Modal.Header className="modalHeader">School Look Up</Modal.Header>
         <Modal.Content>
           <Container className="contentContainer" textAlign="center">
@@ -52,21 +41,14 @@ const SchoolLookUp = () => {
             />
 
             <select name="school" id="" onChange={handleChange}>
-              <option value="default">
-                ...
-              </option>
-              {
-                schools.map((school) => {
-                  return (
-                      <option
-                        key={school.id}
-                        value={school.id}
-                      >
-                      {school.school_name}
-                    </option>
-                  )
-                })
-              }
+              <option value="default">Choose your School</option>
+              {schools.map(school => {
+                return (
+                  <option key={school.id} value={school.id}>
+                    {school.school_name}
+                  </option>
+                );
+              })}
             </select>
 
             <p>
