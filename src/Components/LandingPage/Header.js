@@ -22,7 +22,10 @@ function AppHeader() {
       <div>
         <Menu borderless>
           <Menu.Item header>
-            <Link to="/">MyFieldTripp</Link>
+            <Link to="/">
+              <img className="logo" src="/favicon-16x16.png"/>
+              <span className="logo-text">MyFieldTripp</span>
+            </Link>
           </Menu.Item>
           <Menu.Menu className="siblingFade" position="right">
             <Menu.Item style={{}} as="span" className="menuItem" name="AboutUs">
