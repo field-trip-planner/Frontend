@@ -41,7 +41,7 @@ const SchoolLookUp = () => {
             />
 
             <select name="school" id="" onChange={handleChange}>
-              <option value="default">Choose your School</option>
+              <option value="default">Choose your school</option>
               {schools.map(school => {
                 return (
                   <option key={school.id} value={school.id}>

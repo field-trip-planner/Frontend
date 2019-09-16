@@ -107,7 +107,7 @@ const SchoolRegistration = () => {
                   <option
                     value="default"
                   >
-                    Choose your school
+                    Select one
                   </option>
                   <option
                     value='Elementary School'
