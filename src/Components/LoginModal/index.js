@@ -42,9 +42,7 @@ const LoginModal = props => {
       })
       .catch(err => err);
   };
-  // const _handleGoogleLogin = e => {
-  //   props.history.push("http://localhost:5000/auth/google")
-  // }
+ 
   return (
     <>
       <Modal size="tiny" trigger={<span>Login</span>}>
@@ -86,7 +84,7 @@ const LoginModal = props => {
                         size="large"
                         icon
                         fluid
-                      // onClick={_handleGoogleLogin}
+                      
                       >
                         {/* Need to run backend on separate port locally to work. Need to update to use staging auth url once everything is pushed 
                     to staging */}

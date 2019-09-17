@@ -100,7 +100,7 @@ const FieldTripList = props => {
     console.log('before', document.cookie)
     axios({
       method: 'get',
-      url: 'http://localhost:5000/auth/profile',
+      url: 'http://localhost:5000/auth/login',
       withCredentials: true
       })
       .then( res => {
