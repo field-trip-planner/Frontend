@@ -1,7 +1,7 @@
 import React from "react";
 import { useGlobal } from "reactn";
 import { Link, withRouter } from "react-router-dom";
-import { Menu } from "semantic-ui-react";
+import { Menu, Image } from "semantic-ui-react";
 import LoginModal from '../LoginModal/index';
 import api from "../../api";
 import axios from 'axios';
@@ -69,6 +69,15 @@ const MainMenu = props => {
             <Menu.Item name="Dashboard" onClick={_handleDashboard} />
           </>
           : null}
+
+        {user.photos ?
+          <>
+            <Menu.Item>
+              {console.log('I am here', user.photos[0].value)}
+              <Image src={user.photos[0].value} avatar />
+            </Menu.Item>
+          </> :
+          null}
 
         {((!user.displayName) && props.history.location.pathname === '/') ?
           <>
