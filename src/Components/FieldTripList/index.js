@@ -7,6 +7,7 @@ import { Card, Divider, Input, Header, Container } from "semantic-ui-react";
 import TripItem from "./TripItem";
 import CreateTripModal from "../CreateTripModal/";
 import MainMenu from "../layout/Menu";
+import axios from "axios";
 
 export const fieldTripList = [
   {
@@ -84,6 +85,14 @@ const FieldTripList = props => {
         return setTrips(data);
       })
       .catch(err => err);
+    //axios request to get specific field trips
+    
+    //Teacher, Parent, Chaperone will have different endpoints to make their requests to
+
+    // axios({
+    //   url: ''
+    // })
+    
   }, []); // 2nd param is arr to stop re-render
 
 
