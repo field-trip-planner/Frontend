@@ -75,6 +75,7 @@ const FieldTripList = props => {
   //  state, setter          // property in GlobalState
   const [trips, setTrips] = useGlobal("trips");
   const [search, updateSearch] = useState("");
+  const [user, setUser] = useGlobal("user");
 
   useEffect(() => {
     api
@@ -86,7 +87,6 @@ const FieldTripList = props => {
       .catch(err => err);
   }, []); // 2nd param is arr to stop re-render
 
-
   const _handleSearch = e => {
     updateSearch(e.target.value);
     console.log(search);
@@ -95,15 +95,15 @@ const FieldTripList = props => {
     return trip.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;
   });
 
-const onSubmitSuccess = () =>{
-  api
-    .get("fieldtrips")
-    .then(({ data }) => {
-      console.log("TRIP-LIST:", data);
-      return setTrips(data);
-    })
-    .catch(err => err);
-}
+  const onSubmitSuccess = () => {
+    api
+      .get("fieldtrips")
+      .then(({ data }) => {
+        console.log("TRIP-LIST:", data);
+        return setTrips(data);
+      })
+      .catch(err => err);
+  };
 
   return (
     <>
@@ -120,7 +120,9 @@ const onSubmitSuccess = () =>{
             value={search}
           />
 
-          <CreateTripModal size="small"  onSubmitSuccess ={onSubmitSuccess}/>
+          {user.isTeacher ? (
+            <CreateTripModal size="small" onSubmitSuccess={onSubmitSuccess} />
+          ) : null}
         </div>
 
         <Header>UPCOMING FIELD TRIPS</Header>
