@@ -1,22 +1,34 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
+import { useGlobal } from "reactn";
 import api from "../../api";
 import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 
+
 const CreateTripModal = props => {
+  const [user] = useGlobal("user");
+  
   const [fieldTripInfo, setfieldTripInfo] = useState({
     name: "",
     date: "",
     address: "",
     supplies: "",
     cost: "",
-    field_trip_details: ""
+    field_trip_details: "",
+    creator_id: user.id,
+    school_id: user.school_id,
+
   });
+  
+  console.log('======>>>>   Current user id is ', user.id)
+  console.log('+++++++>>>   school id is ', user.school_id);
+
 
   const _handleChange = e => {
     const { name, value } = e.target;
     console.log("input enter", value);
     setfieldTripInfo({
       ...fieldTripInfo,
+
       [name]: value
     });
   };
@@ -32,8 +44,8 @@ const CreateTripModal = props => {
           address: "",
           supplies: "",
           cost: "",
-          school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",
-          creator_id: "59495f61-f31c-444d-a284-b2233e5aa914",
+          school_id: "",
+          creator_id: "" ,
           field_trip_details: ""
         });
         props.onSubmitSuccess();
