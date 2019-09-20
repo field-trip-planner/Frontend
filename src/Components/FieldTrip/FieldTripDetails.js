@@ -47,27 +47,6 @@ const FieldTripDetails = ({ match } ) => {
       .catch(err => err);
   }, [match.params.id])
 
-  // useEffect(() => {
-  //   // api
-  //   //   .get("students")
-  //   //   .then(({data}) => {
-  //   //     console.log('students ALL ', data);
-  //   //     return setStudents(data);
-  //   //
-  //   //   })
-  //   //   .catch(err => err);
-  //
-  //   api
-  //     .get(`students_fieldtrips/${match.params.id}/statuses`)
-  //     .then(({ data }) => {
-  //
-  //       console.log("ALL STATUS:", data);
-  //       return setStudents(data);
-  //
-  //     })
-  //     .catch(err => err);
-  // }, [] )
-
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
@@ -77,9 +56,6 @@ const FieldTripDetails = ({ match } ) => {
   // setting state
   const [isSuccessfullyAdded, setIsSuccessfullyAdded] = useState(false);
   const [error, setError] = useState({});
-
-  // setting state for the checkbox in student table
-  // const [isPaid, setIsPaid] = useState(false);
 
   const _handleChange = e => {
     const { name, value } = e.target;
@@ -155,22 +131,7 @@ const FieldTripDetails = ({ match } ) => {
 
   const onHandleCheckbox = async (studentStatus) => {
 
-    // const clickedStudentID = studentStatus.student_id;
     const clickedStudentStatusID = studentStatus.studentStatusID;
-
-    // const selectedStudent = students.find((student) => {
-    //   return student.id === clickedStudentID;
-    // })
-    //
-    // console.log("SELECTED Student:", selectedStudent);
-
-    // const studentPayload = {
-    //   ...studentStatus,
-    //   field_trip_id: match.params.id,
-    // };
-    // console.log("studentPayload", studentPayload);
-    // const studentStatusID = 'e955cae0-7061-44a0-b0e5-b19c7c7dcb9f';
-
     const url = `students_fieldtrips/${clickedStudentStatusID}`;
 
     const {
