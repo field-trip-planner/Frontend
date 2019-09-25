@@ -76,23 +76,47 @@ const FieldTripList = props => {
   //  state, setter          // property in GlobalState
   const [trips, setTrips] = useGlobal("trips");
   const [search, updateSearch] = useState("");
+  const [user] = useGlobal("user");
 
   useEffect(() => {
-    api
-      .get("fieldtrips")
-      .then(({ data }) => {
-        console.log("TRIP-LIST:", data);
-        return setTrips(data);
-      })
-      .catch(err => err);
+    // api
+    //   .get("fieldtrips")
+    //   .then(({ data }) => {
+    //     console.log("TRIP-LIST:", data);
+    //     return setTrips(data);
+    //   })
+    //   .catch(err => err);
     //axios request to get specific field trips
-    
-    //Teacher, Parent, Chaperone will have different endpoints to make their requests to
 
-    // axios({
-    //   url: ''
-    // })
-    
+    //Teacher, Parent, Chaperone will have different endpoints to make their requests to
+    if (user.role === 'teacher') {
+      axios({
+        url: `http://localhost:5000/fieldtrips/teacher/${user.id}`,
+        method: 'get'
+      }).then(res => {
+        console.log(res);
+      }).catch(err => console.log(err));
+
+    } else if (user.role === 'parent') {
+      axios({
+        url: `http://localhost:5000/fieldtrips/parent/${user.id}`,
+        method: 'get'
+      }).then(res => {
+        console.log(res);
+      }).catch(err => console.log(err));
+
+    } else if (user.role === 'chaperone') {
+      axios({
+        url: `http://localhost:5000/fieldtrips/chaperone/${user.id}`,
+        method: 'get'
+      }).then(res => {
+        console.log(res);
+      }).catch(err => console.log(err));
+
+    } else {
+      setTrips([]);
+    }
+
   }, []); // 2nd param is arr to stop re-render
 
 
@@ -104,15 +128,15 @@ const FieldTripList = props => {
     return trip.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;
   });
 
-const onSubmitSuccess = () =>{
-  api
-    .get("fieldtrips")
-    .then(({ data }) => {
-      console.log("TRIP-LIST:", data);
-      return setTrips(data);
-    })
-    .catch(err => err);
-}
+  const onSubmitSuccess = () => {
+    api
+      .get("fieldtrips")
+      .then(({ data }) => {
+        console.log("TRIP-LIST:", data);
+        return setTrips(data);
+      })
+      .catch(err => err);
+  }
 
   return (
     <>
@@ -129,7 +153,7 @@ const onSubmitSuccess = () =>{
             value={search}
           />
 
-          <CreateTripModal size="small"  onSubmitSuccess ={onSubmitSuccess}/>
+          <CreateTripModal size="small" onSubmitSuccess={onSubmitSuccess} />
         </div>
 
         <Header>UPCOMING FIELD TRIPS</Header>
@@ -142,12 +166,12 @@ const onSubmitSuccess = () =>{
             ))}
           </Card.Group>
         ) : (
-          <Card.Group itemsPerRow={3}>
-            {searchTrip.map(trip => (
-              <TripItem key={trip.id} trip={trip} />
-            ))}
-          </Card.Group>
-        )}
+            <Card.Group itemsPerRow={3}>
+              {searchTrip.map(trip => (
+                <TripItem key={trip.id} trip={trip} />
+              ))}
+            </Card.Group>
+          )}
         {/* <Card.Group itemsPerRow={3}>
           {fieldTripList.map(trip => (
             <TripItem key={trip.id} trip={trip} />
