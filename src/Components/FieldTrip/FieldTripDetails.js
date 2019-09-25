@@ -74,15 +74,19 @@ const FieldTripDetails = ({ match } ) => {
 
     if (!studentInfo.first_name || !studentInfo.last_name) {
      return setError({
-        message:  !studentInfo.first_name ? 'Please provide a first name': 'Please provide a last name'
+        message: !studentInfo.first_name ?
+          'Please provide a first name': 'Please provide a last name'
       })
     }
 
     const url = "students";
 
+    console.log('TRIP.SCHOOL_id::', trip.school_id);
+
     const newStudentPayload = {
       ...studentInfo,
-      field_trip_id: match.params.id
+      field_trip_id: match.params.id,
+      school_id: trip.school_id
     }
 
     api
