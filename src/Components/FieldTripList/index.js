@@ -77,6 +77,8 @@ const FieldTripList = props => {
   const [trips, setTrips] = useGlobal("trips");
   const [search, updateSearch] = useState("");
   const [user] = useGlobal("user");
+  //students state obj for parents' field trip cards
+  const [students, setStudents] = useState([]);
 
   useEffect(() => {
     // api
@@ -89,35 +91,58 @@ const FieldTripList = props => {
     //axios request to get specific field trips
 
     //Teacher, Parent, Chaperone will have different endpoints to make their requests to
+    console.log('is the user here?', user)
     if (user.role === 'teacher') {
-      axios({
-        url: `http://localhost:5000/fieldtrips/teacher/${user.id}`,
-        method: 'get'
-      }).then(res => {
-        console.log(res);
-      }).catch(err => console.log(err));
+      // axios({
+      //   url: `http://localhost:5000/fieldtrips/teacher/${user.id}`,
+      //   method: 'get',
+      //   withCredentials: true
+      // }).then(res => {
+      //   setTrips(res.data)
+      // }).catch(err => console.log(err));
+      api
+        .get(`fieldtrips/teacher/${user.id}`)
+        .then(({ data }) => {
+          setTrips(data);
+        }).catch(err => console.log(err));
+
 
     } else if (user.role === 'parent') {
-      axios({
-        url: `http://localhost:5000/fieldtrips/parent/${user.id}`,
-        method: 'get'
-      }).then(res => {
-        console.log(res);
-      }).catch(err => console.log(err));
+      // axios({
+      //   url: `http://localhost:5000/fieldtrips/parent/${user.id}`,
+      //   method: 'get',
+      //   withCredentials: true
+      // }).then(res => {
+      //   setTrips(res.data)
+      // }).catch(err => console.log(err));
+     
+      api
+        .get(`fieldtrips/parent/${user.id}`)
+        .then(({data}) => {
+          // console.log(res)
+          setTrips(data);
+        }).catch(err => console.log(err));
+
 
     } else if (user.role === 'chaperone') {
-      axios({
-        url: `http://localhost:5000/fieldtrips/chaperone/${user.id}`,
-        method: 'get'
-      }).then(res => {
-        console.log(res);
-      }).catch(err => console.log(err));
+      // axios({
+      //   url: `http://localhost:5000/fieldtrips/chaperone/${user.id}`,
+      //   method: 'get',
+      //   withCredentials: true
+      // }).then(res => {
+      //   setTrips(res.data)
+      // }).catch(err => console.log(err));
+      api
+        .get(`fieldtrips/chaperone/${user.id}`)
+        .then(({ data }) => {
+          setTrips(data);
+        }).catch(err => console.log(err));
 
     } else {
       setTrips([]);
     }
 
-  }, []); // 2nd param is arr to stop re-render
+  }, [user]); // 2nd param is arr to stop re-render
 
 
   const _handleSearch = e => {
