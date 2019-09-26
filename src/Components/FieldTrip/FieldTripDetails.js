@@ -24,7 +24,7 @@ const FieldTripDetails = ({ match }) => {
 
   const [trip, setTrip] = useState({});  // local state
   const [students, setStudents] = useState([]);
-  const [ user ] = useGlobal('user');
+  const [user] = useGlobal('user');
 
   useEffect(() => {
     const tripItemID = match.params.id;

@@ -3,11 +3,9 @@ import { withRouter } from "react-router-dom";
 import api from "../../api";
 import { useGlobal } from "reactn";
 import { Card, Divider, Input, Header, Container } from "semantic-ui-react";
-
 import TripItem from "./TripItem";
 import CreateTripModal from "../CreateTripModal/";
 import MainMenu from "../layout/Menu";
-import axios from "axios";
 
 export const fieldTripList = [
   {
@@ -78,62 +76,29 @@ const FieldTripList = props => {
   const [search, updateSearch] = useState("");
   const [user] = useGlobal("user");
   //students state obj for parents' field trip cards
-  const [students, setStudents] = useState([]);
+  // const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    // api
-    //   .get("fieldtrips")
-    //   .then(({ data }) => {
-    //     console.log("TRIP-LIST:", data);
-    //     return setTrips(data);
-    //   })
-    //   .catch(err => err);
-    //axios request to get specific field trips
-
-    //Teacher, Parent, Chaperone will have different endpoints to make their requests to
-    console.log('is the user here?', user)
+    /*User specific field trip population. The requests will differ based on the user role.
+    Teacher, Parent, Chaperone will have different endpoints to make their requests to.*/
     if (user.role === 'teacher') {
-      // axios({
-      //   url: `http://localhost:5000/fieldtrips/teacher/${user.id}`,
-      //   method: 'get',
-      //   withCredentials: true
-      // }).then(res => {
-      //   setTrips(res.data)
-      // }).catch(err => console.log(err));
       api
-        .get(`fieldtrips/teacher/${user.id}`)
+        .get(`myfieldtrips/teacher/${user.id}`)
         .then(({ data }) => {
           setTrips(data);
         }).catch(err => console.log(err));
 
-
     } else if (user.role === 'parent') {
-      // axios({
-      //   url: `http://localhost:5000/fieldtrips/parent/${user.id}`,
-      //   method: 'get',
-      //   withCredentials: true
-      // }).then(res => {
-      //   setTrips(res.data)
-      // }).catch(err => console.log(err));
-     
       api
-        .get(`fieldtrips/parent/${user.id}`)
-        .then(({data}) => {
+        .get(`myfieldtrips/parent/${user.id}`)
+        .then(({ data }) => {
           // console.log(res)
           setTrips(data);
         }).catch(err => console.log(err));
 
-
     } else if (user.role === 'chaperone') {
-      // axios({
-      //   url: `http://localhost:5000/fieldtrips/chaperone/${user.id}`,
-      //   method: 'get',
-      //   withCredentials: true
-      // }).then(res => {
-      //   setTrips(res.data)
-      // }).catch(err => console.log(err));
       api
-        .get(`fieldtrips/chaperone/${user.id}`)
+        .get(`myfieldtrips/chaperone/${user.id}`)
         .then(({ data }) => {
           setTrips(data);
         }).catch(err => console.log(err));
