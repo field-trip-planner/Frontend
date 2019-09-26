@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import Fuse from "fuse.js";
+import {useGlobal} from "reactn";
 // import { Link } from "react-router-dom";
 import {
   Button,
+  Card,
   Checkbox,
   Container,
   Divider,
@@ -10,6 +13,9 @@ import {
   Header,
   Icon,
   Image,
+  Input,
+  Label,
+  List,
   Message,
   Modal,
   Segment,
@@ -19,24 +25,53 @@ import api from "../../api";
 import MainMenu from "../layout/Menu.js";
 import "./FieldTripDetails.css";
 
+const options = {
+  shouldSort: true,
+  threshold: 0.5,
+  location:4,
+  distance: 10,
+  maxPatternLength: 12,
+  minMatchCharLength: 1,
+  keys: [
+    "last_name",
+    "first_name"
+  ]
+};
+
+
 const FieldTripDetails = ({ match } ) => {
 
   const [ trip, setTrip ] = useState({});  // local state
   const [students, setStudents] = useState([]);
+  const [chaperones, setChaperones] = useState([]);
+  const [user] = useGlobal("user");
+  //const [searchChaperone, updateSearchChaperone] = useState("");
+  //const [foundChap, updateFoundChap] = useState({});
 
   useEffect(() => {
     const tripItemID = match.params.id;
     const url = `fieldtrips/${tripItemID}`;
 
+    
     api
-      .get(url)
+    .get(url)
       .then(({data}) => {
         console.log('trip item ', data);
-
+        
         return setTrip(data);
       })
       .catch(err => err);
+      
+     
+    api
+      .get(`users/chaperones/${user.school_id}`)  
+      .then(({data}) => {
+        console.log('>>> chaperones ', data);
 
+        return setChaperones(data);
+      })
+      .catch(err => err);
+    
     api
       .get(`students_fieldtrips/${tripItemID}/statuses`)
       .then(({ data }) => {
@@ -45,27 +80,60 @@ const FieldTripDetails = ({ match } ) => {
         return setStudents(data);
       })
       .catch(err => err);
-  }, [match.params.id])
+    }, [match.params.id])
+
+    ///////////////////////////////
+    const fuse = new Fuse(chaperones, options);  
+    const [searchVal, searchChaperones] = useState('');
+    const chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
+
+    const _handleSearch = e => {
+        const{name, value} = e.target;
+        searchChaperones(value);
+
+    };
+    
+    ////////////////////// 
+    const ChaperoneCard = ({chaperone}) => {
+      const {id, first_name, last_name, phone_number, email, role, school_id} = chaperone;
+      return (
+          <Card.Content>
+          <Icon.Group size='large'>
+            <Icon loading size='large' name='circle notch' />
+            <Icon name='user' />
+          </Icon.Group>
+            <Button key = {chaperone.id} color = 'blue' onClick = {_handleAddChap}>
+              {chaperone.last_name}  {chaperone.first_name}                               
+            </Button>                             
+          </Card.Content>
+      )
+  } 
+
+  const _handleAddChap = e => {
+
+  }
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
     last_name: "",
   });
-
+  
   // setting state
   const [isSuccessfullyAdded, setIsSuccessfullyAdded] = useState(false);
   const [error, setError] = useState({});
-
+  
   const _handleChange = e => {
     const { name, value } = e.target;
-
+    
     setError(false);
-
+    
     setStudentInfo({
       ...studentInfo,
       [name]: value
     });
+
+
 
   };
 
@@ -357,7 +425,7 @@ const FieldTripDetails = ({ match } ) => {
 
         <Modal
           trigger={
-            <Button floated="right" primary disabled>
+            <Button floated="right" primary>
               <Icon name="add" />
               Add Chaperone
             </Button>
@@ -365,32 +433,34 @@ const FieldTripDetails = ({ match } ) => {
           closeIcon
         >
           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
-          <Modal.Content>
-            {/*   <Container>  */}
-            <Form onSubmit={_handleSubmit}>
-              <Form.Group widths="equal">
-                <Form.Input
-                  fluid
-                  label="First Name"
-                  name="first_name"
-                  value={trip.first_name}
-                  onChange={_handleChange}
-                />
-              </Form.Group>
-              <Form.Group widths="equal">
-                <Form.Input
-                  fluid
-                  label="Last Name"
-                  name="last_name"
-                  value={trip.last_name}
-                  onChange={_handleChange}
-                />
-              </Form.Group>
 
-              <Form.Button primary>Submit</Form.Button>
-            </Form>
-            {/*  </Container>  */}
-          </Modal.Content>
+
+          
+          <Card.Group itemsPerRow = {2} textAlign = 'right'>
+            <Card>
+              <Input
+                onChange={_handleSearch}
+                size="large"
+                icon="search"
+                iconPosition="left"
+                placeholder="...search"
+                floated="left"
+                value={searchVal}
+              />
+            </Card> 
+
+            { chaperonesFound
+              ? 
+                  <Card centered >
+                  {chaperonesFound.map(chap => (                
+                      <ChaperoneCard key = {chap.id}  chaperone = {chap}/>                                                                               
+                  ))}
+                  </Card>
+              :
+                  null 
+          } 
+          </Card.Group>
+
         </Modal>
       </Container>
     </>
