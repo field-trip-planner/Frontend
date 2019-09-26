@@ -32,6 +32,7 @@ const LoginModal = props => {
   };
   const _handleSubmit = e => {
     e.preventDefault();
+    console.log(info)
     api
       .post("login", info)
       .then(res => {
