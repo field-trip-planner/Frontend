@@ -17,7 +17,8 @@ const ParentRegistrationModal = props => {
     email: "",
     password: "",
     confirm_password: "",
-    phone_number: ""
+    phone_number: "",
+    googleId: null
   });
 
   const _handleChange = e => {

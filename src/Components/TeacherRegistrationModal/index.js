@@ -14,9 +14,10 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     last_name: "",
     email: "",
     password: "",
-    isTeacher: true,
+    role: 'teacher',
     school_id: school,
-    phone_number: ""
+    phone_number: "",
+    googleId: null
   });
   const [info, setInfo] = useState({
     email: "",

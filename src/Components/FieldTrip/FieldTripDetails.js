@@ -14,20 +14,25 @@ import {
   Modal,
   Segment,
   Table,
+  Dropdown
 } from "semantic-ui-react";
 import api from "../../api";
 import MainMenu from "../layout/Menu.js";
 import "./FieldTripDetails.css";
+import { useGlobal } from "reactn"
 
 const FieldTripDetails = ({ match } ) => {
 
   const [ trip, setTrip ] = useState({});  // local state
   const [students, setStudents] = useState([]);
-
+  const [parentList, setParentList] = useState([])
+  const [ user ] = useGlobal("user")
+  // const [ listOfParents, setListOfParents ] = useState([])
+  
   useEffect(() => {
     const tripItemID = match.params.id;
-    const url = `fieldtrips/${tripItemID}`;
-
+    const url = `fieldtrips/${tripItemID}`
+   
     api
       .get(url)
       .then(({data}) => {
@@ -44,8 +49,33 @@ const FieldTripDetails = ({ match } ) => {
 
         return setStudents(data);
       })
-      .catch(err => err);
+      .catch(err => err); 
+      
+      api.get(`users/parents/${user.school_id}`)
+        .then(({data})=>{
+          setParentList(data)
+          console.log("this is parent found by id",data) 
+          console.log("this is the current user", user)
+          
+        })
+        .catch(err => err)
+        
   }, [match.params.id])
+  console.log("parentlist-----", parentList)
+
+  
+    ////Setting parent list
+    const listOfParents = parentList.map(parent => {
+      return({
+        key: parent.id,
+        value: parent.id,
+        text: `${parent.last_name}, ${parent.first_name}`
+      }
+      )
+    })
+  
+    /////
+  
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
@@ -107,14 +137,13 @@ const FieldTripDetails = ({ match } ) => {
 
         setStudentInfo({
           first_name: "",
-          last_name: "",
+          last_name: ""
         })
 
         setTimeout(() => {
           setIsSuccessfullyAdded(false);
 
         }, 2000)
-
         return data;
 
       })
@@ -284,6 +313,26 @@ const FieldTripDetails = ({ match } ) => {
                     onChange={_handleChange}
                   />
                 </Form.Group>
+                <Dropdown 
+                  placeholder="Please assign a parent to this new student."
+                  fluid
+                  search
+                  selection
+                  options = {listOfParents}
+                />
+                
+                
+                
+                
+                {/* <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Parent/Guardian"
+                    name="parent_name"
+                    value={studentInfo.parent_name}
+                    onChange={_handleChange}
+                  />
+                </Form.Group> */}
 
                 <Form.Button primary>Submit</Form.Button>
               </Form>
