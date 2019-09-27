@@ -13,16 +13,16 @@ import {
   Message,
   Modal,
   Segment,
-  Table,
+  Table
 } from "semantic-ui-react";
 import api from "../../api";
 import MainMenu from "../layout/Menu.js";
 import "./FieldTripDetails.css";
 
-const FieldTripDetails = ({ match } ) => {
-
-  const [ trip, setTrip ] = useState({});  // local state
+const FieldTripDetails = ({ match }) => {
+  const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
+  const [chaperones, setChaperones] = useState([]);
 
   useEffect(() => {
     const tripItemID = match.params.id;
@@ -30,8 +30,8 @@ const FieldTripDetails = ({ match } ) => {
 
     api
       .get(url)
-      .then(({data}) => {
-        console.log('trip item ', data);
+      .then(({ data }) => {
+        console.log("trip item ", data);
 
         return setTrip(data);
       })
@@ -45,12 +45,16 @@ const FieldTripDetails = ({ match } ) => {
         return setStudents(data);
       })
       .catch(err => err);
-  }, [match.params.id])
 
+    api
+      .get(`/chaperones/${tripItemID}`)
+      .then(res => setChaperones(res.data))
+      .catch(err => console.log(err));
+  }, [match.params.id]);
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
-    last_name: "",
+    last_name: ""
   });
 
   // setting state
@@ -66,16 +70,17 @@ const FieldTripDetails = ({ match } ) => {
       ...studentInfo,
       [name]: value
     });
-
   };
 
   const _handleSubmit = e => {
     e.preventDefault();
 
     if (!studentInfo.first_name || !studentInfo.last_name) {
-     return setError({
-        message:  !studentInfo.first_name ? 'Please provide a first name': 'Please provide a last name'
-      })
+      return setError({
+        message: !studentInfo.first_name
+          ? "Please provide a first name"
+          : "Please provide a last name"
+      });
     }
 
     const url = "students";
@@ -83,12 +88,12 @@ const FieldTripDetails = ({ match } ) => {
     const newStudentPayload = {
       ...studentInfo,
       field_trip_id: match.params.id
-    }
+    };
 
     api
       .post(url, newStudentPayload)
-      .then(({data}) => {
-        console.log('A student added::', data);
+      .then(({ data }) => {
+        console.log("A student added::", data);
 
         setIsSuccessfullyAdded(true);
         setError(false);
@@ -98,92 +103,83 @@ const FieldTripDetails = ({ match } ) => {
 
         api
           .get(statusUrl)
-          .then(({data}) => {
-            console.log('students ALL::', data);
+          .then(({ data }) => {
+            console.log("students ALL::", data);
             return setStudents(data);
-
           })
           .catch(err => err);
 
         setStudentInfo({
           first_name: "",
-          last_name: "",
-        })
+          last_name: ""
+        });
 
         setTimeout(() => {
           setIsSuccessfullyAdded(false);
-
-        }, 2000)
+        }, 2000);
 
         return data;
-
       })
-      .catch((err) => {
+      .catch(err => {
         // in case of err, here we make sure to set success to false
         setIsSuccessfullyAdded(false);
         // in order to add an error message in the modal we set hasError to true
-        console.log("error", err.response.data)
+        console.log("error", err.response.data);
         setError(err.response.data);
 
         return err;
       });
   };
 
-  const onHandleCheckbox = async (studentStatus) => {
-
+  const onHandleCheckbox = async studentStatus => {
     const clickedStudentStatusID = studentStatus.studentStatusID;
     const url = `students_fieldtrips/${clickedStudentStatusID}`;
 
-    const {
-      paid_status,
-      permission_status,
-      supplies_status,
-    } = studentStatus
+    const { paid_status, permission_status, supplies_status } = studentStatus;
 
     api
       .put(url, {
         paid_status,
         permission_status,
-        supplies_status,
+        supplies_status
       })
       .then(({ data }) => {
-
         console.log("STUDENT_STATUS_DATA::", data);
 
         return data;
-
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(err => {
+        console.log(err);
       });
 
-    const updatedStudents = students.map((student) => {
+    const updatedStudents = students.map(student => {
       if (student.id === clickedStudentStatusID) {
         return {
           ...student,
-          ...studentStatus,
-        }
+          ...studentStatus
+        };
       }
       return student;
-    })
+    });
     console.log("updatedStudents:", updatedStudents);
 
     setStudents(updatedStudents);
-  }
+  };
 
-  const getStatus = (studentID) => {
-    const selectedStudent = students.find((student) => {
+  const getStatus = studentID => {
+    const selectedStudent = students.find(student => {
       return student.id === studentID;
-    })
+    });
 
-    if (selectedStudent.paid_status &&
+    if (
+      selectedStudent.paid_status &&
       selectedStudent.permission_status &&
-      selectedStudent.supplies_status) {
-
-      return 'complete';
+      selectedStudent.supplies_status
+    ) {
+      return "complete";
     }
-    return 'incomplete'
-  }
+    return "incomplete";
+  };
 
   return (
     <>
@@ -217,16 +213,17 @@ const FieldTripDetails = ({ match } ) => {
             <Grid.Column>
               <div className="trip-summary-wrapper">
                 <h2>
-                  Additional Notes / Trip Summary: {" "}
-                  {trip.field_trip_details}
+                  Additional Notes / Trip Summary: {trip.field_trip_details}
                 </h2>
               </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>
 
-        <Segment basic clearing style={{ padding: "unset", marginTop: 120}} >
-          <Header as='h2' floated='left'>Attending Students</Header>
+        <Segment basic clearing style={{ padding: "unset", marginTop: 120 }}>
+          <Header as="h2" floated="left">
+            Attending Students
+          </Header>
           <Modal
             trigger={
               <Button floated="right" primary>
@@ -238,7 +235,7 @@ const FieldTripDetails = ({ match } ) => {
             onClose={() => {
               setStudentInfo({
                 first_name: "",
-                last_name: "",
+                last_name: ""
               });
               setIsSuccessfullyAdded(false);
               setError(false);
@@ -246,25 +243,20 @@ const FieldTripDetails = ({ match } ) => {
           >
             <Modal.Header className="modalHeader">Add Student</Modal.Header>
             <Modal.Content>
-              {
-                isSuccessfullyAdded && (
-                  <Message positive>
-                    <Message.Header>Student successfully added!</Message.Header>
-                  </Message>
-                )
+              {isSuccessfullyAdded && (
+                <Message positive>
+                  <Message.Header>Student successfully added!</Message.Header>
+                </Message>
+              )}
 
-              }
-
-              {
-                Object.keys(error).length > 0 && (
-                  <Message negative>
-                    <Message.Header>
-                      We ran into an issue adding the student. {error.message}. And Please try again.
-                    </Message.Header>
-                  </Message>
-                )
-
-              }
+              {Object.keys(error).length > 0 && (
+                <Message negative>
+                  <Message.Header>
+                    We ran into an issue adding the student. {error.message}.
+                    And Please try again.
+                  </Message.Header>
+                </Message>
+              )}
               <Form onSubmit={_handleSubmit}>
                 <Form.Group widths="equal">
                   <Form.Input
@@ -304,48 +296,55 @@ const FieldTripDetails = ({ match } ) => {
           </Table.Header>
 
           <Table.Body>
-            {
-              students.map((student) => {
-                return (
-                  <Table.Row key={student.id}>
-                    <Table.Cell>{student.first_name}</Table.Cell>
-                    <Table.Cell>{student.last_name}</Table.Cell>
-                    <Table.Cell>
-                        <Checkbox checked={student.paid_status}
-                          onClick={(e, data) => onHandleCheckbox({
-                            studentStatusID: student.id,
-                            paid_status: data.checked,
-                          })}
-                        />
-                    </Table.Cell>
-                    <Table.Cell>
-                        <Checkbox checked={student.permission_status}
-                          onClick={(e, data) => onHandleCheckbox({
-                            studentStatusID: student.id,
-                            permission_status: data.checked,
-                          })}
-                        />
-                    </Table.Cell>
-                    <Table.Cell>
-                        <Checkbox checked={student.supplies_status}
-                          onClick={(e, data) => onHandleCheckbox({
-                            studentStatusID: student.id,
-                            supplies_status: data.checked,
-                          })}
-                        />
-                    </Table.Cell>
-                    <Table.Cell>
-                        {getStatus(student.id)}
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              })
-            }
+            {students.map(student => {
+              return (
+                <Table.Row key={student.id}>
+                  <Table.Cell>{student.first_name}</Table.Cell>
+                  <Table.Cell>{student.last_name}</Table.Cell>
+                  <Table.Cell>
+                    <Checkbox
+                      checked={student.paid_status}
+                      onClick={(e, data) =>
+                        onHandleCheckbox({
+                          studentStatusID: student.id,
+                          paid_status: data.checked
+                        })
+                      }
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Checkbox
+                      checked={student.permission_status}
+                      onClick={(e, data) =>
+                        onHandleCheckbox({
+                          studentStatusID: student.id,
+                          permission_status: data.checked
+                        })
+                      }
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Checkbox
+                      checked={student.supplies_status}
+                      onClick={(e, data) =>
+                        onHandleCheckbox({
+                          studentStatusID: student.id,
+                          supplies_status: data.checked
+                        })
+                      }
+                    />
+                  </Table.Cell>
+                  <Table.Cell>{getStatus(student.id)}</Table.Cell>
+                </Table.Row>
+              );
+            })}
           </Table.Body>
 
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell>{students.length} Students Going</Table.HeaderCell>
+              <Table.HeaderCell>
+                {students.length} Students Going
+              </Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
               <Table.HeaderCell />
@@ -392,6 +391,25 @@ const FieldTripDetails = ({ match } ) => {
             {/*  </Container>  */}
           </Modal.Content>
         </Modal>
+        <Table columns={1} style={{ marginTop: 20, marginBottom: 50 }}>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Chaperone Name</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
+            {chaperones.map(chaperone => {
+              return (
+                <Table.Row key={chaperone.id}>
+                  <Table.Cell>
+                    {`${chaperone.first_name}, ${chaperone.last_name}`}
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
+          </Table.Body>
+        </Table>
       </Container>
     </>
   );
