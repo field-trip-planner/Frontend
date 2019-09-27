@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useGlobal } from 'reactn';
+import Fuse from "fuse.js";
+import {useGlobal} from "reactn";
+
 import {
   Button,
+  Card,
   Checkbox,
   Container,
   Divider,
@@ -10,10 +13,11 @@ import {
   Header,
   Icon,
   Image,
+  Input,
   Message,
   Modal,
   Segment,
-  Table,
+  Table
 } from "semantic-ui-react";
 import api from "../../api";
 import MainMenu from "../layout/Menu.js";
@@ -21,13 +25,27 @@ import TeacherFieldTripDetailView from './TeacherFieldTripDetailView';
 import ChaperoneFieldTripDetailView from './ChaperoneFieldTripDetailView';
 import StudentsReadOnlyTable from './StudentsReadOnlyTable';
 import "./FieldTripDetails.css";
-// import { userInfo } from "os";
+
+const options = {
+  shouldSort: true,
+  threshold: 0.5,
+  location:4,
+  distance: 10,
+  maxPatternLength: 12,
+  minMatchCharLength: 1,
+  keys: [
+    "last_name",
+    "first_name"
+  ]
+};
 
 const FieldTripDetails = ({ match }) => {
 
-  const [trip, setTrip] = useState({});  // local state
+  const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
-  const [user] = useGlobal('user');
+  const [chaperones, setChaperones] = useState([]);
+  const [user] = useGlobal("user");
+  const [assignedChap, setAssignedChap] = useState([]);
 
   useEffect(() => {
     const tripItemID = match.params.id;
@@ -43,6 +61,15 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
 
     api
+      .get(`users/chaperones/${user.school_id}`)
+      .then(({data}) => {
+        console.log('>>> chaperones ', data);
+
+        return setChaperones(data);
+      })
+      .catch(err => err);
+
+    api
       .get(`students_fieldtrips/${tripItemID}/statuses`)
       .then(({ data }) => {
         console.log("ALL STATUS:", data);
@@ -50,12 +77,67 @@ const FieldTripDetails = ({ match }) => {
         return setStudents(data);
       })
       .catch(err => err);
-  }, [match.params.id])
+
+    api
+      .get(`/chaperones/${tripItemID}`)
+      .then(res => setChaperones(res.data))
+      .catch(err => console.log(err));
+  }, [match.params.id]);
+
+  ///////////////////////////////
+  const fuse = new Fuse(chaperones, options);
+  const [searchVal, searchChaperones] = useState('');
+  let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
+
+  const _handleSearch = e => {
+      const{name, value} = e.target;
+      searchChaperones(value);
+      console.log('>>>>> chaperonesFound ', chaperonesFound);
+      console.log('====>> NOW assignedChap', assignedChap);
+  };
+
+    //////////////////////
+  const ChaperoneCard = ({ chaperone }) => {
+    const {id, first_name, last_name, phone_number, email, role, school_id} = chaperone;
+    return (
+        <Card.Content>
+        <Icon.Group size='large'>
+          <Icon loading size='large' name='circle notch' />
+          <Icon name='user' />
+        </Icon.Group>
+          <Button key = {chaperone.id} color = 'blue' onClick = {_handleAddChap}>
+            {chaperone.last_name}  {chaperone.first_name}
+          </Button>
+        </Card.Content>
+    )
+  }
+
+  const _handleAddChap = (e)  => {
+
+    let addedChaperone = {
+      user_id: chaperonesFound[0].id,
+      field_trip_id: trip.id
+    }
+
+    api
+    .post (`chaperones/`, addedChaperone )
+    .then(({data}) => {
+       console.log('++++++ chaperonesFound[0]', chaperonesFound[0]);
+       let newChaperoneList = chaperones.filter(item => item.id !== chaperonesFound[0].id);
+      return setChaperones(newChaperoneList);
+
+    })
+    .catch(err => err);
+
+    setIsSuccessfullyAdded(true);
+    setError(false);
+
+  }
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
-    last_name: "",
+    last_name: ""
   });
 
   // setting state
@@ -71,17 +153,18 @@ const FieldTripDetails = ({ match }) => {
       ...studentInfo,
       [name]: value
     });
-
   };
 
   const _handleSubmit = e => {
     e.preventDefault();
 
     if (!studentInfo.first_name || !studentInfo.last_name) {
-     return setError({
-        message: !studentInfo.first_name ?
-          'Please provide a first name': 'Please provide a last name'
-      })
+      return setError({
+        message: !studentInfo.first_name
+          ? "Please provide a first name"
+          : "Please provide a last name"
+      });
+
     }
 
     const url = "students";
@@ -108,38 +191,34 @@ const FieldTripDetails = ({ match }) => {
         api
           .get(statusUrl)
           .then(({ data }) => {
-            console.log('students ALL::', data);
+            console.log("students ALL::", data);
             return setStudents(data);
-
           })
           .catch(err => err);
 
         setStudentInfo({
           first_name: "",
-          last_name: "",
-        })
+          last_name: ""
+        });
 
         setTimeout(() => {
           setIsSuccessfullyAdded(false);
-
-        }, 2000)
+        }, 2000);
 
         return data;
-
       })
-      .catch((err) => {
+      .catch(err => {
         // in case of err, here we make sure to set success to false
         setIsSuccessfullyAdded(false);
         // in order to add an error message in the modal we set hasError to true
-        console.log("error", err.response.data)
+        console.log("error", err.response.data);
         setError(err.response.data);
 
         return err;
       });
   };
 
-  const onHandleCheckbox = async (studentStatus) => {
-
+  const onHandleCheckbox = async studentStatus => {
     const clickedStudentStatusID = studentStatus.studentStatusID;
     const url = `students_fieldtrips/${clickedStudentStatusID}`;
 
@@ -147,52 +226,51 @@ const FieldTripDetails = ({ match }) => {
       paid_status,
       permission_status,
       supplies_status,
-    } = studentStatus
+    } = studentStatus;
 
     api
       .put(url, {
         paid_status,
         permission_status,
-        supplies_status,
+        supplies_status
       })
       .then(({ data }) => {
-
         console.log("STUDENT_STATUS_DATA::", data);
 
         return data;
-
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(err => {
+        console.log(err);
       });
 
-    const updatedStudents = students.map((student) => {
+    const updatedStudents = students.map(student => {
       if (student.id === clickedStudentStatusID) {
         return {
           ...student,
-          ...studentStatus,
-        }
+          ...studentStatus
+        };
       }
       return student;
-    })
+    });
     console.log("updatedStudents:", updatedStudents);
 
     setStudents(updatedStudents);
-  }
+  };
 
-  const getStatus = (studentID) => {
-    const selectedStudent = students.find((student) => {
+  const getStatus = studentID => {
+    const selectedStudent = students.find(student => {
       return student.id === studentID;
-    })
+    });
 
-    if (selectedStudent.paid_status &&
+    if (
+      selectedStudent.paid_status &&
       selectedStudent.permission_status &&
-      selectedStudent.supplies_status) {
-
+      selectedStudent.supplies_status
+    ) {
       return "complete";
     }
     return "incomplete";
-  }
+  };
 
   return (
     <>
@@ -257,6 +335,83 @@ const FieldTripDetails = ({ match }) => {
           _handleChange={_handleChange}
           onHandleCheckbox={onHandleCheckbox}
         />
+
+        <Modal
+          trigger={
+            <Button floated="right" primary>
+              <Icon name="add" />
+              Add Chaperone
+            </Button>
+          }
+          closeIcon
+        >
+          <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
+          <Modal.Content>
+            {
+              isSuccessfullyAdded && (
+                <Message positive>
+                  <Message.Header>Chaperone added!</Message.Header>
+                </Message>
+              )
+
+            }
+
+            {
+              Object.keys(error).length > 0 && (
+                <Message negative>
+                  <Message.Header>
+                    Error adding the chaperone. {error.message}.
+                  </Message.Header>
+                </Message>
+              )
+
+            }
+            <Card.Group itemsPerRow = {2} textAlign = 'right'>
+              <Card>
+                <Input
+                  onChange={_handleSearch}
+                  size="large"
+                  icon="search"
+                  iconPosition="left"
+                  placeholder="...search"
+                  floated="left"
+                  value={searchVal}
+                />
+              </Card>
+
+              { chaperonesFound
+                ?
+                <Card centered >
+                  {chaperonesFound.map(chap => (
+                    <ChaperoneCard key = {chap.id}  chaperone = {chap}/>
+                  ))}
+                </Card>
+                :
+                null
+              }
+            </Card.Group>
+          </Modal.Content>
+        </Modal>
+
+        <Table columns={1} style={{ marginTop: 20, marginBottom: 50 }}>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Chaperone Name</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
+            {chaperones.map(chaperone => {
+              return (
+                <Table.Row key={chaperone.id}>
+                  <Table.Cell>
+                    {`${chaperone.first_name}, ${chaperone.last_name}`}
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
+          </Table.Body>
+        </Table>
 
       </Container>
     </>
