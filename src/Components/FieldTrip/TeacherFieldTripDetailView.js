@@ -11,11 +11,12 @@ import {
   Segment,
   Table,
 } from "semantic-ui-react";
+import AddChaperoneModal from './AddChaperoneModal';
 
 const TeacherFieldTripDetailView = (
   { setStudentInfo,
+    setChaperones,
     studentInfo,
-    trip,
     students,
     getStatus,
     setIsSuccessfullyAdded,
@@ -24,6 +25,8 @@ const TeacherFieldTripDetailView = (
     error,
     _handleSubmit,
     _handleChange,
+    chaperones,
+    trip,
     onHandleCheckbox,
   }) => {
   const [ user ] = useGlobal("user");
@@ -33,7 +36,7 @@ const TeacherFieldTripDetailView = (
       {
         user.role === "teacher" && (
           <>
-            <Segment basic clearing style={{ padding: "unset", marginTop: 120 }} >
+            <Segment basic clearing style={{ padding: "unset", marginTop: 120 }}>
               <Header as='h2' floated='left'>Attending Students</Header>
               <Modal
                 trigger={
@@ -161,42 +164,15 @@ const TeacherFieldTripDetailView = (
               </Table.Footer>
             </Table>
 
-            <Modal
-              trigger={
-                <Button floated="right" primary disabled>
-                  <Icon name="add" />
-                  Add Chaperone
-                </Button>
-              }
-              closeIcon
-            >
-              <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
-              <Modal.Content>
-                {/*   <Container>  */}
-                <Form onSubmit={_handleSubmit}>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="First Name"
-                      name="first_name"
-                      value={trip.first_name}
-                      onChange={_handleChange}
-                    />
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="Last Name"
-                      name="last_name"
-                      value={trip.last_name}
-                      onChange={_handleChange}
-                    />
-                  </Form.Group>
-                  <Form.Button primary>Submit</Form.Button>
-                </Form>
-                {/*  </Container>  */}
-              </Modal.Content>
-            </Modal>
+            <AddChaperoneModal
+              error={error}
+              setError={setError}
+              isSuccessfullyAdded={isSuccessfullyAdded}
+              setIsSuccessfullyAdded={setIsSuccessfullyAdded}
+              chaperones={chaperones}
+              setChaperones={setChaperones}
+              trip={trip}
+            />
           </>
         )
       }
