@@ -15,8 +15,8 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     email: "",
     password: "",
     role: 'teacher',
-    school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",    
-    //school_id: school,
+    //school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",    
+    school_id: school,
     phone_number: "",
     googleId: null
   });
