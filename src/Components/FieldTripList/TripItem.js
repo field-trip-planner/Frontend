@@ -2,6 +2,7 @@ import React from "react";
 import { Grid, Card, Icon, Image } from "semantic-ui-react";
 
 import { Link } from 'react-router-dom';
+import { tsPropertySignature } from "@babel/types";
 
 const TripItem = ({ trip }) => {
   return (
@@ -30,3 +31,12 @@ const TripItem = ({ trip }) => {
 };
 
 export default TripItem;
+
+
+// {props.students && props.studentToFieldTrips ?
+// props.students.forEach(student => {
+
+// })
+// <p>
+
+// </p>}
