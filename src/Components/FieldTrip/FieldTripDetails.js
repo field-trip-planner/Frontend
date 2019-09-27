@@ -27,12 +27,14 @@ const FieldTripDetails = ({ match } ) => {
   const [students, setStudents] = useState([]);
   const [parentList, setParentList] = useState([])
   const [ user ] = useGlobal("user")
-  // const [ listOfParents, setListOfParents ] = useState([])
+  
   
   useEffect(() => {
     const tripItemID = match.params.id;
     const url = `fieldtrips/${tripItemID}`
-   
+    console.log("SCHOOL ID TEST:", user.school_id)//SCHOOL ID TEST
+    const currentUsersSchoolId = user.school_id
+    console.log("SCHOOL id TEST 2", currentUsersSchoolId)
     api
       .get(url)
       .then(({data}) => {
@@ -51,20 +53,22 @@ const FieldTripDetails = ({ match } ) => {
       })
       .catch(err => err); 
       
-      api.get(`users/parents/${user.school_id}`)
+      api.get(`users/parents/${currentUsersSchoolId}`)
         .then(({data})=>{
-          setParentList(data)
           console.log("this is parent found by id",data) 
-          console.log("this is the current user", user)
+          console.log("this is the current user", user)  
+          setParentList(data)
+         
           
         })
         .catch(err => err)
         
   }, [match.params.id])
-  console.log("parentlist-----", parentList)
+  console.log("parentList-----", parentList)//******************************************why empty */ not async?????
 
   
-    ////Setting parent list
+    ////Setting parentList
+    
     const listOfParents = parentList.map(parent => {
       return({
         key: parent.id,
@@ -81,6 +85,7 @@ const FieldTripDetails = ({ match } ) => {
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
     last_name: "",
+    //parent_id:
   });
 
   // setting state
