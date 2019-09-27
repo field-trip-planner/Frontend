@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
+import { useGlobal } from 'reactn';
 import {
   Button,
   Checkbox,
@@ -18,11 +18,15 @@ import {
 import api from "../../api";
 import MainMenu from "../layout/Menu.js";
 import "./FieldTripDetails.css";
+import { userInfo } from "os";
 
 const FieldTripDetails = ({ match }) => {
+
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [chaperones, setChaperones] = useState([]);
+  const [user] = useGlobal('user');
+
 
   useEffect(() => {
     const tripItemID = match.params.id;
@@ -31,7 +35,6 @@ const FieldTripDetails = ({ match }) => {
     api
       .get(url)
       .then(({ data }) => {
-        console.log("trip item ", data);
 
         return setTrip(data);
       })
@@ -81,6 +84,7 @@ const FieldTripDetails = ({ match }) => {
           ? "Please provide a first name"
           : "Please provide a last name"
       });
+
     }
 
     const url = "students";
@@ -93,7 +97,9 @@ const FieldTripDetails = ({ match }) => {
     api
       .post(url, newStudentPayload)
       .then(({ data }) => {
-        console.log("A student added::", data);
+
+        console.log('A student added::', data);
+
 
         setIsSuccessfullyAdded(true);
         setError(false);
@@ -218,12 +224,25 @@ const FieldTripDetails = ({ match }) => {
               </div>
             </Grid.Column>
           </Grid.Row>
+          {user.role === "teacher" || user.role === "chaperone" ?
+            <Grid.Row columns={1}>
+              <Grid.Column>
+                <div className="trip-summary-wrapper">
+                  <h2>
+                    Chaperone Tasks: {" "}
+                    {trip.chaperoneTasks}
+                  </h2>
+                </div>
+              </Grid.Column>
+            </Grid.Row> :
+            null
+          }
         </Grid>
-
         <Segment basic clearing style={{ padding: "unset", marginTop: 120 }}>
           <Header as="h2" floated="left">
             Attending Students
           </Header>
+
           <Modal
             trigger={
               <Button floated="right" primary>
@@ -296,48 +315,45 @@ const FieldTripDetails = ({ match }) => {
           </Table.Header>
 
           <Table.Body>
-            {students.map(student => {
-              return (
-                <Table.Row key={student.id}>
-                  <Table.Cell>{student.first_name}</Table.Cell>
-                  <Table.Cell>{student.last_name}</Table.Cell>
-                  <Table.Cell>
-                    <Checkbox
-                      checked={student.paid_status}
-                      onClick={(e, data) =>
-                        onHandleCheckbox({
+
+            {
+              students.map((student) => {
+                return (
+                  <Table.Row key={student.id}>
+                    <Table.Cell>{student.first_name}</Table.Cell>
+                    <Table.Cell>{student.last_name}</Table.Cell>
+                    <Table.Cell>
+                      <Checkbox checked={student.paid_status}
+                        onClick={(e, data) => onHandleCheckbox({
                           studentStatusID: student.id,
-                          paid_status: data.checked
-                        })
-                      }
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Checkbox
-                      checked={student.permission_status}
-                      onClick={(e, data) =>
-                        onHandleCheckbox({
+                          paid_status: data.checked,
+                        })}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Checkbox checked={student.permission_status}
+                        onClick={(e, data) => onHandleCheckbox({
                           studentStatusID: student.id,
-                          permission_status: data.checked
-                        })
-                      }
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Checkbox
-                      checked={student.supplies_status}
-                      onClick={(e, data) =>
-                        onHandleCheckbox({
+                          permission_status: data.checked,
+                        })}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Checkbox checked={student.supplies_status}
+                        onClick={(e, data) => onHandleCheckbox({
                           studentStatusID: student.id,
-                          supplies_status: data.checked
-                        })
-                      }
-                    />
-                  </Table.Cell>
-                  <Table.Cell>{getStatus(student.id)}</Table.Cell>
-                </Table.Row>
-              );
-            })}
+                          supplies_status: data.checked,
+                        })}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>
+                      {getStatus(student.id)}
+                    </Table.Cell>
+                  </Table.Row>
+                )
+              })
+            }
+
           </Table.Body>
 
           <Table.Footer>
