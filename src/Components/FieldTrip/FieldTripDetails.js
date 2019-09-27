@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useGlobal } from 'reactn';
+import Fuse from "fuse.js";
+import {useGlobal} from "reactn";
+
 import {
   Button,
+  Card,
   Checkbox,
   Container,
   Divider,
@@ -10,6 +13,9 @@ import {
   Header,
   Icon,
   Image,
+  Input,
+  Label,
+  List,
   Message,
   Modal,
   Segment,
@@ -20,26 +26,53 @@ import MainMenu from "../layout/Menu.js";
 import "./FieldTripDetails.css";
 import { userInfo } from "os";
 
-const FieldTripDetails = ({ match }) => {
+
+const options = {
+  shouldSort: true,
+  threshold: 0.5,
+  location:4,
+  distance: 10,
+  maxPatternLength: 12,
+  minMatchCharLength: 1,
+  keys: [
+    "last_name",
+    "first_name"
+  ]
+};
+
+
+const FieldTripDetails = ({ match } ) => {
+
 
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [chaperones, setChaperones] = useState([]);
-  const [user] = useGlobal('user');
-
+  const [user] = useGlobal("user");
+  const [assignedChap, setAssignedChap] = useState([]);
 
   useEffect(() => {
     const tripItemID = match.params.id;
     const url = `fieldtrips/${tripItemID}`;
 
     api
-      .get(url)
-      .then(({ data }) => {
+    .get(url)
+      .then(({data}) => {
+        console.log('trip item ', data)        
 
         return setTrip(data);
       })
       .catch(err => err);
+      
+     
+    api
+      .get(`users/chaperones/${user.school_id}`)  
+      .then(({data}) => {
+        console.log('>>> chaperones ', data);
 
+        return setChaperones(data);
+      })
+      .catch(err => err);
+    
     api
       .get(`students_fieldtrips/${tripItemID}/statuses`)
       .then(({ data }) => {
@@ -48,7 +81,58 @@ const FieldTripDetails = ({ match }) => {
         return setStudents(data);
       })
       .catch(err => err);
+    }, [match.params.id])
 
+    ///////////////////////////////
+    const fuse = new Fuse(chaperones, options);  
+    const [searchVal, searchChaperones] = useState('');
+    let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
+
+    const _handleSearch = e => {
+        const{name, value} = e.target;
+        searchChaperones(value);
+        console.log('>>>>> chaperonesFound ', chaperonesFound);
+        console.log('====>> NOW assignedChap', assignedChap);
+    };
+    
+    ////////////////////// 
+    const ChaperoneCard = ({chaperone}) => {
+      const {id, first_name, last_name, phone_number, email, role, school_id} = chaperone;
+      return (
+          <Card.Content>
+          <Icon.Group size='large'>
+            <Icon loading size='large' name='circle notch' />
+            <Icon name='user' />
+          </Icon.Group>
+            <Button key = {chaperone.id} color = 'blue' onClick = {_handleAddChap}>
+              {chaperone.last_name}  {chaperone.first_name}                               
+            </Button>                             
+          </Card.Content>
+      )
+  } 
+
+  const _handleAddChap = (e)  => {
+
+    let addedChaperone = {
+      user_id: chaperonesFound[0].id,
+      field_trip_id: trip.id 
+    }
+
+    api
+    .post (`chaperones/`, addedChaperone )
+    .then(({data}) => {
+       console.log('++++++ chaperonesFound[0]', chaperonesFound[0]);
+       let newChaperoneList = chaperones.filter(item => item.id !== chaperonesFound[0].id);
+      return setChaperones(newChaperoneList);
+     
+    })
+    .catch(err => err);
+
+    setIsSuccessfullyAdded(true);
+    setError(false);
+
+  }
+  
     api
       .get(`/chaperones/${tripItemID}`)
       .then(res => setChaperones(res.data))
@@ -59,16 +143,16 @@ const FieldTripDetails = ({ match }) => {
     first_name: "",
     last_name: ""
   });
-
+  
   // setting state
   const [isSuccessfullyAdded, setIsSuccessfullyAdded] = useState(false);
   const [error, setError] = useState({});
-
+  
   const _handleChange = e => {
     const { name, value } = e.target;
-
+    
     setError(false);
-
+    
     setStudentInfo({
       ...studentInfo,
       [name]: value
@@ -372,7 +456,7 @@ const FieldTripDetails = ({ match }) => {
 
         <Modal
           trigger={
-            <Button floated="right" primary disabled>
+            <Button floated="right" primary>
               <Icon name="add" />
               Add Chaperone
             </Button>
@@ -381,31 +465,56 @@ const FieldTripDetails = ({ match }) => {
         >
           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
           <Modal.Content>
-            {/*   <Container>  */}
-            <Form onSubmit={_handleSubmit}>
-              <Form.Group widths="equal">
-                <Form.Input
-                  fluid
-                  label="First Name"
-                  name="first_name"
-                  value={trip.first_name}
-                  onChange={_handleChange}
-                />
-              </Form.Group>
-              <Form.Group widths="equal">
-                <Form.Input
-                  fluid
-                  label="Last Name"
-                  name="last_name"
-                  value={trip.last_name}
-                  onChange={_handleChange}
-                />
-              </Form.Group>
+          {
+            isSuccessfullyAdded && (
+              <Message positive>
+                <Message.Header>Chaperone added!</Message.Header>
+              </Message>
+            )
 
-              <Form.Button primary>Submit</Form.Button>
-            </Form>
-            {/*  </Container>  */}
+          }
+
+          {
+            Object.keys(error).length > 0 && (
+              <Message negative>
+                <Message.Header>
+                  Error adding the chaperone. {error.message}.
+                </Message.Header>
+              </Message>
+            )
+
+          }
+
+
+            <Card.Group itemsPerRow = {2} textAlign = 'right'>
+              <Card>
+                <Input
+                  onChange={_handleSearch}
+                  size="large"
+                  icon="search"
+                  iconPosition="left"
+                  placeholder="...search"
+                  floated="left"
+                  value={searchVal}
+                />
+              </Card> 
+
+              { chaperonesFound
+                ? 
+                    <Card centered >
+                    {chaperonesFound.map(chap => (                
+                        <ChaperoneCard key = {chap.id}  chaperone = {chap}/>                                                                               
+                    ))}
+                    </Card>
+                :
+                    null 
+            } 
+            </Card.Group>
+   
           </Modal.Content>
+
+          
+
         </Modal>
         <Table columns={1} style={{ marginTop: 20, marginBottom: 50 }}>
           <Table.Header>
