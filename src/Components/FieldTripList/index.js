@@ -91,8 +91,8 @@ const FieldTripList = props => {
     } else if (user.role === 'parent') {
       api
         .get(`myfieldtrips/parent/${user.id}`)
-        .then(({ data }) => {
-          // console.log(res)
+        .then(({data}) => {
+          console.log(data)
           setTrips(data);
         }).catch(err => console.log(err));
 

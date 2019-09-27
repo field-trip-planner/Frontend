@@ -24,6 +24,14 @@ const TripItem = ({ trip }) => {
           <Card.Description>
             <p>Supplies Needed:{trip.supplies}</p>
           </Card.Description>
+          {trip.students ?
+            <Card.Description>
+              Students: {trip.students.map(student => {
+                return <p>{student.first_name} {student.last_name}</p>
+              })}
+            </Card.Description> :
+            null
+          }
         </Link>
       </Card.Content>
     </Card>
