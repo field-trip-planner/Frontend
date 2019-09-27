@@ -14,8 +14,6 @@ import {
   Icon,
   Image,
   Input,
-  Label,
-  List,
   Message,
   Modal,
   Segment,
@@ -24,7 +22,6 @@ import {
 import api from "../../api";
 import MainMenu from "../layout/Menu.js";
 import "./FieldTripDetails.css";
-import { userInfo } from "os";
 
 const options = {
   shouldSort: true,
