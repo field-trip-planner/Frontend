@@ -45,8 +45,7 @@ const FieldTripDetails = ({ match } ) => {
   const [students, setStudents] = useState([]);
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
-  //const [searchChaperone, updateSearchChaperone] = useState("");
-  //const [foundChap, updateFoundChap] = useState({});
+  const [assignedChap, setAssignedChap] = useState([]);
 
   useEffect(() => {
     const tripItemID = match.params.id;
@@ -85,12 +84,13 @@ const FieldTripDetails = ({ match } ) => {
     ///////////////////////////////
     const fuse = new Fuse(chaperones, options);  
     const [searchVal, searchChaperones] = useState('');
-    const chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
+    let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
 
     const _handleSearch = e => {
         const{name, value} = e.target;
         searchChaperones(value);
-
+        console.log('>>>>> chaperonesFound ', chaperonesFound);
+        console.log('====>> NOW assignedChap', assignedChap);
     };
     
     ////////////////////// 
@@ -109,8 +109,31 @@ const FieldTripDetails = ({ match } ) => {
       )
   } 
 
-  const _handleAddChap = e => {
+  const _handleAddChap = (e)  => {
 
+    let addedChaperone = {
+      user_id: chaperonesFound[0].id,
+      field_trip_id: trip.id 
+    }
+
+    api
+    .post (`chaperones/`, addedChaperone )
+    .then(({data}) => {
+      console.log('>>> GONNA BE ADDE chaperone DATA ', data);
+
+       console.log('++++++ chaperonesFound[0]', chaperonesFound[0]);
+       let newChaperoneList = chaperones.filter(item => item.id !== chaperonesFound[0].id);
+
+      return setChaperones(newChaperoneList);
+     
+    })
+    .catch(err => err);
+
+    setIsSuccessfullyAdded(true);
+    setError(false);
+    // const [assignedChap, setAssignedChap]
+
+    
   }
 
   // setting state for the student information to be entered by user
@@ -433,33 +456,59 @@ const FieldTripDetails = ({ match } ) => {
           closeIcon
         >
           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
+          <Modal.Content>
+          {
+            isSuccessfullyAdded && (
+              <Message positive>
+                <Message.Header>Chaperone added!</Message.Header>
+              </Message>
+            )
 
+          }
+
+          {
+            Object.keys(error).length > 0 && (
+              <Message negative>
+                <Message.Header>
+                  Error adding the chaperone. {error.message}.
+                </Message.Header>
+              </Message>
+            )
+
+          }
+
+
+            <Card.Group itemsPerRow = {2} textAlign = 'right'>
+              <Card>
+                <Input
+                  onChange={_handleSearch}
+                  size="large"
+                  icon="search"
+                  iconPosition="left"
+                  placeholder="...search"
+                  floated="left"
+                  value={searchVal}
+                />
+              </Card> 
+
+              { chaperonesFound
+                ? 
+                    <Card centered >
+                    {chaperonesFound.map(chap => (                
+                        <ChaperoneCard key = {chap.id}  chaperone = {chap}/>                                                                               
+                    ))}
+                    </Card>
+                :
+                    null 
+            } 
+            </Card.Group>
+          
+          
+          
+          
+          </Modal.Content>
 
           
-          <Card.Group itemsPerRow = {2} textAlign = 'right'>
-            <Card>
-              <Input
-                onChange={_handleSearch}
-                size="large"
-                icon="search"
-                iconPosition="left"
-                placeholder="...search"
-                floated="left"
-                value={searchVal}
-              />
-            </Card> 
-
-            { chaperonesFound
-              ? 
-                  <Card centered >
-                  {chaperonesFound.map(chap => (                
-                      <ChaperoneCard key = {chap.id}  chaperone = {chap}/>                                                                               
-                  ))}
-                  </Card>
-              :
-                  null 
-          } 
-          </Card.Group>
 
         </Modal>
       </Container>
