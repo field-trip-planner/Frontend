@@ -49,20 +49,11 @@ const FieldTripDetails = ({ match } ) => {
     const url = `fieldtrips/${tripItemID}`;
 
     api
-    .get(url)
+      .get(url)
       .then(({data}) => {
         console.log('trip item ', data)
 
         return setTrip(data);
-      })
-      .catch(err => err);
-
-    api
-      .get(`users/chaperones/${user.school_id}`)
-      .then(({data}) => {
-        console.log('>>> chaperones ', data);
-
-        return setChaperones(data);
       })
       .catch(err => err);
 
@@ -79,6 +70,16 @@ const FieldTripDetails = ({ match } ) => {
       .get(`/chaperones/${tripItemID}`)
       .then(res => setChaperones(res.data))
       .catch(err => console.log(err));
+
+    api
+      .get(`users/chaperones/${user.school_id}`)
+      .then(({data}) => {
+        console.log('>>> chaperones ', data);
+
+        return setChaperones(data);
+      })
+      .catch(err => err);
+
   }, [match.params.id]);
 
   ///////////////////////////////
