@@ -14,8 +14,6 @@ import {
   Icon,
   Image,
   Input,
-  Label,
-  List,
   Message,
   Modal,
   Segment,
@@ -24,8 +22,6 @@ import {
 import api from "../../api";
 import MainMenu from "../layout/Menu.js";
 import "./FieldTripDetails.css";
-import { userInfo } from "os";
-
 
 const options = {
   shouldSort: true,
@@ -40,9 +36,7 @@ const options = {
   ]
 };
 
-
 const FieldTripDetails = ({ match } ) => {
-
 
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
@@ -55,24 +49,14 @@ const FieldTripDetails = ({ match } ) => {
     const url = `fieldtrips/${tripItemID}`;
 
     api
-    .get(url)
+      .get(url)
       .then(({data}) => {
-        console.log('trip item ', data)        
+        console.log('trip item ', data)
 
         return setTrip(data);
       })
       .catch(err => err);
-      
-     
-    api
-      .get(`users/chaperones/${user.school_id}`)  
-      .then(({data}) => {
-        console.log('>>> chaperones ', data);
 
-        return setChaperones(data);
-      })
-      .catch(err => err);
-    
     api
       .get(`students_fieldtrips/${tripItemID}/statuses`)
       .then(({ data }) => {
@@ -81,41 +65,56 @@ const FieldTripDetails = ({ match } ) => {
         return setStudents(data);
       })
       .catch(err => err);
-    }, [match.params.id])
 
-    ///////////////////////////////
-    const fuse = new Fuse(chaperones, options);  
-    const [searchVal, searchChaperones] = useState('');
-    let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
+    api
+      .get(`/chaperones/${tripItemID}`)
+      .then(res => setChaperones(res.data))
+      .catch(err => console.log(err));
 
-    const _handleSearch = e => {
-        const{name, value} = e.target;
-        searchChaperones(value);
-        console.log('>>>>> chaperonesFound ', chaperonesFound);
-        console.log('====>> NOW assignedChap', assignedChap);
-    };
-    
-    ////////////////////// 
-    const ChaperoneCard = ({chaperone}) => {
-      const {id, first_name, last_name, phone_number, email, role, school_id} = chaperone;
-      return (
-          <Card.Content>
-          <Icon.Group size='large'>
-            <Icon loading size='large' name='circle notch' />
-            <Icon name='user' />
-          </Icon.Group>
-            <Button key = {chaperone.id} color = 'blue' onClick = {_handleAddChap}>
-              {chaperone.last_name}  {chaperone.first_name}                               
-            </Button>                             
-          </Card.Content>
-      )
-  } 
+    api
+      .get(`users/chaperones/${user.school_id}`)
+      .then(({data}) => {
+        console.log('>>> chaperones ', data);
+
+        return setChaperones(data);
+      })
+      .catch(err => err);
+
+  }, [match.params.id]);
+
+  ///////////////////////////////
+  const fuse = new Fuse(chaperones, options);
+  const [searchVal, searchChaperones] = useState('');
+  let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
+
+  const _handleSearch = e => {
+      const{name, value} = e.target;
+      searchChaperones(value);
+      console.log('>>>>> chaperonesFound ', chaperonesFound);
+      console.log('====>> NOW assignedChap', assignedChap);
+  };
+
+    //////////////////////
+  const ChaperoneCard = ({ chaperone }) => {
+    const {id, first_name, last_name, phone_number, email, role, school_id} = chaperone;
+    return (
+        <Card.Content>
+        <Icon.Group size='large'>
+          <Icon loading size='large' name='circle notch' />
+          <Icon name='user' />
+        </Icon.Group>
+          <Button key = {chaperone.id} color = 'blue' onClick = {_handleAddChap}>
+            {chaperone.last_name}  {chaperone.first_name}
+          </Button>
+        </Card.Content>
+    )
+  }
 
   const _handleAddChap = (e)  => {
 
     let addedChaperone = {
       user_id: chaperonesFound[0].id,
-      field_trip_id: trip.id 
+      field_trip_id: trip.id
     }
 
     api
@@ -124,7 +123,7 @@ const FieldTripDetails = ({ match } ) => {
        console.log('++++++ chaperonesFound[0]', chaperonesFound[0]);
        let newChaperoneList = chaperones.filter(item => item.id !== chaperonesFound[0].id);
       return setChaperones(newChaperoneList);
-     
+
     })
     .catch(err => err);
 
@@ -132,27 +131,22 @@ const FieldTripDetails = ({ match } ) => {
     setError(false);
 
   }
-  
-    api
-      .get(`/chaperones/${tripItemID}`)
-      .then(res => setChaperones(res.data))
-      .catch(err => console.log(err));
-  }, [match.params.id]);
+
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
     last_name: ""
   });
-  
+
   // setting state
   const [isSuccessfullyAdded, setIsSuccessfullyAdded] = useState(false);
   const [error, setError] = useState({});
-  
+
   const _handleChange = e => {
     const { name, value } = e.target;
-    
+
     setError(false);
-    
+
     setStudentInfo({
       ...studentInfo,
       [name]: value
@@ -183,7 +177,6 @@ const FieldTripDetails = ({ match } ) => {
       .then(({ data }) => {
 
         console.log('A student added::', data);
-
 
         setIsSuccessfullyAdded(true);
         setError(false);
@@ -465,27 +458,25 @@ const FieldTripDetails = ({ match } ) => {
         >
           <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
           <Modal.Content>
-          {
-            isSuccessfullyAdded && (
-              <Message positive>
-                <Message.Header>Chaperone added!</Message.Header>
-              </Message>
-            )
+            {
+              isSuccessfullyAdded && (
+                <Message positive>
+                  <Message.Header>Chaperone added!</Message.Header>
+                </Message>
+              )
 
-          }
+            }
 
-          {
-            Object.keys(error).length > 0 && (
-              <Message negative>
-                <Message.Header>
-                  Error adding the chaperone. {error.message}.
-                </Message.Header>
-              </Message>
-            )
+            {
+              Object.keys(error).length > 0 && (
+                <Message negative>
+                  <Message.Header>
+                    Error adding the chaperone. {error.message}.
+                  </Message.Header>
+                </Message>
+              )
 
-          }
-
-
+            }
             <Card.Group itemsPerRow = {2} textAlign = 'right'>
               <Card>
                 <Input
@@ -497,25 +488,22 @@ const FieldTripDetails = ({ match } ) => {
                   floated="left"
                   value={searchVal}
                 />
-              </Card> 
+              </Card>
 
               { chaperonesFound
-                ? 
+                ?
                     <Card centered >
-                    {chaperonesFound.map(chap => (                
-                        <ChaperoneCard key = {chap.id}  chaperone = {chap}/>                                                                               
+                    {chaperonesFound.map(chap => (
+                        <ChaperoneCard key = {chap.id}  chaperone = {chap}/>
                     ))}
                     </Card>
                 :
-                    null 
-            } 
+                    null
+              }
             </Card.Group>
-   
           </Modal.Content>
-
-          
-
         </Modal>
+
         <Table columns={1} style={{ marginTop: 20, marginBottom: 50 }}>
           <Table.Header>
             <Table.Row>

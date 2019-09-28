@@ -95,7 +95,7 @@ const FieldTripList = props => {
             ))}
           </Card.Group>
         ) : (
-          
+
             <Card.Group itemsPerRow={3}>
               {searchTrip.map(trip => (
                 <TripItem key={trip.id} trip={trip} />
@@ -109,10 +109,9 @@ const FieldTripList = props => {
             <TripItem key={trip.id} trip={trip} />
           ))}
         </Card.Group> */}
-        </Container>
-      </>
-    );
-  }
+      </Container>
+    </>
+  );
 };
 
 export default withRouter(FieldTripList);
