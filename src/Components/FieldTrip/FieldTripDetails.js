@@ -64,6 +64,16 @@ const FieldTripDetails = ({ match }) => {
       .get(`/chaperones/${tripItemID}`)
       .then(res => setChaperones(res.data))
       .catch(err => console.log(err));
+
+    api
+      .get(`users/chaperones/${user.school_id}`)
+      .then(({data}) => {
+        console.log('>>> chaperones ', data);
+
+        return setChaperones(data);
+      })
+      .catch(err => err);
+
   }, [match.params.id]);
 
   // setting state for the student information to be entered by user
