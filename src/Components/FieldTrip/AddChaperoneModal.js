@@ -68,15 +68,11 @@ const AddChaperoneModal = (
   }
 
   const ChaperoneCard = ({ chaperone }) => {
-    // const {
-    //   id,
-    //   first_name,
-    //   last_name,
-    //   phone_number,
-    //   email,
-    //   role,
-    //   school_id
-    // } = chaperone;
+    const {
+      id,
+      first_name,
+      last_name,
+    } = chaperone;
 
     return (
       <Card.Content>
@@ -84,8 +80,8 @@ const AddChaperoneModal = (
           <Icon loading size='large' name='circle notch' />
           <Icon name='user' />
         </Icon.Group>
-        <Button key = {chaperone.id} color = 'blue' onClick = {_handleAddChap}>
-          {chaperone.last_name}  {chaperone.first_name}
+        <Button key = {id} color = 'blue' onClick = {_handleAddChap}>
+          {last_name}  {first_name}
         </Button>
       </Card.Content>
     )
