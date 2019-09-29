@@ -52,7 +52,7 @@ const ChaperonesTable = ({ chaperones }) => {
                   return (
                     <Table.Row key={chaperone.id}>
                       <Table.Cell>
-                        {`${chaperone.first_name}, ${chaperone.last_name}`}
+                        {`${chaperone.first_name} ${chaperone.last_name}`}
                       </Table.Cell>
                     </Table.Row>
                   );

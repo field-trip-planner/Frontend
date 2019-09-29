@@ -5,7 +5,6 @@ import {
   Header,
   Icon,
   Message,
-  Modal,
   Segment,
   Table,
 } from "semantic-ui-react";
@@ -29,7 +28,7 @@ const StudentsReadOnlyTable = (
         user.role === "parent" || user.role === "chaperone" && (
           <>
             <Segment basic clearing style={{ padding: "unset", marginTop: 120}} >
-              <Header as='h2' floated='left'>Attending Students</Header>
+              <Header as='h2' floated='left'>Students</Header>
             </Segment>
 
             <Table columns={5} style={{ marginTop: 20, marginBottom: 50 }}>

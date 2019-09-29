@@ -16,6 +16,8 @@ import AddChaperoneModal from './AddChaperoneModal';
 const TeacherFieldTripDetailView = (
   { setStudentInfo,
     setChaperones,
+    setChaperonesToAssign,
+    chaperonesToAssign,
     studentInfo,
     students,
     getStatus,
@@ -28,6 +30,7 @@ const TeacherFieldTripDetailView = (
     chaperones,
     trip,
     onHandleCheckbox,
+    match,
   }) => {
   const [ user ] = useGlobal("user");
 
@@ -37,7 +40,7 @@ const TeacherFieldTripDetailView = (
         user.role === "teacher" && (
           <>
             <Segment basic clearing style={{ padding: "unset", marginTop: 120 }}>
-              <Header as='h2' floated='left'>Attending Students</Header>
+              <Header as='h2' floated='left'>Students</Header>
               <Modal
                 trigger={
                   <Button floated="right" primary>
@@ -93,7 +96,6 @@ const TeacherFieldTripDetailView = (
                         onChange={_handleChange}
                       />
                     </Form.Group>
-
                     <Form.Button primary>Submit</Form.Button>
                   </Form>
                 </Modal.Content>
@@ -169,9 +171,13 @@ const TeacherFieldTripDetailView = (
               setError={setError}
               isSuccessfullyAdded={isSuccessfullyAdded}
               setIsSuccessfullyAdded={setIsSuccessfullyAdded}
-              chaperones={chaperones}
               setChaperones={setChaperones}
+              chaperones={chaperones}
+              setChaperonesToAssign={setChaperonesToAssign}
+              chaperonesToAssign={chaperonesToAssign}
               trip={trip}
+              match={match}
+              user={user}
             />
           </>
         )

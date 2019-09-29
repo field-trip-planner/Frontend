@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {useGlobal} from "reactn";
 import {
-  Button,
-  Card,
   Container,
   Divider,
   Grid,
   Header,
   Icon,
   Image,
-  Input,
-  Message,
-  Modal,
-  Segment
 } from "semantic-ui-react";
 
 import api from "../../api";
@@ -29,25 +23,17 @@ const FieldTripDetails = ({ match }) => {
   const [students, setStudents] = useState([]);
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
-  const [assignedChap, setAssignedChap] = useState([]);
+
+  const tripItemID = match.params.id;
 
   useEffect(() => {
-    const tripItemID = match.params.id;
     const url = `fieldtrips/${tripItemID}`;
-
     api
       .get(url)
       .then(({ data }) => {
         console.log('trip item ', data);
 
         return setTrip(data);
-      })
-      .catch(err => err);
-
-    api
-      .get(`users/chaperones/${user.school_id}`)
-      .then(({data}) => {
-        return setChaperones(data);
       })
       .catch(err => err);
 
@@ -65,16 +51,7 @@ const FieldTripDetails = ({ match }) => {
       .then(res => setChaperones(res.data))
       .catch(err => console.log(err));
 
-    api
-      .get(`users/chaperones/${user.school_id}`)
-      .then(({data}) => {
-        console.log('>>> chaperones ', data);
-
-        return setChaperones(data);
-      })
-      .catch(err => err);
-
-  }, [match.params.id]);
+  }, [tripItemID, user.school_id]);
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
@@ -110,8 +87,6 @@ const FieldTripDetails = ({ match }) => {
     }
 
     const url = "students";
-
-    console.log('TRIP.SCHOOL_id::', trip.school_id);
 
     const newStudentPayload = {
       ...studentInfo,
@@ -275,8 +250,10 @@ const FieldTripDetails = ({ match }) => {
           isSuccessfullyAdded={isSuccessfullyAdded}
           _handleSubmit={_handleSubmit}
           _handleChange={_handleChange}
+          setChaperones={setChaperones}
           chaperones={chaperones}
           onHandleCheckbox={onHandleCheckbox}
+          match={match}
         />
         <ChaperonesTable chaperones={chaperones} />
       </Container>
