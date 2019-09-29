@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Fuse from "fuse.js";
 import {useGlobal} from "reactn";
-
 import {
   Button,
   Card,
-  Checkbox,
   Container,
   Divider,
-  Form,
   Grid,
   Header,
   Icon,
@@ -16,27 +12,18 @@ import {
   Input,
   Message,
   Modal,
-  Segment,
-  Table
+  Segment
 } from "semantic-ui-react";
+
 import api from "../../api";
 import MainMenu from "../layout/Menu.js";
+import TeacherFieldTripDetailView from "./TeacherFieldTripDetailView";
+import ChaperoneFieldTripDetailView from "./ChaperoneFieldTripDetailView";
+import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
+import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
-const options = {
-  shouldSort: true,
-  threshold: 0.5,
-  location:4,
-  distance: 10,
-  maxPatternLength: 12,
-  minMatchCharLength: 1,
-  keys: [
-    "last_name",
-    "first_name"
-  ]
-};
-
-const FieldTripDetails = ({ match } ) => {
+const FieldTripDetails = ({ match }) => {
 
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
@@ -50,10 +37,17 @@ const FieldTripDetails = ({ match } ) => {
 
     api
       .get(url)
-      .then(({data}) => {
-        console.log('trip item ', data)
+      .then(({ data }) => {
+        console.log('trip item ', data);
 
         return setTrip(data);
+      })
+      .catch(err => err);
+
+    api
+      .get(`users/chaperones/${user.school_id}`)
+      .then(({data}) => {
+        return setChaperones(data);
       })
       .catch(err => err);
 
@@ -81,56 +75,6 @@ const FieldTripDetails = ({ match } ) => {
       .catch(err => err);
 
   }, [match.params.id]);
-
-  ///////////////////////////////
-  const fuse = new Fuse(chaperones, options);
-  const [searchVal, searchChaperones] = useState('');
-  let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
-
-  const _handleSearch = e => {
-      const{name, value} = e.target;
-      searchChaperones(value);
-      console.log('>>>>> chaperonesFound ', chaperonesFound);
-      console.log('====>> NOW assignedChap', assignedChap);
-  };
-
-    //////////////////////
-  const ChaperoneCard = ({ chaperone }) => {
-    const {id, first_name, last_name, phone_number, email, role, school_id} = chaperone;
-    return (
-        <Card.Content>
-        <Icon.Group size='large'>
-          <Icon loading size='large' name='circle notch' />
-          <Icon name='user' />
-        </Icon.Group>
-          <Button key = {chaperone.id} color = 'blue' onClick = {_handleAddChap}>
-            {chaperone.last_name}  {chaperone.first_name}
-          </Button>
-        </Card.Content>
-    )
-  }
-
-  const _handleAddChap = (e)  => {
-
-    let addedChaperone = {
-      user_id: chaperonesFound[0].id,
-      field_trip_id: trip.id
-    }
-
-    api
-    .post (`chaperones/`, addedChaperone )
-    .then(({data}) => {
-       console.log('++++++ chaperonesFound[0]', chaperonesFound[0]);
-       let newChaperoneList = chaperones.filter(item => item.id !== chaperonesFound[0].id);
-      return setChaperones(newChaperoneList);
-
-    })
-    .catch(err => err);
-
-    setIsSuccessfullyAdded(true);
-    setError(false);
-
-  }
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
@@ -167,15 +111,17 @@ const FieldTripDetails = ({ match } ) => {
 
     const url = "students";
 
+    console.log('TRIP.SCHOOL_id::', trip.school_id);
+
     const newStudentPayload = {
       ...studentInfo,
-      field_trip_id: match.params.id
-    };
+      field_trip_id: match.params.id,
+      school_id: trip.school_id
+    }
 
     api
       .post(url, newStudentPayload)
       .then(({ data }) => {
-
         console.log('A student added::', data);
 
         setIsSuccessfullyAdded(true);
@@ -218,7 +164,11 @@ const FieldTripDetails = ({ match } ) => {
     const clickedStudentStatusID = studentStatus.studentStatusID;
     const url = `students_fieldtrips/${clickedStudentStatusID}`;
 
-    const { paid_status, permission_status, supplies_status } = studentStatus;
+    const {
+      paid_status,
+      permission_status,
+      supplies_status,
+    } = studentStatus;
 
     api
       .put(url, {
@@ -296,233 +246,39 @@ const FieldTripDetails = ({ match } ) => {
             <Grid.Column>
               <div className="trip-summary-wrapper">
                 <h2>
-                  Additional Notes / Trip Summary: {trip.field_trip_details}
+                  Additional Notes / Trip Summary: {" "}
+                  {trip.field_trip_details}
                 </h2>
               </div>
             </Grid.Column>
           </Grid.Row>
           {user.role === "teacher" || user.role === "chaperone" ?
-            <Grid.Row columns={1}>
-              <Grid.Column>
-                <div className="trip-summary-wrapper">
-                  <h2>
-                    Chaperone Tasks: {" "}
-                    {trip.chaperoneTasks}
-                  </h2>
-                </div>
-              </Grid.Column>
-            </Grid.Row> :
+            <ChaperoneFieldTripDetailView trip={trip} /> :
             null
           }
         </Grid>
-        <Segment basic clearing style={{ padding: "unset", marginTop: 120 }}>
-          <Header as="h2" floated="left">
-            Attending Students
-          </Header>
 
-          <Modal
-            trigger={
-              <Button floated="right" primary>
-                <Icon name="add" />
-                Add Student
-              </Button>
-            }
-            closeIcon
-            onClose={() => {
-              setStudentInfo({
-                first_name: "",
-                last_name: ""
-              });
-              setIsSuccessfullyAdded(false);
-              setError(false);
-            }}
-          >
-            <Modal.Header className="modalHeader">Add Student</Modal.Header>
-            <Modal.Content>
-              {isSuccessfullyAdded && (
-                <Message positive>
-                  <Message.Header>Student successfully added!</Message.Header>
-                </Message>
-              )}
+        <StudentsReadOnlyTable
+          students={students}
+          getStatus={getStatus}
+        />
 
-              {Object.keys(error).length > 0 && (
-                <Message negative>
-                  <Message.Header>
-                    We ran into an issue adding the student. {error.message}.
-                    And Please try again.
-                  </Message.Header>
-                </Message>
-              )}
-              <Form onSubmit={_handleSubmit}>
-                <Form.Group widths="equal">
-                  <Form.Input
-                    fluid
-                    label="First Name"
-                    name="first_name"
-                    value={studentInfo.first_name}
-                    onChange={_handleChange}
-                  />
-                </Form.Group>
-                <Form.Group widths="equal">
-                  <Form.Input
-                    fluid
-                    label="Last Name"
-                    name="last_name"
-                    value={studentInfo.last_name}
-                    onChange={_handleChange}
-                  />
-                </Form.Group>
-
-                <Form.Button primary>Submit</Form.Button>
-              </Form>
-            </Modal.Content>
-          </Modal>
-        </Segment>
-
-        <Table columns={5} style={{ marginTop: 20, marginBottom: 50 }}>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>First Name</Table.HeaderCell>
-              <Table.HeaderCell>Last Name</Table.HeaderCell>
-              <Table.HeaderCell>Paid</Table.HeaderCell>
-              <Table.HeaderCell>E-sign</Table.HeaderCell>
-              <Table.HeaderCell>Supplies</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-
-            {
-              students.map((student) => {
-                return (
-                  <Table.Row key={student.id}>
-                    <Table.Cell>{student.first_name}</Table.Cell>
-                    <Table.Cell>{student.last_name}</Table.Cell>
-                    <Table.Cell>
-                      <Checkbox checked={student.paid_status}
-                        onClick={(e, data) => onHandleCheckbox({
-                          studentStatusID: student.id,
-                          paid_status: data.checked,
-                        })}
-                      />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Checkbox checked={student.permission_status}
-                        onClick={(e, data) => onHandleCheckbox({
-                          studentStatusID: student.id,
-                          permission_status: data.checked,
-                        })}
-                      />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Checkbox checked={student.supplies_status}
-                        onClick={(e, data) => onHandleCheckbox({
-                          studentStatusID: student.id,
-                          supplies_status: data.checked,
-                        })}
-                      />
-                    </Table.Cell>
-                    <Table.Cell>
-                      {getStatus(student.id)}
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              })
-            }
-
-          </Table.Body>
-
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell>
-                {students.length} Students Going
-              </Table.HeaderCell>
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-            </Table.Row>
-          </Table.Footer>
-        </Table>
-
-        <Modal
-          trigger={
-            <Button floated="right" primary>
-              <Icon name="add" />
-              Add Chaperone
-            </Button>
-          }
-          closeIcon
-        >
-          <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
-          <Modal.Content>
-            {
-              isSuccessfullyAdded && (
-                <Message positive>
-                  <Message.Header>Chaperone added!</Message.Header>
-                </Message>
-              )
-
-            }
-
-            {
-              Object.keys(error).length > 0 && (
-                <Message negative>
-                  <Message.Header>
-                    Error adding the chaperone. {error.message}.
-                  </Message.Header>
-                </Message>
-              )
-
-            }
-            <Card.Group itemsPerRow = {2} textAlign = 'right'>
-              <Card>
-                <Input
-                  onChange={_handleSearch}
-                  size="large"
-                  icon="search"
-                  iconPosition="left"
-                  placeholder="...search"
-                  floated="left"
-                  value={searchVal}
-                />
-              </Card>
-
-              { chaperonesFound
-                ?
-                    <Card centered >
-                    {chaperonesFound.map(chap => (
-                        <ChaperoneCard key = {chap.id}  chaperone = {chap}/>
-                    ))}
-                    </Card>
-                :
-                    null
-              }
-            </Card.Group>
-          </Modal.Content>
-        </Modal>
-
-        <Table columns={1} style={{ marginTop: 20, marginBottom: 50 }}>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Chaperone Name</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {chaperones.map(chaperone => {
-              return (
-                <Table.Row key={chaperone.id}>
-                  <Table.Cell>
-                    {`${chaperone.first_name}, ${chaperone.last_name}`}
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+        <TeacherFieldTripDetailView
+          setError={setError}
+          error={error}
+          setStudentInfo={setStudentInfo}
+          studentInfo={studentInfo}
+          trip={trip}
+          students={students}
+          getStatus={getStatus}
+          setIsSuccessfullyAdded={setIsSuccessfullyAdded}
+          isSuccessfullyAdded={isSuccessfullyAdded}
+          _handleSubmit={_handleSubmit}
+          _handleChange={_handleChange}
+          chaperones={chaperones}
+          onHandleCheckbox={onHandleCheckbox}
+        />
+        <ChaperonesTable chaperones={chaperones} />
       </Container>
     </>
   );
