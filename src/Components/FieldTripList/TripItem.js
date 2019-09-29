@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Card, Icon, Image } from "semantic-ui-react";
 
 import { Link } from 'react-router-dom';
-import { tsPropertySignature } from "@babel/types";
+// import { tsPropertySignature } from "@babel/types";
 
 const TripItem = ({ trip }) => {
   return (

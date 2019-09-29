@@ -27,45 +27,56 @@ const options = {
 
 const AddChaperoneModal = (
   {
-    chaperones,
     setChaperones,
     error,
     isSuccessfullyAdded,
     setIsSuccessfullyAdded,
     setError,
     trip,
+    user,
+    match,
   }) => {
 
-  const fuse = new Fuse(chaperones, options);
+  const [chaperonesToAssign, setChaperonesToAssign] = useState([]);
+  const tripItemID = match.params.id;
+
+  // Fuzzy search
+  const fuse = new Fuse(chaperonesToAssign, options);
   const [searchVal, searchChaperones] = useState('');
-  let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperones;
+  let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperonesToAssign;
 
   const _handleSearch = e => {
     const{name, value} = e.target;
     searchChaperones(value);
-    console.log('>>>>> chaperonesFound ', chaperonesFound);
-    // console.log('====>> NOW assignedChap', assignedChap);
   };
 
-  const _handleAddChap = (e)  => {
-    let addedChaperone = {
-      user_id: chaperonesFound[0].id,
+  const _handleAddChap = (e, { id })  => {
+    console.log("data prop target::", id)
+
+    // the id is how we know which chaperone is selected from the list
+    //  same id passed as a prop in the <Card.Content> button below
+    const addedChaperone = {
+      user_id: id,
       field_trip_id: trip.id
-    }
+    };
 
     api
       .post (`chaperones/`, addedChaperone )
       .then(({data}) => {
-        console.log('++++++ chaperonesFound[0]', chaperonesFound[0]);
-        let newChaperoneList = chaperones.filter(item => item.id !== chaperonesFound[0].id);
-        return setChaperones(newChaperoneList);
+        api
+          .get(`/chaperones/${tripItemID}`)
+          .then(res => setChaperones(res.data))
+          .catch(err => console.log(err));
 
+        const newChaperoneList =
+          chaperonesToAssign.filter(chaperone => chaperone.id !== id);
+        return setChaperonesToAssign(newChaperoneList);
       })
       .catch(err => err);
 
     setIsSuccessfullyAdded(true);
     setError(false);
-  }
+  };
 
   const ChaperoneCard = ({ chaperone }) => {
     const {
@@ -80,17 +91,25 @@ const AddChaperoneModal = (
           <Icon loading size='large' name='circle notch' />
           <Icon name='user' />
         </Icon.Group>
-        <Button key = {id} color = 'blue' onClick = {_handleAddChap}>
-          {last_name}  {first_name}
+        <Button key={id} id={id} color='blue' onClick={_handleAddChap}>
+          {last_name}, {first_name}
         </Button>
       </Card.Content>
     )
-  }
+  };
 
   return (
     <Segment basic clearing style={{ padding: "unset", marginTop: 80 }}>
       <Header as='h2' floated='left'>Chaperones</Header>
       <Modal
+        onOpen={() => {
+          api
+            .get(`users/chaperones/${tripItemID}/${user.school_id}`)
+            .then(({data}) => {
+              return setChaperonesToAssign(data);
+            })
+            .catch(err => err);
+        }}
         trigger={
           <Button floated="right" primary>
             <Icon name="add" />

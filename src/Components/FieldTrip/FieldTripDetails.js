@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {useGlobal} from "reactn";
 import {
-  Button,
-  Card,
   Container,
   Divider,
   Grid,
   Header,
   Icon,
   Image,
-  Input,
-  Message,
-  Modal,
-  Segment
 } from "semantic-ui-react";
 
 import api from "../../api";
@@ -29,13 +23,11 @@ const FieldTripDetails = ({ match }) => {
   const [students, setStudents] = useState([]);
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
-  const [chaperonesToAssign, setChaperonesToAssign] = useState([]);
 
   const tripItemID = match.params.id;
 
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`;
-
     api
       .get(url)
       .then(({ data }) => {
@@ -60,59 +52,6 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => console.log(err));
 
   }, [tripItemID, user.school_id]);
-
-  // Fuzzy search
-  const fuse = new Fuse(chaperonesToAssign, options);
-  const [searchVal, searchChaperones] = useState('');
-  let chaperonesFound = searchVal ? fuse.search(searchVal) : chaperonesToAssign;
-
-  const _handleSearch = e => {
-      const{name, value} = e.target;
-      searchChaperones(value);
-      console.log('>>>>> chaperonesFound ', chaperonesFound);
-      console.log('====>> NOW assignedChap', chaperonesToAssign);
-  };
-
-  const ChaperoneCard = ({ chaperone }) => {
-    const {id, first_name, last_name, phone_number, email, role, school_id} = chaperone;
-    return (
-        <Card.Content>
-        <Icon.Group size='large'>
-          <Icon loading size='large' name='circle notch' />
-          <Icon name='user' />
-        </Icon.Group>
-          <Button key={chaperone.id} id={chaperone.id} color='blue' onClick={_handleAddChap}>
-            {chaperone.last_name}  {chaperone.first_name}
-          </Button>
-        </Card.Content>
-    )
-  }
-
-  const _handleAddChap = (e, { id })  => {
-    console.log("e Target::", e.target)
-    console.log("data Target::", id)
-
-    let addedChaperone = {
-      user_id: id,
-      field_trip_id: trip.id
-    }
-
-    api
-    .post (`chaperones/`, addedChaperone )
-    .then(({data}) => {
-      api
-        .get(`/chaperones/${tripItemID}`)
-        .then(res => setChaperones(res.data))
-        .catch(err => console.log(err));
-
-      const newChaperoneList = chaperonesToAssign.filter(chaperone => chaperone.id !== id);
-      return setChaperonesToAssign(newChaperoneList);
-    })
-    .catch(err => err);
-
-    setIsSuccessfullyAdded(true);
-    setError(false);
-  };
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
@@ -311,8 +250,10 @@ const FieldTripDetails = ({ match }) => {
           isSuccessfullyAdded={isSuccessfullyAdded}
           _handleSubmit={_handleSubmit}
           _handleChange={_handleChange}
+          setChaperones={setChaperones}
           chaperones={chaperones}
           onHandleCheckbox={onHandleCheckbox}
+          match={match}
         />
         <ChaperonesTable chaperones={chaperones} />
       </Container>
