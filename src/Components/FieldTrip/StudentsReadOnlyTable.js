@@ -1,7 +1,6 @@
 import React from "react";
 import { useGlobal } from "reactn";
 import {
-  Checkbox,
   Header,
   Icon,
   Message,
@@ -26,7 +25,7 @@ const StudentsReadOnlyTable = (
   return (
     <>
       {
-        user.role === "parent" || user.role === "chaperone" && (
+        (user.role === "parent" || user.role === "chaperone") && (
           <>
             <Segment basic clearing style={{ padding: "unset", marginTop: 120}} >
               <Header as='h2' floated='left'>Students</Header>

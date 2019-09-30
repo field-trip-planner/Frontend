@@ -5,7 +5,6 @@ import {
   Divider,
   Grid,
   Header,
-  Icon,
   Image,
 } from "semantic-ui-react";
 
@@ -174,21 +173,6 @@ const FieldTripDetails = ({ match }) => {
     setStudents(updatedStudents);
   };
 
-  // const getStatus = studentID => {
-  //   const selectedStudent = students.find(student => {
-  //     return student.id === studentID;
-  //   });
-  //
-  //   if (
-  //     selectedStudent.paid_status &&
-  //     selectedStudent.permission_status &&
-  //     selectedStudent.supplies_status
-  //   ) {
-  //     return "complete";
-  //   }
-  //   return "incomplete";
-  // };
-
   return (
     <>
       {/* trip is our local state data */}
@@ -227,7 +211,8 @@ const FieldTripDetails = ({ match }) => {
               </div>
             </Grid.Column>
           </Grid.Row>
-          {user.role === "teacher" || user.role === "chaperone" ?
+          {
+            (user.role === "teacher" || user.role === "chaperone") ?
             <ChaperoneFieldTripDetailView trip={trip} /> :
             null
           }
