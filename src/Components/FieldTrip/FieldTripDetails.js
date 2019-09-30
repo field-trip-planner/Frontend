@@ -174,20 +174,20 @@ const FieldTripDetails = ({ match }) => {
     setStudents(updatedStudents);
   };
 
-  const getStatus = studentID => {
-    const selectedStudent = students.find(student => {
-      return student.id === studentID;
-    });
-
-    if (
-      selectedStudent.paid_status &&
-      selectedStudent.permission_status &&
-      selectedStudent.supplies_status
-    ) {
-      return "complete";
-    }
-    return "incomplete";
-  };
+  // const getStatus = studentID => {
+  //   const selectedStudent = students.find(student => {
+  //     return student.id === studentID;
+  //   });
+  //
+  //   if (
+  //     selectedStudent.paid_status &&
+  //     selectedStudent.permission_status &&
+  //     selectedStudent.supplies_status
+  //   ) {
+  //     return "complete";
+  //   }
+  //   return "incomplete";
+  // };
 
   return (
     <>
@@ -235,7 +235,6 @@ const FieldTripDetails = ({ match }) => {
 
         <StudentsReadOnlyTable
           students={students}
-          getStatus={getStatus}
         />
 
         <TeacherFieldTripDetailView
@@ -245,7 +244,6 @@ const FieldTripDetails = ({ match }) => {
           studentInfo={studentInfo}
           trip={trip}
           students={students}
-          getStatus={getStatus}
           setIsSuccessfullyAdded={setIsSuccessfullyAdded}
           isSuccessfullyAdded={isSuccessfullyAdded}
           _handleSubmit={_handleSubmit}
