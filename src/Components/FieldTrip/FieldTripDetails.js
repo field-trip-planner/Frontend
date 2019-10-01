@@ -107,7 +107,7 @@ const listOfParents = parentList.map(parent => {
 return({
   key: parent.id,
   value: parent.id,
-  text: `${parent.last_name}, ${parent.first_name}`
+  text: `${parent.last_name}, ${parent.first_name}, ${parent.id}`
 })
 })
 
@@ -174,13 +174,16 @@ return({
 
   const _handleChange = e => {
     const { name, value } = e.target;
+    
 
     setError(false);
 
     setStudentInfo({
       ...studentInfo,
-      [name]: value
+      [name]: value,
+      parent_id: value
     });
+    console.log("IN HANDLE", studentInfo.parent_id)
   };
 
   const _handleSubmit = e => {
@@ -199,13 +202,16 @@ return({
 
     const newStudentPayload = {
       ...studentInfo,
-      field_trip_id: match.params.id
+      field_trip_id: match.params.id,
+      school_id: user.school_id,
+      
     };
 
     api
       .post(url, newStudentPayload)
       .then(({ data }) => {
 
+        console.log("picked pARENT ID", studentInfo.parent_id)
         console.log('A student added::', data);
 
         setIsSuccessfullyAdded(true);
@@ -402,15 +408,38 @@ return({
                     onChange={_handleChange}
                   />
                 </Form.Group>
-                <Dropdown 
+                <Form.Field
+                  control='select'
+                  name='parent_id'
+                  label='Parent Name'
+                  placeholder='Parent'
+                  onChange={_handleChange}
+                >
+                   <option
+                    value="default"
+                  >
+                    Select a Parent
+                  </option>
+
+                  {parentList.map(parent => <option key={parent.id} value={parent.id}>
+                  {`${parent.last_name}, ${parent.first_name}`}</option>)}
+                 
+                </Form.Field>          
+                
+                
+                {/* encouraged to revisit */}
+                {/* //<Dropdown
                   placeholder="Please assign a parent to this new student."
                   fluid
                   search
                   selection
                   options = {listOfParents}
-                  value={studentInfo.parent_id}
+                  name= "parent_id"
+                  //value={studentInfo.parent_id}
+                  onChange={_handleChange}
+
                 />
-                
+                 */}
                 <Form.Button primary>Submit</Form.Button>
               </Form>
             </Modal.Content>
