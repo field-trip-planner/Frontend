@@ -12,6 +12,8 @@ import {
   Table,
 } from "semantic-ui-react";
 import AddChaperoneModal from './AddChaperoneModal';
+import { MaybeCheckmarkWithWarning } from '../Shared/MaybeCheckmark';
+import getStatus from '../../Utils/getStatus';
 
 const TeacherFieldTripDetailView = (
   { setStudentInfo,
@@ -20,7 +22,6 @@ const TeacherFieldTripDetailView = (
     chaperonesToAssign,
     studentInfo,
     students,
-    getStatus,
     setIsSuccessfullyAdded,
     isSuccessfullyAdded,
     setError,
@@ -117,6 +118,12 @@ const TeacherFieldTripDetailView = (
               <Table.Body>
                 {
                   students.map((student) => {
+                    const selectedStudent = students.find(s => {
+                      return s.id === student.id;
+                    });
+                    const status = getStatus(selectedStudent);
+                    const isComplete = status === 'complete';
+
                     return (
                       <Table.Row key={student.id}>
                         <Table.Cell>{student.first_name}</Table.Cell>
@@ -145,8 +152,13 @@ const TeacherFieldTripDetailView = (
                                     })}
                           />
                         </Table.Cell>
-                        <Table.Cell>
-                          {getStatus(student.id)}
+                        <Table.Cell negative={!isComplete} positive={isComplete}>
+                            <div style={{display: 'flex', alignItems: 'center', width: 95}}>
+                              <MaybeCheckmarkWithWarning isComplete={isComplete} />
+                              <span>
+                                {status}
+                              </span>
+                            </div>
                         </Table.Cell>
                       </Table.Row>
                     )
