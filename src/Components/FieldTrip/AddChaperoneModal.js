@@ -76,6 +76,9 @@ const AddChaperoneModal = (
 
     setIsSuccessfullyAdded(true);
     setError(false);
+    setTimeout(() => {
+      setIsSuccessfullyAdded(false);
+    }, 1500);
   };
 
   const ChaperoneCard = ({ chaperone }) => {
