@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Card, Icon, Image } from "semantic-ui-react";
+import { Grid, Card, Icon, Image,Container } from "semantic-ui-react";
 
 import { Link } from 'react-router-dom';
 // import { tsPropertySignature } from "@babel/types";
@@ -24,6 +24,17 @@ const TripItem = ({ trip }) => {
           <Card.Description>
             <p>Supplies Needed:{trip.supplies}</p>
           </Card.Description>
+          {trip.students ?
+            <Card.Description>
+              <Container textAlign="center">
+              <Icon name='student' />
+              {trip.students.map(student => {
+                return <p>{student.first_name} {student.last_name}</p>
+              })}
+              </Container>
+            </Card.Description> :
+            null
+          }
         </Link>
       </Card.Content>
     </Card>
