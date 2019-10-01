@@ -164,7 +164,8 @@ return({
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
-    last_name: ""
+    last_name: "",
+    parent_id:""
   });
 
   // setting state
@@ -407,21 +408,9 @@ return({
                   search
                   selection
                   options = {listOfParents}
+                  value={studentInfo.parent_id}
                 />
                 
-                
-                
-                
-                {/* <Form.Group widths="equal">
-                  <Form.Input
-                    fluid
-                    label="Parent/Guardian"
-                    name="parent_name"
-                    value={studentInfo.parent_name}
-                    onChange={_handleChange}
-                  />
-                </Form.Group> */}
-
                 <Form.Button primary>Submit</Form.Button>
               </Form>
             </Modal.Content>
