@@ -45,7 +45,7 @@ const FieldTripList = props => {
       setTrips([]);
     }
 
-  }, [user]); // 2nd param is arr to stop re-render
+  }, [trips]); // 2nd param is arr to stop re-render
 
   const _handleSearch = e => {
     updateSearch(e.target.value);
@@ -54,17 +54,6 @@ const FieldTripList = props => {
   const searchTrip = trips.filter(trip => {
     return trip.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;
   });
-
-  const onSubmitSuccess = () => {
-    api
-      .get("fieldtrips")
-      .then(({ data }) => {
-        console.log("TRIP-LIST:", data);
-        return setTrips(data);
-      })
-      .catch(err => err);
-
-  }
 
   return (
     <>
@@ -81,14 +70,14 @@ const FieldTripList = props => {
             value={search}
           />
 
-          <CreateTripModal size="small" onSubmitSuccess={onSubmitSuccess} />
+          <CreateTripModal size="small"  />
         </div>
 
           <Header>UPCOMING FIELD TRIPS</Header>
 
 
         <Divider />
-        {search === "" ? (
+        {/* {search === "" ? (
           <Card.Group itemsPerRow={3}>
             {trips.map(trip => (
               <TripItem key={trip.id} trip={trip} />
@@ -101,7 +90,12 @@ const FieldTripList = props => {
                 <TripItem key={trip.id} trip={trip} />
               ))}
             </Card.Group>
-          )}
+          )} */}
+           <Card.Group itemsPerRow={3}>
+            {trips.map(trip => (
+              <TripItem key={trip.id} trip={trip} />
+            ))}
+          </Card.Group>
 
         {/* <Card.Group itemsPerRow={3}>
 

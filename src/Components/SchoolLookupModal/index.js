@@ -32,13 +32,13 @@ const SchoolLookUp = () => {
         <Modal.Header className="modalHeader">School Look Up</Modal.Header>
         <Modal.Content>
           <Container className="contentContainer" textAlign="center">
-            <Input
+            {/* <Input
               className="schoolLookUpSearchBar"
               size="large"
               icon="building"
               iconPosition="left"
               placeholder="Search Schools..."
-            />
+            /> */}
 
             <select name="school" id="" onChange={handleChange}>
               <option value="default">Choose your school</option>

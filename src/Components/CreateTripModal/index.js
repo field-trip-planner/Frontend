@@ -4,16 +4,18 @@ import api from "../../api";
 import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 
 const CreateTripModal = props => {
+  const [user] = useGlobal("user");
+  const [trips, setTrips] = useGlobal("trips");
   const [fieldTripInfo, setfieldTripInfo] = useState({
     name: "",
     date: "",
     address: "",
     supplies: "",
     cost: "",
-    field_trip_details: ""
+    field_trip_details: "",
+    school_id: user.school_id,
+    creator_id: user.id
   });
-
-  const [user] = useGlobal("user");
 
   const _handleChange = e => {
     const { name, value } = e.target;
@@ -35,12 +37,9 @@ const CreateTripModal = props => {
           address: "",
           supplies: "",
           cost: "",
-          school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",
-          creator_id: "59495f61-f31c-444d-a284-b2233e5aa914",
-          field_trip_details: ""
+          school_id: ""
         });
-        props.onSubmitSuccess();
-        return data;
+        setTrips([...trips, data[0]])
       })
       .catch(err => err);
     console.log(fieldTripInfo);

@@ -75,17 +75,17 @@ const LoginModal = props => {
                       Login
                     </Button>
 
-                    <button
+                    {/* <button
                       className="googleLoginButton"
                       color="teal"
                       size="large"
-                    >
+                    > */}
                       {/* Need to run backend on separate port locally to work. Need to update to use staging auth url once everything is pushed 
                     to staging */}
-                      <a href="http://localhost:5000/auth/google">
+                      {/* <a href="http://localhost:5000/auth/google">
                         Log in with Google
                       </a>
-                    </button>
+                    </button> */}
                   </Segment>
                 </Form>
                 <Message>
