@@ -22,6 +22,7 @@ const TeacherFieldTripDetailView = (
     chaperonesToAssign,
     studentInfo,
     students,
+    parentList,
     setIsSuccessfullyAdded,
     isSuccessfullyAdded,
     setError,
@@ -97,6 +98,22 @@ const TeacherFieldTripDetailView = (
                         onChange={_handleChange}
                       />
                     </Form.Group>
+                    <Form.Field
+                      control='select'
+                      name='parent_id'
+                      label='Parent Name'
+                      placeholder='Parent'
+                      onChange={_handleChange}
+                    >
+                      <option
+                        value="default"
+                      >
+                        Select a Parent
+                      </option>
+                        {parentList.map(parent => <option key={parent.id} value={parent.id}>
+                        {`${parent.last_name}, ${parent.first_name}`}
+                      </option>)}
+                    </Form.Field>        
                     <Form.Button primary>Submit</Form.Button>
                   </Form>
                 </Modal.Content>

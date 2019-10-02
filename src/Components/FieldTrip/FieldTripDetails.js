@@ -16,21 +16,21 @@ import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
-const FieldTripDetails = ({ match }) => {
+const FieldTripDetails = ({ match } ) => {
 
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
-
+  const [parentList, setParentList] = useState([])
   const tripItemID = match.params.id;
-
+  
   useEffect(() => {
-    const url = `fieldtrips/${tripItemID}`;
+    const url = `fieldtrips/${tripItemID}`
     api
       .get(url)
-      .then(({ data }) => {
-        console.log('trip item ', data);
+      .then(({data}) => {
+        console.log('trip item ', data)
 
         return setTrip(data);
       })
@@ -49,13 +49,23 @@ const FieldTripDetails = ({ match }) => {
       .get(`/chaperones/${tripItemID}`)
       .then(res => setChaperones(res.data))
       .catch(err => console.log(err));
+  
+    api.get(`users/parents/${user.school_id}`)
+      .then(({data})=>{
+        console.log("this is parent found by id",data) 
+        console.log("this is the current user", user)  
+      setParentList(data)
+    
+    })
+      .catch(err => err)
 
-  }, [tripItemID, user.school_id]);
+    }, [match.params.id, user.school_id]);
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
     first_name: "",
-    last_name: ""
+    last_name: "",
+    parent_id:""
   });
 
   // setting state
@@ -64,12 +74,12 @@ const FieldTripDetails = ({ match }) => {
 
   const _handleChange = e => {
     const { name, value } = e.target;
-
     setError(false);
-
+    
     setStudentInfo({
       ...studentInfo,
-      [name]: value
+      [name]: value,
+      parent_id: value
     });
   };
 
@@ -90,8 +100,8 @@ const FieldTripDetails = ({ match }) => {
     const newStudentPayload = {
       ...studentInfo,
       field_trip_id: match.params.id,
-      school_id: trip.school_id
-    }
+      school_id: user.school_id,
+    };
 
     api
       .post(url, newStudentPayload)
@@ -138,10 +148,10 @@ const FieldTripDetails = ({ match }) => {
     const clickedStudentStatusID = studentStatus.studentStatusID;
     const url = `students_fieldtrips/${clickedStudentStatusID}`;
 
-    const {
-      paid_status,
-      permission_status,
-      supplies_status,
+    const { 
+      paid_status, 
+      permission_status, 
+      supplies_status, 
     } = studentStatus;
 
     api
@@ -213,11 +223,11 @@ const FieldTripDetails = ({ match }) => {
           </Grid.Row>
           {
             (user.role === "teacher" || user.role === "chaperone") ?
-            <ChaperoneFieldTripDetailView trip={trip} /> :
-            null
+           <ChaperoneFieldTripDetailView trip={trip} /> :
+           null 
           }
         </Grid>
-
+        
         <StudentsReadOnlyTable
           students={students}
         />
@@ -229,6 +239,7 @@ const FieldTripDetails = ({ match }) => {
           studentInfo={studentInfo}
           trip={trip}
           students={students}
+          parentList={parentList}
           setIsSuccessfullyAdded={setIsSuccessfullyAdded}
           isSuccessfullyAdded={isSuccessfullyAdded}
           _handleSubmit={_handleSubmit}

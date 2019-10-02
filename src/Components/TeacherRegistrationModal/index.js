@@ -34,6 +34,7 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    console.log("school---", school)
     const newTeacher = { ...teacherCreds };
     try {
       const newRegister = await api.post("register", newTeacher);
