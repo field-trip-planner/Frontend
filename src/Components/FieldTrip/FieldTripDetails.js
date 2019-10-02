@@ -24,7 +24,7 @@ const FieldTripDetails = ({ match } ) => {
   const [user] = useGlobal("user");
   const [parentList, setParentList] = useState([])
   const tripItemID = match.params.id;
-  
+
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`
     api
@@ -49,17 +49,17 @@ const FieldTripDetails = ({ match } ) => {
       .get(`/chaperones/${tripItemID}`)
       .then(res => setChaperones(res.data))
       .catch(err => console.log(err));
-  
+
     api.get(`users/parents/${user.school_id}`)
       .then(({data})=>{
-        console.log("this is parent found by id",data) 
-        console.log("this is the current user", user)  
+        // console.log("this is parent found by id",data)
+        // console.log("this is the current user", user)
       setParentList(data)
-    
+
     })
       .catch(err => err)
 
-    }, [match.params.id, user.school_id]);
+    }, [tripItemID, user.school_id]);
 
   // setting state for the student information to be entered by user
   const [studentInfo, setStudentInfo] = useState({
@@ -75,7 +75,7 @@ const FieldTripDetails = ({ match } ) => {
   const _handleChange = e => {
     const { name, value } = e.target;
     setError(false);
-    
+
     setStudentInfo({
       ...studentInfo,
       [name]: value,
@@ -148,10 +148,10 @@ const FieldTripDetails = ({ match } ) => {
     const clickedStudentStatusID = studentStatus.studentStatusID;
     const url = `students_fieldtrips/${clickedStudentStatusID}`;
 
-    const { 
-      paid_status, 
-      permission_status, 
-      supplies_status, 
+    const {
+      paid_status,
+      permission_status,
+      supplies_status,
     } = studentStatus;
 
     api
@@ -224,10 +224,10 @@ const FieldTripDetails = ({ match } ) => {
           {
             (user.role === "teacher" || user.role === "chaperone") ?
            <ChaperoneFieldTripDetailView trip={trip} /> :
-           null 
+           null
           }
         </Grid>
-        
+
         <StudentsReadOnlyTable
           students={students}
         />

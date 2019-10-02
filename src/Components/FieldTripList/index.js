@@ -23,7 +23,7 @@ const FieldTripList = props => {
       api
         .get(`myfieldtrips/teacher/${user.id}`)
         .then(({ data }) => {
-          setTrips(data);
+          return setTrips(data);
         }).catch(err => console.log(err));
 
     } else if (user.role === 'parent') {
@@ -31,21 +31,17 @@ const FieldTripList = props => {
         .get(`myfieldtrips/parent/${user.id}`)
         .then(({data}) => {
           console.log(data)
-          setTrips(data);
+          return setTrips(data);
         }).catch(err => console.log(err));
 
     } else if (user.role === 'chaperone') {
       api
         .get(`myfieldtrips/chaperone/${user.id}`)
         .then(({ data }) => {
-          setTrips(data);
+          return setTrips(data);
         }).catch(err => console.log(err));
-
-    } else {
-      setTrips([]);
     }
-
-  }, [trips]); // 2nd param is arr to stop re-render
+  }, [user.role, user.id, setTrips]);
 
   const _handleSearch = e => {
     updateSearch(e.target.value);
