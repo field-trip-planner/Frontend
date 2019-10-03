@@ -73,25 +73,19 @@ const FieldTripList = props => {
 
 
         <Divider />
-        {/* {search === "" ? (
+         {search === "" ? (
           <Card.Group itemsPerRow={3}>
             {trips.map(trip => (
               <TripItem key={trip.id} trip={trip} />
             ))}
           </Card.Group>
         ) : (
-
             <Card.Group itemsPerRow={3}>
               {searchTrip.map(trip => (
                 <TripItem key={trip.id} trip={trip} />
               ))}
             </Card.Group>
-          )} */}
-           <Card.Group itemsPerRow={3}>
-            {trips.map(trip => (
-              <TripItem key={trip.id} trip={trip} />
-            ))}
-          </Card.Group>
+          )}
 
         {/* <Card.Group itemsPerRow={3}>
 
