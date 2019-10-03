@@ -11,7 +11,7 @@ const SchoolLookUp = () => {
   const [schools, setSchools] = useState([]);
 
   useEffect(() => {
-    api
+    api()
       .get("schools")
       .then(({ data }) => {
         setSchools(data);

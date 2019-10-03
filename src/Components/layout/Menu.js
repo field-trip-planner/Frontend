@@ -8,16 +8,15 @@ import "./Menu.css";
 
 const MainMenu = props => {
   const [user] = useGlobal("user");
-  const [trips, setTrips] = useGlobal("trips")
+  const [trips, setTrips] = useGlobal("trips");
   const _handleLogout = () => {
-    api
+    api()
       .delete("logout")
       .then(res => res)
       .catch(err => err);
     localStorage.removeItem("state");
     props.history.push("/");
     setTrips([]);
-
   };
   return (
     <Menu>

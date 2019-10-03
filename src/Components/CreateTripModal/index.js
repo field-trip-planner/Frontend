@@ -28,7 +28,7 @@ const CreateTripModal = props => {
 
   const _handleSubmit = e => {
     e.preventDefault();
-    api
+    api()
       .post("fieldtrips", fieldTripInfo)
       .then(({ data }) => {
         setfieldTripInfo({
@@ -39,7 +39,7 @@ const CreateTripModal = props => {
           cost: "",
           school_id: ""
         });
-        setTrips([...trips, data[0]])
+        setTrips([...trips, data[0]]);
       })
       .catch(err => err);
     console.log(fieldTripInfo);
@@ -47,78 +47,76 @@ const CreateTripModal = props => {
 
   return (
     <>
-      {
-        user.role === "teacher" && (
-          <Modal
-            trigger={
-              <Button floated="right" primary>
-                <Icon name="add" />
-                Create Trip
-              </Button>
-            }
-          >
-            <Modal.Header className="modalHeader">Create Your Trip!</Modal.Header>
-            <Modal.Content>
-              <Container>
-                <Form onSubmit={_handleSubmit}>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="Field Trip Name"
-                      name="name"
-                      value={fieldTripInfo.name}
-                      onChange={_handleChange}
-                    />
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="Date"
-                      name="date"
-                      value={fieldTripInfo.date}
-                      onChange={_handleChange}
-                      placeholder="MM/DD/YYYY"
-                    />
-                    <Form.Input
-                      fluid
-                      label="Address"
-                      name="address"
-                      value={fieldTripInfo.address}
-                      onChange={_handleChange}
-                    />
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="Supplies"
-                      name="supplies"
-                      value={fieldTripInfo.supplies}
-                      onChange={_handleChange}
-                    />
-                    <Form.Input
-                      fluid
-                      label="Cost"
-                      name="cost"
-                      value={fieldTripInfo.cost}
-                      onChange={_handleChange}
-                      width="7"
-                    />
-                  </Form.Group>
-                  {/* adding 'fluid' in Form.TextArea causes error */}
-                  <Form.TextArea
-                    label="Field Trip Details"
-                    name="field_trip_details"
-                    value={fieldTripInfo.field_trip_details}
+      {user.role === "teacher" && (
+        <Modal
+          trigger={
+            <Button floated="right" primary>
+              <Icon name="add" />
+              Create Trip
+            </Button>
+          }
+        >
+          <Modal.Header className="modalHeader">Create Your Trip!</Modal.Header>
+          <Modal.Content>
+            <Container>
+              <Form onSubmit={_handleSubmit}>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Field Trip Name"
+                    name="name"
+                    value={fieldTripInfo.name}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Date"
+                    name="date"
+                    value={fieldTripInfo.date}
+                    onChange={_handleChange}
+                    placeholder="MM/DD/YYYY"
+                  />
+                  <Form.Input
+                    fluid
+                    label="Address"
+                    name="address"
+                    value={fieldTripInfo.address}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Supplies"
+                    name="supplies"
+                    value={fieldTripInfo.supplies}
+                    onChange={_handleChange}
+                  />
+                  <Form.Input
+                    fluid
+                    label="Cost"
+                    name="cost"
+                    value={fieldTripInfo.cost}
                     onChange={_handleChange}
                     width="7"
                   />
-                  <Form.Button primary>Submit</Form.Button>
-                </Form>
-              </Container>
-            </Modal.Content>
-          </Modal>
-        )
-      }
+                </Form.Group>
+                {/* adding 'fluid' in Form.TextArea causes error */}
+                <Form.TextArea
+                  label="Field Trip Details"
+                  name="field_trip_details"
+                  value={fieldTripInfo.field_trip_details}
+                  onChange={_handleChange}
+                  width="7"
+                />
+                <Form.Button primary>Submit</Form.Button>
+              </Form>
+            </Container>
+          </Modal.Content>
+        </Modal>
+      )}
     </>
   );
 };

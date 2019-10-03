@@ -6,7 +6,7 @@ import api from "../../api";
 
 const ParentRegistrationModal = props => {
   const [user, setUser] = useGlobal("user");
-  const [school] = useGlobal("school")
+  const [school] = useGlobal("school");
   const [handleState, setHandleState] = useState({
     success: false,
     failed: false,
@@ -17,9 +17,9 @@ const ParentRegistrationModal = props => {
     last_name: "",
     email: "",
     password: "",
-    role:"parent",
+    role: "parent",
     //school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",
-    school_id: school,//
+    school_id: school, //
     confirm_password: "",
     phone_number: "",
     googleId: null
@@ -33,7 +33,7 @@ const ParentRegistrationModal = props => {
     });
   };
   const _handleSubmit = async () => {
-    const newUser = { ...info };//
+    const newUser = { ...info }; //
     delete newUser.confirm_password;
     if (info.password !== info.confirm_password) {
       setHandleState({ failed: true, message: "Invalid Password" });
@@ -42,14 +42,14 @@ const ParentRegistrationModal = props => {
       }, 2000);
     } else {
       try {
-        const newRegister = await api.post("register", newUser);
+        const newRegister = await api().post("register", newUser);
         if (newRegister) {
           setHandleState({
             success: true,
             message: "Account Created Successfully"
           });
         }
-        const newLogin = await api.post("login", {
+        const newLogin = await api().post("login", {
           email: info.email,
           password: info.password
         });
