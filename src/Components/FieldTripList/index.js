@@ -19,27 +19,28 @@ const FieldTripList = props => {
   useEffect(() => {
     /*User specific field trip population. The requests will differ based on the user role.
     Teacher, Parent, Chaperone will have different endpoints to make their requests to.*/
-    if (user.role === 'teacher') {
-      api
+    if (user.role === "teacher") {
+      api()
         .get(`myfieldtrips/teacher/${user.id}`)
         .then(({ data }) => {
           return setTrips(data);
-        }).catch(err => console.log(err));
-
-    } else if (user.role === 'parent') {
-      api
+        })
+        .catch(err => console.log(err));
+    } else if (user.role === "parent") {
+      api()
         .get(`myfieldtrips/parent/${user.id}`)
-        .then(({data}) => {
-          console.log(data)
+        .then(({ data }) => {
+          console.log(data);
           return setTrips(data);
-        }).catch(err => console.log(err));
-
-    } else if (user.role === 'chaperone') {
-      api
+        })
+        .catch(err => console.log(err));
+    } else if (user.role === "chaperone") {
+      api()
         .get(`myfieldtrips/chaperone/${user.id}`)
         .then(({ data }) => {
           return setTrips(data);
-        }).catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     }
   }, [user.role, user.id, setTrips]);
 
@@ -66,26 +67,25 @@ const FieldTripList = props => {
             value={search}
           />
 
-          <CreateTripModal size="small"  />
+          <CreateTripModal size="small" />
         </div>
 
-          <Header>UPCOMING FIELD TRIPS</Header>
-
+        <Header>UPCOMING FIELD TRIPS</Header>
 
         <Divider />
-         {search === "" ? (
+        {search === "" ? (
           <Card.Group itemsPerRow={3}>
             {trips.map(trip => (
               <TripItem key={trip.id} trip={trip} />
             ))}
           </Card.Group>
         ) : (
-            <Card.Group itemsPerRow={3}>
-              {searchTrip.map(trip => (
-                <TripItem key={trip.id} trip={trip} />
-              ))}
-            </Card.Group>
-          )}
+          <Card.Group itemsPerRow={3}>
+            {searchTrip.map(trip => (
+              <TripItem key={trip.id} trip={trip} />
+            ))}
+          </Card.Group>
+        )}
 
         {/* <Card.Group itemsPerRow={3}>
 
