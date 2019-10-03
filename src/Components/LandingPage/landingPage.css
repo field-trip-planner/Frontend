@@ -1,0 +1,19 @@
+.menutItem {
+  transition: opacity 0.2s;
+}
+
+.siblingFade {
+  cursor: pointer;
+}
+
+.siblingFade span:hover {
+  color: #1678c2;
+}
+
+.item .menutItem:hover {
+  color: #1678c2;
+}
+
+.siblingFade:hover span:not(:hover) {
+  opacity: 0.5;
+}

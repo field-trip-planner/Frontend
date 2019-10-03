@@ -1,0 +1,23 @@
+.schoolFormContainer{
+  /*padding-top: 0px;*/
+  /*height: 200px;*/
+}
+
+.modalHeader {
+  /*text-align: center*/
+}
+
+.schoolRegRedirect{
+  color: rgb(150,0,150);
+  margin-left: 10px;
+}
+
+.schoolRegRedirect:hover{
+  cursor: pointer;
+  color: rgb(250, 0, 250);
+}
+
+.schoolForm{
+  height: 100%;
+
+}
