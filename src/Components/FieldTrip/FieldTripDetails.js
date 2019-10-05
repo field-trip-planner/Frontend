@@ -26,6 +26,8 @@ const FieldTripDetails = ({ match } ) => {
   const [parentList, setParentList] = useState([])
   const tripItemID = match.params.id;
 
+  let perPage;
+
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`
     api
@@ -43,7 +45,8 @@ const FieldTripDetails = ({ match } ) => {
         console.log("ALL STATUS:", data);
         // {completeStudentStatusesSorted, totalCount, totalPages}
         setStudents(data.completeStudentStatusesSorted);
-        return setTotalCount(data.totalCount);
+        setTotalCount(data.totalCount);
+        perPage = data.perPage;
       })
       .catch(err => err);
 
@@ -113,17 +116,23 @@ const FieldTripDetails = ({ match } ) => {
         setIsSuccessfullyAdded(true);
         setError(false);
 
-        const tripItemID = match.params.id;
-        const statusUrl = `students_fieldtrips/${tripItemID}/statuses`;
+        // const tripItemID = match.params.id;
+        // const statusUrl = `students_fieldtrips/${tripItemID}/statuses?sortBy=created_at&direction=desc`;
+        // api
+        //   .get(statusUrl)
+        //   .then(({ data }) => {
+        //     console.log("students ALL::", data);
+        //     setStudents(data.completeStudentStatusesSorted);
+        //     return setTotalCount(data.totalCount);
+        //   })
+        //   .catch(err => err);
 
-        api
-          .get(statusUrl)
-          .then(({ data }) => {
-            console.log("students ALL::", data);
-            setStudents(data.completeStudentStatusesSorted);
-            return setTotalCount(data.totalCount);
-          })
-          .catch(err => err);
+        const studentsMinusLastOne = students.slice(0, students.length - 1);
+        const updatedStudents = [data, ...studentsMinusLastOne];
+        setStudents(updatedStudents);
+        setTotalCount(totalCount + 1);
+
+        // const totalPages = Math.ceil(totalCount / perPage);
 
         setStudentInfo({
           first_name: "",
