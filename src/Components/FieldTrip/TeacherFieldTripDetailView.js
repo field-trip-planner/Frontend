@@ -22,6 +22,7 @@ const TeacherFieldTripDetailView = (
     chaperonesToAssign,
     studentInfo,
     students,
+    totalCount,
     parentList,
     setIsSuccessfullyAdded,
     isSuccessfullyAdded,
@@ -113,7 +114,7 @@ const TeacherFieldTripDetailView = (
                         {parentList.map(parent => <option key={parent.id} value={parent.id}>
                         {`${parent.last_name}, ${parent.first_name}`}
                       </option>)}
-                    </Form.Field>        
+                    </Form.Field>
                     <Form.Button primary>Submit</Form.Button>
                   </Form>
                 </Modal.Content>
@@ -185,7 +186,7 @@ const TeacherFieldTripDetailView = (
 
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell>{students.length} Students Going</Table.HeaderCell>
+                  <Table.HeaderCell>{/*students.length*/} {totalCount} Students Going</Table.HeaderCell>
                   <Table.HeaderCell />
                   <Table.HeaderCell />
                   <Table.HeaderCell />

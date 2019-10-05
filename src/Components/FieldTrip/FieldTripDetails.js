@@ -20,6 +20,7 @@ const FieldTripDetails = ({ match } ) => {
 
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
   const [parentList, setParentList] = useState([])
@@ -40,8 +41,9 @@ const FieldTripDetails = ({ match } ) => {
       .get(`students_fieldtrips/${tripItemID}/statuses`)
       .then(({ data }) => {
         console.log("ALL STATUS:", data);
-
-        return setStudents(data);
+        // {completeStudentStatusesSorted, totalCount, totalPages}
+        setStudents(data.completeStudentStatusesSorted);
+        return setTotalCount(data.totalCount);
       })
       .catch(err => err);
 
@@ -118,7 +120,8 @@ const FieldTripDetails = ({ match } ) => {
           .get(statusUrl)
           .then(({ data }) => {
             console.log("students ALL::", data);
-            return setStudents(data);
+            setStudents(data.completeStudentStatusesSorted);
+            return setTotalCount(data.totalCount);
           })
           .catch(err => err);
 
@@ -239,6 +242,7 @@ const FieldTripDetails = ({ match } ) => {
           studentInfo={studentInfo}
           trip={trip}
           students={students}
+          totalCount={totalCount}
           parentList={parentList}
           setIsSuccessfullyAdded={setIsSuccessfullyAdded}
           isSuccessfullyAdded={isSuccessfullyAdded}
