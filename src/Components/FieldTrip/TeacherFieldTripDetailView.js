@@ -130,16 +130,29 @@ const TeacherFieldTripDetailView = (
               {/*{5 of 10 attending*/} {totalCount} Total
             </Segment>
 
-            <Table columns={5} style={{ marginBottom: 50 }} celled striped selectable attached="bottom">
+            <Table  style={{ marginBottom: 50 }} celled striped selectable attached="bottom">
 
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>First Name</Table.HeaderCell>
                   <Table.HeaderCell>Last Name</Table.HeaderCell>
-                  <Table.HeaderCell>Paid</Table.HeaderCell>
-                  <Table.HeaderCell>E-sign</Table.HeaderCell>
-                  <Table.HeaderCell>Supplies</Table.HeaderCell>
-                  <Table.HeaderCell>Status</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>
+                    <div style={{ width: 70 }}>
+                      Paid
+                    </div>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell singleLine collapsing>
+                    <div style={{ width: 70 }}>
+                      E-sign
+                    </div>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell collapsing>
+                    <div style={{ width: 70 }}>
+                      Supplies
+                    </div>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell collapsing>Status</Table.HeaderCell>
+                  <Table.HeaderCell collapsing >Delete</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -194,6 +207,11 @@ const TeacherFieldTripDetailView = (
                               </span>
                             </div>
                         </Table.Cell>
+                        <Table.Cell collapsing textAlign="center">
+                          <div style={{cursor: 'pointer'}}>
+                            <Icon name="trash alternate outline" />
+                          </div>
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })
@@ -202,7 +220,7 @@ const TeacherFieldTripDetailView = (
 
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell colSpan='6'>
+                  <Table.HeaderCell colSpan='7'>
                     <Pagination
                       floated='right'
                       boundaryRange={0}
