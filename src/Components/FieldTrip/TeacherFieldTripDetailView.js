@@ -130,8 +130,7 @@ const TeacherFieldTripDetailView = (
               {/*{5 of 10 attending*/} {totalCount} Total
             </Segment>
 
-            <Table  style={{ marginBottom: 50 }} celled striped selectable attached="bottom">
-
+            <Table style={{marginBottom: 50}} celled striped selectable attached="bottom">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>First Name</Table.HeaderCell>
@@ -175,29 +174,35 @@ const TeacherFieldTripDetailView = (
                       >
                         <Table.Cell>{student.first_name}</Table.Cell>
                         <Table.Cell>{student.last_name}</Table.Cell>
-                        <Table.Cell>
-                          <Checkbox checked={student.paid_status}
-                                    onClick={(e, data) => onHandleCheckbox({
-                                      studentStatusID: student.id,
-                                      paid_status: data.checked,
-                                    })}
-                          />
+                        <Table.Cell selectable>
+                          <div style={{cursor: 'pointer', padding: 11}}>
+                            <Checkbox checked={student.paid_status}
+                                      onClick={(e, data) => onHandleCheckbox({
+                                        studentStatusID: student.id,
+                                        paid_status: data.checked,
+                                      })}
+                            />
+                          </div>
                         </Table.Cell>
-                        <Table.Cell>
-                          <Checkbox checked={student.permission_status}
-                                    onClick={(e, data) => onHandleCheckbox({
-                                      studentStatusID: student.id,
-                                      permission_status: data.checked,
-                                    })}
-                          />
+                        <Table.Cell selectable>
+                          <div style={{cursor: 'pointer', padding: 11}}>
+                            <Checkbox checked={student.permission_status}
+                                      onClick={(e, data) => onHandleCheckbox({
+                                        studentStatusID: student.id,
+                                        permission_status: data.checked,
+                                      })}
+                            />
+                          </div>
                         </Table.Cell>
-                        <Table.Cell>
-                          <Checkbox checked={student.supplies_status}
-                                    onClick={(e, data) => onHandleCheckbox({
-                                      studentStatusID: student.id,
-                                      supplies_status: data.checked,
-                                    })}
-                          />
+                        <Table.Cell selectable>
+                          <div style={{cursor: 'pointer', padding: 11}}>
+                            <Checkbox checked={student.supplies_status}
+                                      onClick={(e, data) => onHandleCheckbox({
+                                        studentStatusID: student.id,
+                                        supplies_status: data.checked,
+                                      })}
+                            />
+                          </div>
                         </Table.Cell>
                         <Table.Cell negative={!isComplete} positive={isComplete}>
                             <div style={{display: 'flex', alignItems: 'center', width: 95}}>
@@ -207,8 +212,17 @@ const TeacherFieldTripDetailView = (
                               </span>
                             </div>
                         </Table.Cell>
-                        <Table.Cell collapsing textAlign="center">
-                          <div style={{cursor: 'pointer'}}>
+                        <Table.Cell
+                          collapsing
+                          selectable
+                          textAlign="center"
+                        >
+                          <div
+                            style={{cursor: 'pointer'}}
+                            onClick={() => {
+                              console.log("CLicked Delete")
+                            }}
+                          >
                             <Icon name="trash alternate outline" />
                           </div>
                         </Table.Cell>
