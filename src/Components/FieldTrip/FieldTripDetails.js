@@ -209,6 +209,28 @@ const FieldTripDetails = ({ match } ) => {
       .catch(err => err);
   }
 
+  const onDeleteMessageConfirmation = (studentFieldTripId, currentPage) => {
+    const url = `students_fieldtrips/${studentFieldTripId}`;
+    const currentPageStatusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${currentPage}`;
+
+    api
+      .delete(url)
+      .then(({ data }) => {
+        console.log("DELETED STUDENT::", data);
+        // Get deleted student's name here
+        api
+          .get(currentPageStatusUrl)
+          .then(({ data }) => {
+            console.log("ALL STUDENTS AFTER A DELETE::", data);
+            setStudents(data.completeStudentStatusesSorted);
+            setTotalCount(data.totalCount);
+            return setTotalPages(data.totalPages);
+          })
+          .catch(err => err);
+      })
+      .catch(err => err);
+  }
+
   return (
     <>
       {/* trip is our local state data */}
@@ -268,6 +290,7 @@ const FieldTripDetails = ({ match } ) => {
           totalCount={totalCount}
           totalPages={totalPages}
           onPaginationChange={onPaginationChange}
+          onDeleteMessageConfirmation={onDeleteMessageConfirmation}
           lastAddedStudentStatusID={lastAddedStudentStatusID}
           parentList={parentList}
           setIsSuccessfullyAdded={setIsSuccessfullyAdded}

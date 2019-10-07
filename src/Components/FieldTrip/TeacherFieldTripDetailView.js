@@ -27,6 +27,7 @@ const TeacherFieldTripDetailView = (
     totalCount,
     totalPages,
     onPaginationChange,
+    onDeleteMessageConfirmation,
     lastAddedStudentStatusID,
     parentList,
     setIsSuccessfullyAdded,
@@ -42,10 +43,6 @@ const TeacherFieldTripDetailView = (
   }) => {
   const [ user ] = useGlobal("user");
   const [activePage, setActivePage] = useState(1);
-
-  const onDeleteMessageConfirmation = (e) => {
-    console.log("delete clicked");
-  }
 
   return (
     <>
@@ -230,7 +227,7 @@ const TeacherFieldTripDetailView = (
                               <Button color='red'
                                       content='Really delete?'
                                       onClick={() =>{
-
+                                        onDeleteMessageConfirmation(student.id, activePage);
                                       }}
                               />
                             }
