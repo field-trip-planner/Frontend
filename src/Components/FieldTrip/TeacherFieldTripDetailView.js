@@ -9,6 +9,7 @@ import {
   Message,
   Modal,
   Pagination,
+  Popup,
   Segment,
   Table,
 } from 'semantic-ui-react'
@@ -41,6 +42,11 @@ const TeacherFieldTripDetailView = (
   }) => {
   const [ user ] = useGlobal("user");
   const [activePage, setActivePage] = useState(1);
+
+  const onDeleteMessageConfirmation = (e) => {
+    console.log("delete clicked");
+
+  }
 
   return (
     <>
@@ -212,20 +218,27 @@ const TeacherFieldTripDetailView = (
                               </span>
                             </div>
                         </Table.Cell>
-                        <Table.Cell
-                          collapsing
-                          selectable
-                          textAlign="center"
-                        >
-                          <div
-                            style={{cursor: 'pointer'}}
-                            onClick={() => {
-                              console.log("CLicked Delete")
-                            }}
-                          >
-                            <Icon name="trash alternate outline" />
-                          </div>
-                        </Table.Cell>
+                          <Popup
+                            trigger={
+                              <Table.Cell
+                                collapsing
+                                selectable
+                                textAlign="center"
+                              >
+                                <div style={{cursor: 'pointer'}}>
+                                  <Icon name="trash alternate outline" />
+                                </div>
+                              </Table.Cell>
+                            }
+                            content={
+                              <Button color='red'
+                                      content='Really delete?'
+                                      onClick={onDeleteMessageConfirmation}
+                              />
+                            }
+                            on='click'
+                            position='top center'
+                          />
                       </Table.Row>
                     )
                   })
