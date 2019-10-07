@@ -45,7 +45,6 @@ const TeacherFieldTripDetailView = (
 
   const onDeleteMessageConfirmation = (e) => {
     console.log("delete clicked");
-
   }
 
   return (
@@ -164,10 +163,7 @@ const TeacherFieldTripDetailView = (
               <Table.Body>
                 {
                   students.map((student) => {
-                    const selectedStudent = students.find(s => {
-                      return s.id === student.id;
-                    });
-                    const status = getStatus(selectedStudent);
+                    const status = getStatus(student);
                     const isComplete = status === 'complete';
 
                     return (
@@ -233,7 +229,9 @@ const TeacherFieldTripDetailView = (
                             content={
                               <Button color='red'
                                       content='Really delete?'
-                                      onClick={onDeleteMessageConfirmation}
+                                      onClick={() =>{
+
+                                      }}
                               />
                             }
                             on='click'
