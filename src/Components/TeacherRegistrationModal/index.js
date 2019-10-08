@@ -7,7 +7,7 @@ import "./teacherRegistration.css";
 
 const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
   const [user, setUser] = useGlobal("user");
-  const [school] = useGlobal("school");
+  const [school, setSchool] = useGlobal("school");
 
   const [teacherCreds, setTeacherCreds] = useState({
     first_name: "",
@@ -29,12 +29,12 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     setTeacherCreds({
       ...teacherCreds,
       [name]: value
-    });
+    });console.log("school ID SET", school);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log("school---", school);
+    console.log("SCHOOL STATE", school);
     const newTeacher = { ...teacherCreds };
     try {
       const newRegister = await api().post("register", newTeacher);
@@ -43,12 +43,15 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
         password: newTeacher.password
       });
       setUser(newLogin.data.user);
+      
       history.push("/dashboard");
+    
+      
     } catch (e) {
       console.log(e);
     }
   };
-
+//console.log("EMPTY SCHOOL", school)
   return (
     <Modal
       size="small"
