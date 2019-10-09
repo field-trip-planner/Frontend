@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGlobal } from "reactn";
 import {
   Button,
@@ -8,9 +8,10 @@ import {
   Icon,
   Message,
   Modal,
+  Pagination,
   Segment,
   Table,
-} from "semantic-ui-react";
+} from 'semantic-ui-react'
 import AddChaperoneModal from './AddChaperoneModal';
 import { MaybeCheckmarkWithWarning } from '../Shared/MaybeCheckmark';
 import getStatus from '../../Utils/getStatus';
@@ -22,6 +23,10 @@ const TeacherFieldTripDetailView = (
     chaperonesToAssign,
     studentInfo,
     students,
+    totalCount,
+    totalPages,
+    onPaginationChange,
+    lastAddedStudentStatusID,
     parentList,
     setIsSuccessfullyAdded,
     isSuccessfullyAdded,
@@ -35,6 +40,7 @@ const TeacherFieldTripDetailView = (
     match,
   }) => {
   const [ user ] = useGlobal("user");
+  const [activePage, setActivePage] = useState(1);
 
   return (
     <>
@@ -113,14 +119,19 @@ const TeacherFieldTripDetailView = (
                         {parentList.map(parent => <option key={parent.id} value={parent.id}>
                         {`${parent.last_name}, ${parent.first_name}`}
                       </option>)}
-                    </Form.Field>        
+                    </Form.Field>
                     <Form.Button primary>Submit</Form.Button>
                   </Form>
                 </Modal.Content>
               </Modal>
             </Segment>
 
-            <Table columns={5} style={{ marginTop: 20, marginBottom: 50 }}>
+            <Segment size="big" attached="top">
+              {/*{5 of 10 attending*/} {totalCount} Total
+            </Segment>
+
+            <Table columns={5} style={{ marginBottom: 50 }} celled striped selectable attached="bottom">
+
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>First Name</Table.HeaderCell>
@@ -142,7 +153,13 @@ const TeacherFieldTripDetailView = (
                     const isComplete = status === 'complete';
 
                     return (
-                      <Table.Row key={student.id}>
+                      <Table.Row
+                        key={student.id}
+                        style={
+                          lastAddedStudentStatusID === student.id ?
+                            {backgroundColor: '#ebf5ff'} : undefined
+                        }
+                      >
                         <Table.Cell>{student.first_name}</Table.Cell>
                         <Table.Cell>{student.last_name}</Table.Cell>
                         <Table.Cell>
@@ -185,12 +202,22 @@ const TeacherFieldTripDetailView = (
 
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell>{students.length} Students Going</Table.HeaderCell>
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
+                  <Table.HeaderCell colSpan='6'>
+                    <Pagination
+                      floated='right'
+                      boundaryRange={0}
+                      activePage={activePage}
+                      onPageChange={(e, data) => {
+                        onPaginationChange(data.activePage);
+                        setActivePage(data.activePage);
+                      }}
+                      firstItem={null}
+                      lastItem={null}
+                      siblingRange={1}
+                      totalPages={totalPages}
+                      size='mini'
+                    />
+                  </Table.HeaderCell>
                 </Table.Row>
               </Table.Footer>
             </Table>
