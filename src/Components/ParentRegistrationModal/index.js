@@ -8,13 +8,6 @@ const ParentRegistrationModal = props => {
   const [school, setSchool] = useGlobal("school");
   const [schools, setSchools] = useState([]);
   const [user, setUser] = useGlobal("user");
-<<<<<<< HEAD
-<<<<<<< HEAD
-  const [school] = useGlobal("school");
-=======
->>>>>>> 8f039dc671c0f1e2f3d694d6b51dd2bcc660c225
-=======
->>>>>>> afeaa63ea28354813a589368a72f4abdd6dcbfae
   const [handleState, setHandleState] = useState({
     success: false,
     failed: false,
@@ -36,15 +29,6 @@ const ParentRegistrationModal = props => {
     email: "",
     password: "",
     role: "parent",
-<<<<<<< HEAD
-    //school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",
-<<<<<<< HEAD
-    school_id: school, //
-=======
-    // school_id: school,
->>>>>>> 8f039dc671c0f1e2f3d694d6b51dd2bcc660c225
-=======
->>>>>>> afeaa63ea28354813a589368a72f4abdd6dcbfae
     confirm_password: "",
     phone_number: "",
     googleId: null

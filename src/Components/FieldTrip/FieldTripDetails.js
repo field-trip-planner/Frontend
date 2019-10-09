@@ -10,9 +10,18 @@ import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
+<<<<<<< HEAD
 const FieldTripDetails = ({ match }) => {
+=======
+let perPage;
+
+const FieldTripDetails = ({ match } ) => {
+>>>>>>> 738d6f3f1900fba6187a9adf9afcf037fda84116
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [lastAddedStudentStatusID, setLastAddedStudentStatusID] = useState(null);
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
   const [parentList, setParentList] = useState([]);
@@ -33,8 +42,11 @@ const FieldTripDetails = ({ match }) => {
       .get(`students_fieldtrips/${tripItemID}/statuses`)
       .then(({ data }) => {
         console.log("ALL STATUS:", data);
-
-        return setStudents(data);
+        // {completeStudentStatusesSorted, totalCount, totalPages}
+        setStudents(data.completeStudentStatusesSorted);
+        setTotalCount(data.totalCount);
+        setTotalPages(data.totalPages);
+        perPage = data.perPage;
       })
       .catch(err => err);
 
@@ -102,9 +114,18 @@ const FieldTripDetails = ({ match }) => {
         setIsSuccessfullyAdded(true);
         setError(false);
 
-        const tripItemID = match.params.id;
-        const statusUrl = `students_fieldtrips/${tripItemID}/statuses`;
+        if (students.length < perPage) {
+          const updatedStudents = [data, ...students];
+          setStudents(updatedStudents);
+        } else {
+          // Slice when the perPage is 5 students on the student status table
+          const studentsMinusLastOne = students.slice(0, students.length - 1);
+          const updatedStudents = [data, ...studentsMinusLastOne];
+          setStudents(updatedStudents);
+        }
+        setTotalCount(totalCount + 1);
 
+<<<<<<< HEAD
         api()
           .get(statusUrl)
           .then(({ data }) => {
@@ -112,6 +133,12 @@ const FieldTripDetails = ({ match }) => {
             return setStudents(data);
           })
           .catch(err => err);
+=======
+        const updatedTotalPages = Math.ceil((totalCount + 1) / perPage);
+        setTotalPages(updatedTotalPages);
+
+        setLastAddedStudentStatusID(data.id);
+>>>>>>> 738d6f3f1900fba6187a9adf9afcf037fda84116
 
         setStudentInfo({
           first_name: "",
@@ -135,7 +162,7 @@ const FieldTripDetails = ({ match }) => {
       });
   };
 
-  const onHandleCheckbox = async studentStatus => {
+  const onHandleCheckbox = studentStatus => {
     const clickedStudentStatusID = studentStatus.studentStatusID;
     const url = `students_fieldtrips/${clickedStudentStatusID}`;
 
@@ -169,6 +196,42 @@ const FieldTripDetails = ({ match }) => {
 
     setStudents(updatedStudents);
   };
+
+  const onPaginationChange = (activePage) => {
+    const tripItemID = match.params.id;
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}`;
+    api
+      .get(statusUrl)
+      .then(({ data }) => {
+        console.log("students ALL::", data);
+        setStudents(data.completeStudentStatusesSorted);
+        setLastAddedStudentStatusID(null);
+        return setTotalCount(data.totalCount);
+      })
+      .catch(err => err);
+  }
+
+  const onDeleteMessageConfirmation = (studentFieldTripId, currentPage) => {
+    const url = `students_fieldtrips/${studentFieldTripId}`;
+    const currentPageStatusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${currentPage}`;
+
+    api
+      .delete(url)
+      .then(({ data }) => {
+        console.log("DELETED STUDENT::", data);
+        // Get deleted student's name here
+        api
+          .get(currentPageStatusUrl)
+          .then(({ data }) => {
+            console.log("ALL STUDENTS AFTER A DELETE::", data);
+            setStudents(data.completeStudentStatusesSorted);
+            setTotalCount(data.totalCount);
+            return setTotalPages(data.totalPages);
+          })
+          .catch(err => err);
+      })
+      .catch(err => err);
+  }
 
   return (
     <>
@@ -221,6 +284,11 @@ const FieldTripDetails = ({ match }) => {
           studentInfo={studentInfo}
           trip={trip}
           students={students}
+          totalCount={totalCount}
+          totalPages={totalPages}
+          onPaginationChange={onPaginationChange}
+          onDeleteMessageConfirmation={onDeleteMessageConfirmation}
+          lastAddedStudentStatusID={lastAddedStudentStatusID}
           parentList={parentList}
           setIsSuccessfullyAdded={setIsSuccessfullyAdded}
           isSuccessfullyAdded={isSuccessfullyAdded}
