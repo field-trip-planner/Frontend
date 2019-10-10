@@ -5,10 +5,23 @@ import {
   Icon,
   Segment,
   Table,
+  Popup,
+  Grid,
+  Button
 } from 'semantic-ui-react'
+import api from '../../api';
 
-const ChaperonesTable = ({ chaperones }) => {
-  const [ user ] = useGlobal("user");
+const ChaperonesTable = ({ chaperones, setChaperones }) => {
+  const [user] = useGlobal("user");
+
+  const handleRemoveChaperone = (e) => {
+    console.log(e.target.value)
+    console.log('before', chaperones)
+    const newChaperones = chaperones.filter(chaperone => {
+      return e.target.value !== chaperone.id;
+    })
+    //  setChaperones(newChaperones);
+  }
 
   return (
     <>
@@ -50,11 +63,24 @@ const ChaperonesTable = ({ chaperones }) => {
               <Table.Body>
                 {chaperones.map(chaperone => {
                   return (
-                    <Table.Row key={chaperone.id}>
-                      <Table.Cell>
-                        {`${chaperone.first_name} ${chaperone.last_name}`}
-                      </Table.Cell>
-                    </Table.Row>
+                    <Popup flowing hoverable
+                        trigger={
+                          <Table.Row key={chaperone.id}>
+                            <Table.Cell>
+                              {`${chaperone.first_name}, ${chaperone.last_name}`}
+                            </Table.Cell>
+                          </Table.Row>
+                        }>
+
+                        <Grid centered columns={1}>
+                          <Grid.Column textAlign='center'>
+                          
+                            <Button value={chaperone.id} negative
+                            onClick={(e) => handleRemoveChaperone(e)}
+                            >Remove Chaperone</Button>
+                          </Grid.Column>
+                        </Grid>
+                      </Popup>
                   );
                 })}
               </Table.Body>
