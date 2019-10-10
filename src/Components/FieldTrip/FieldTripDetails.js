@@ -122,6 +122,7 @@ const FieldTripDetails = ({ match }) => {
           setStudents(updatedStudents);
         }
         setTotalCount(totalCount + 1);
+
         const updatedTotalPages = Math.ceil((totalCount + 1) / perPage);
         setTotalPages(updatedTotalPages);
 
