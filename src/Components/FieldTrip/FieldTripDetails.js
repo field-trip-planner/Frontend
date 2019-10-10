@@ -10,18 +10,16 @@ import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
-<<<<<<< HEAD
 const FieldTripDetails = ({ match }) => {
-=======
-let perPage;
+  let perPage;
 
-const FieldTripDetails = ({ match } ) => {
->>>>>>> 738d6f3f1900fba6187a9adf9afcf037fda84116
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [lastAddedStudentStatusID, setLastAddedStudentStatusID] = useState(null);
+  const [lastAddedStudentStatusID, setLastAddedStudentStatusID] = useState(
+    null
+  );
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
   const [parentList, setParentList] = useState([]);
@@ -124,13 +122,6 @@ const FieldTripDetails = ({ match } ) => {
           setStudents(updatedStudents);
         }
         setTotalCount(totalCount + 1);
-        api()
-          .get(statusUrl)
-          .then(({ data }) => {
-            console.log("students ALL::", data);
-            return setStudents(data);
-          })
-          .catch(err => err);
         const updatedTotalPages = Math.ceil((totalCount + 1) / perPage);
         setTotalPages(updatedTotalPages);
 
@@ -193,7 +184,7 @@ const FieldTripDetails = ({ match } ) => {
     setStudents(updatedStudents);
   };
 
-  const onPaginationChange = (activePage) => {
+  const onPaginationChange = activePage => {
     const tripItemID = match.params.id;
     const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}`;
     api
@@ -205,7 +196,7 @@ const FieldTripDetails = ({ match } ) => {
         return setTotalCount(data.totalCount);
       })
       .catch(err => err);
-  }
+  };
 
   const onDeleteMessageConfirmation = (studentFieldTripId, currentPage) => {
     const url = `students_fieldtrips/${studentFieldTripId}`;
@@ -227,7 +218,7 @@ const FieldTripDetails = ({ match } ) => {
           .catch(err => err);
       })
       .catch(err => err);
-  }
+  };
 
   return (
     <>
