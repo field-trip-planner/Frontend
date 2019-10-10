@@ -18,6 +18,7 @@ const ChaperonesTable = ({ chaperones, setChaperones }) => {
     const newChaperones = chaperones.filter(chaperone => {
       return e.target.value !== chaperone.id;
     })
+    //Once the api call is made, will await for an ok status from api call before updating state
      setChaperones(newChaperones);
   }
 
