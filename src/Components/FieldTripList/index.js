@@ -11,6 +11,7 @@ const FieldTripList = props => {
   //  state, setter          // property in GlobalState
   const [trips, setTrips] = useGlobal("trips");
   const [search, updateSearch] = useState("");
+  const [open, setOpen] = useState(false);
 
   const [user] = useGlobal("user");
   //students state obj for parents' field trip cards
@@ -67,7 +68,7 @@ const FieldTripList = props => {
             value={search}
           />
 
-          <CreateTripModal size="small" />
+          <CreateTripModal size="small" setOpen={setOpen} open={open} />
         </div>
 
         <Header>UPCOMING FIELD TRIPS</Header>

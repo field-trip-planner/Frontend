@@ -14,7 +14,8 @@ const CreateTripModal = props => {
     cost: "",
     field_trip_details: "",
     school_id: user.school_id,
-    creator_id: user.id
+    creator_id: user.id,
+    chaperoneTasks: ""
   });
 
   const _handleChange = e => {
@@ -37,9 +38,12 @@ const CreateTripModal = props => {
           address: "",
           supplies: "",
           cost: "",
-          school_id: ""
+          school_id: "",
+          field_trip_details: "",
+          chaperoneTasks: ""
         });
         setTrips([...trips, data[0]]);
+        props.setOpen(!props.open);
       })
       .catch(err => err);
     console.log(fieldTripInfo);
@@ -49,8 +53,13 @@ const CreateTripModal = props => {
     <>
       {user.role === "teacher" && (
         <Modal
+          open={props.open}
           trigger={
-            <Button floated="right" primary>
+            <Button
+              floated="right"
+              primary
+              onClick={() => props.setOpen(!props.open)}
+            >
               <Icon name="add" />
               Create Trip
             </Button>
@@ -73,10 +82,10 @@ const CreateTripModal = props => {
                   <Form.Input
                     fluid
                     label="Date"
+                    type="date"
                     name="date"
                     value={fieldTripInfo.date}
                     onChange={_handleChange}
-                    placeholder="MM/DD/YYYY"
                   />
                   <Form.Input
                     fluid
@@ -97,20 +106,30 @@ const CreateTripModal = props => {
                   <Form.Input
                     fluid
                     label="Cost"
+                    type="number"
                     name="cost"
                     value={fieldTripInfo.cost}
                     onChange={_handleChange}
-                    width="7"
+                    width="5"
                   />
                 </Form.Group>
                 {/* adding 'fluid' in Form.TextArea causes error */}
-                <Form.TextArea
-                  label="Field Trip Details"
-                  name="field_trip_details"
-                  value={fieldTripInfo.field_trip_details}
-                  onChange={_handleChange}
-                  width="7"
-                />
+                <Form.Group widths="equal">
+                  <Form.TextArea
+                    label="Field Trip Details"
+                    name="field_trip_details"
+                    value={fieldTripInfo.field_trip_details}
+                    onChange={_handleChange}
+                    width=""
+                  />
+                  <Form.TextArea
+                    label="Chaperone Tasks"
+                    name="chaperoneTasks"
+                    value={fieldTripInfo.chaperoneTasks}
+                    onChange={_handleChange}
+                    width=""
+                  />
+                </Form.Group>
                 <Form.Button primary>Submit</Form.Button>
               </Form>
             </Container>
