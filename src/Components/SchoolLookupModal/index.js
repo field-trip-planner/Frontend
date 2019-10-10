@@ -23,7 +23,7 @@ const SchoolLookUp = () => {
 
   const handleChange = e => {
     e.preventDefault();
-    // setSchool(e.target.value);
+    setSchool(e.target.value);
   };
 
   return (

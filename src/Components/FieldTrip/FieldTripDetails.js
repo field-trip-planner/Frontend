@@ -231,7 +231,7 @@ const FieldTripDetails = ({ match }) => {
           onHandleCheckbox={onHandleCheckbox}
           match={match}
         />
-        <ChaperonesTable chaperones={chaperones} />
+        <ChaperonesTable chaperones={chaperones} setChaperones={setChaperones} />
       </Container>
     </>
   );

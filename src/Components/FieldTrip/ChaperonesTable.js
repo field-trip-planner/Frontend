@@ -15,12 +15,10 @@ const ChaperonesTable = ({ chaperones, setChaperones }) => {
   const [user] = useGlobal("user");
 
   const handleRemoveChaperone = (e) => {
-    console.log(e.target.value)
-    console.log('before', chaperones)
     const newChaperones = chaperones.filter(chaperone => {
       return e.target.value !== chaperone.id;
     })
-    //  setChaperones(newChaperones);
+     setChaperones(newChaperones);
   }
 
   return (
