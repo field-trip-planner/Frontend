@@ -1,8 +1,8 @@
-const getStatus = (selectedStudent) => {
+const getStatus = (student) => {
   if (
-    selectedStudent.paid_status &&
-    selectedStudent.permission_status &&
-    selectedStudent.supplies_status
+    student.paid_status &&
+    student.permission_status &&
+    student.supplies_status
   ) {
     return "complete";
   }
