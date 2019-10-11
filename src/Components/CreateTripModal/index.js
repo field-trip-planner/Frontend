@@ -122,14 +122,14 @@ const CreateTripModal = props => {
                     name="field_trip_details"
                     value={fieldTripInfo.field_trip_details}
                     onChange={_handleChange}
-                    width=""
+
                   />
                   <Form.TextArea
                     label="Chaperone Tasks"
                     name="chaperoneTasks"
                     value={fieldTripInfo.chaperoneTasks}
                     onChange={_handleChange}
-                    width=""
+
                   />
                 </Form.Group>
                 <Form.Button primary>Submit</Form.Button>
