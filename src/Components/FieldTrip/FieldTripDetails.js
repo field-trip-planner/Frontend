@@ -10,13 +10,9 @@ import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
-<<<<<<< HEAD
-const FieldTripDetails = ({ match }) => {
-=======
 let perPage;
 
 const FieldTripDetails = ({ match } ) => {
->>>>>>> 738d6f3f1900fba6187a9adf9afcf037fda84116
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -125,20 +121,10 @@ const FieldTripDetails = ({ match } ) => {
         }
         setTotalCount(totalCount + 1);
 
-<<<<<<< HEAD
-        api()
-          .get(statusUrl)
-          .then(({ data }) => {
-            console.log("students ALL::", data);
-            return setStudents(data);
-          })
-          .catch(err => err);
-=======
         const updatedTotalPages = Math.ceil((totalCount + 1) / perPage);
         setTotalPages(updatedTotalPages);
 
         setLastAddedStudentStatusID(data.id);
->>>>>>> 738d6f3f1900fba6187a9adf9afcf037fda84116
 
         setStudentInfo({
           first_name: "",

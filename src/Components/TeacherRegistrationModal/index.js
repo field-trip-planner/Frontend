@@ -7,18 +7,20 @@ import "./teacherRegistration.css";
 
 const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
   const [user, setUser] = useGlobal("user");
-  const [school, setSchool] = useGlobal("school");
-
+  const [school_id, setSchool] = useGlobal("school");
+  console.log("PRIOR TO HANDLECHANGE", school_id)
+  
   const [teacherCreds, setTeacherCreds] = useState({
     first_name: "",
     last_name: "",
     email: "",
     role: "teacher",
     password: "",
-    school_id: school,
+    school_id: "",
     phone_number: "",
     googleId: null
   });
+console.log("CREDS After TO USESTATE ", teacherCreds)
   const [info, setInfo] = useState({
     email: "",
     password: ""
@@ -26,23 +28,39 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
 
   const handleChange = e => {
     const { name, value } = e.target;
+    console.log("TEACHER CREDS BEFORE SETCREDS", teacherCreds)
     setTeacherCreds({
       ...teacherCreds,
+      school_id: school_id,
       [name]: value
-    });console.log("school ID SET", school);
+    });
+    
+    console.log("INHANDLECHANGE school ID SET", school_id);
+    console.log("TEACHERCREDS IN HANDLE", teacherCreds);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log("SCHOOL STATE", school);
-    const newTeacher = { ...teacherCreds };
+    console.log("SCHOOL STATE", school_id);
+    //const newTeacher = { ...teacherCreds };
+    //console.log("NEWTEACHER", newTeacher)
+    //console.log("SCHOOL STATE after Newteacher", school);
+    console.log("TEACHERCREDS IN SUBMITHANDLE", teacherCreds);
+
+
+    
     try {
-      const newRegister = await api().post("register", newTeacher);
+      const newRegister = await api().post("register", teacherCreds);
       const newLogin = await api().post("login", {
-        email: newTeacher.email,
-        password: newTeacher.password
+        // email: newTeacher.email,
+        // password: newTeacher.password
+        email: teacherCreds.email,
+        password: teacherCreds.password
       });
       setUser(newLogin.data.user);
+      console.log("NEWREGISTER", newRegister)
+      //console.log("newLogin.data.user", newLogin.data.user)
+
       
       history.push("/dashboard");
     
