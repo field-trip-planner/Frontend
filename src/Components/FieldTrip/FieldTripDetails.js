@@ -10,9 +10,8 @@ import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
+let perPage;
 const FieldTripDetails = ({ match }) => {
-  let perPage;
-
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -188,7 +187,7 @@ const FieldTripDetails = ({ match }) => {
   const onPaginationChange = activePage => {
     const tripItemID = match.params.id;
     const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}`;
-    api
+    api()
       .get(statusUrl)
       .then(({ data }) => {
         console.log("students ALL::", data);
@@ -203,12 +202,12 @@ const FieldTripDetails = ({ match }) => {
     const url = `students_fieldtrips/${studentFieldTripId}`;
     const currentPageStatusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${currentPage}`;
 
-    api
+    api()
       .delete(url)
       .then(({ data }) => {
         console.log("DELETED STUDENT::", data);
         // Get deleted student's name here
-        api
+        api()
           .get(currentPageStatusUrl)
           .then(({ data }) => {
             console.log("ALL STUDENTS AFTER A DELETE::", data);

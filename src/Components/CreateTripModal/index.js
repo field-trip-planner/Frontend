@@ -54,6 +54,8 @@ const CreateTripModal = props => {
       {user.role === "teacher" && (
         <Modal
           open={props.open}
+          closeIcon
+          onClose={() => props.setOpen(!props.open)}
           trigger={
             <Button
               floated="right"
