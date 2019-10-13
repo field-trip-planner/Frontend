@@ -26,6 +26,9 @@ const TeacherFieldTripDetailView = (
     students,
     totalCount,
     totalPages,
+    handleSort,
+    sortBy,
+    direction,
     onPaginationChange,
     onDeleteMessageConfirmation,
     lastAddedStudentStatusID,
@@ -132,11 +135,27 @@ const TeacherFieldTripDetailView = (
               {/*{5 of 10 attending*/} {totalCount} Total
             </Segment>
 
-            <Table style={{marginBottom: 50}} celled striped selectable attached="bottom">
+            <Table style={{marginBottom: 50}}
+                   celled
+                   striped
+                   selectable
+                   attached="bottom"
+                   sortable
+            >
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>First Name</Table.HeaderCell>
-                  <Table.HeaderCell>Last Name</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortBy === 'first_name' ? direction : null}
+                    onClick={handleSort('first_name')}
+                  >
+                    First Name
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortBy === 'last_name' ? direction : null}
+                    onClick={handleSort('last_name')}
+                  >
+                    Last Name
+                  </Table.HeaderCell>
                   <Table.HeaderCell collapsing>
                     <div style={{ width: 70 }}>
                       Paid
@@ -152,7 +171,13 @@ const TeacherFieldTripDetailView = (
                       Supplies
                     </div>
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing>Status</Table.HeaderCell>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={sortBy === 'going_status' ? direction : null}
+                    onClick={handleSort('going_status')}
+                  >
+                    Status
+                  </Table.HeaderCell>
                   <Table.HeaderCell collapsing >Delete</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>

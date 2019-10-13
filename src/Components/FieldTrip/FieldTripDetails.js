@@ -9,6 +9,7 @@ import ChaperoneFieldTripDetailView from "./ChaperoneFieldTripDetailView";
 import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
+import { sortBy as _sortBy } from 'lodash';
 
 let perPage;
 const FieldTripDetails = ({ match }) => {
@@ -23,6 +24,8 @@ const FieldTripDetails = ({ match }) => {
   const [user] = useGlobal("user");
   const [parentList, setParentList] = useState([]);
   const tripItemID = match.params.id;
+  const [sortBy, setSortBy] = useState("last_name");
+  const [direction, setDirection] = useState("ascending");
 
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`;
@@ -186,7 +189,10 @@ const FieldTripDetails = ({ match }) => {
 
   const onPaginationChange = activePage => {
     const tripItemID = match.params.id;
-    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}`;
+
+    const newDirection = direction === "ascending" ? "asc" : "desc";
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${newDirection}`;
+
     api()
       .get(statusUrl)
       .then(({ data }) => {
@@ -219,6 +225,25 @@ const FieldTripDetails = ({ match }) => {
       })
       .catch(err => err);
   };
+
+  const handleSort = (clickedColumn) => () => {
+    if (sortBy !== clickedColumn) {
+      const studentsSorted = _sortBy(students, [clickedColumn]);
+
+      setStudents(studentsSorted);
+      setSortBy(clickedColumn);
+      setDirection('ascending');
+
+      return;
+    }
+    // when clicking same column that you've sorted before
+    const studentsSortedReversed = students.reverse();
+    const newDirection = direction === 'ascending' ?
+      'descending' : 'ascending';
+
+    setDirection(newDirection);
+    setStudents(studentsSortedReversed);
+  }
 
   return (
     <>
@@ -273,6 +298,9 @@ const FieldTripDetails = ({ match }) => {
           students={students}
           totalCount={totalCount}
           totalPages={totalPages}
+          handleSort={handleSort}
+          sortBy={sortBy}
+          direction={direction}
           onPaginationChange={onPaginationChange}
           onDeleteMessageConfirmation={onDeleteMessageConfirmation}
           lastAddedStudentStatusID={lastAddedStudentStatusID}
