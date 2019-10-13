@@ -146,13 +146,13 @@ const TeacherFieldTripDetailView = (
                 <Table.Row>
                   <Table.HeaderCell
                     sorted={sortBy === 'first_name' ? direction : null}
-                    onClick={handleSort('first_name')}
+                    onClick={handleSort('first_name', activePage)}
                   >
                     First Name
                   </Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortBy === 'last_name' ? direction : null}
-                    onClick={handleSort('last_name')}
+                    onClick={handleSort('last_name', activePage)}
                   >
                     Last Name
                   </Table.HeaderCell>
@@ -174,7 +174,7 @@ const TeacherFieldTripDetailView = (
                   <Table.HeaderCell
                     collapsing
                     sorted={sortBy === 'going_status' ? direction : null}
-                    onClick={handleSort('going_status')}
+                    onClick={handleSort('going_status', activePage)}
                   >
                     Status
                   </Table.HeaderCell>

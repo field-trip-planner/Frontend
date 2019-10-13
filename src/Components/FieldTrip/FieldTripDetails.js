@@ -9,7 +9,6 @@ import ChaperoneFieldTripDetailView from "./ChaperoneFieldTripDetailView";
 import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
-import { sortBy as _sortBy } from 'lodash';
 
 let perPage;
 const FieldTripDetails = ({ match }) => {
@@ -188,8 +187,6 @@ const FieldTripDetails = ({ match }) => {
   };
 
   const onPaginationChange = activePage => {
-    const tripItemID = match.params.id;
-
     const newDirection = direction === "ascending" ? "asc" : "desc";
     const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${newDirection}`;
 
@@ -226,23 +223,41 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   };
 
-  const handleSort = (clickedColumn) => () => {
+  const getDirection = (clickedColumn) => {
     if (sortBy !== clickedColumn) {
-      const studentsSorted = _sortBy(students, [clickedColumn]);
-
-      setStudents(studentsSorted);
-      setSortBy(clickedColumn);
-      setDirection('ascending');
-
-      return;
+      return 'ascending';
     }
-    // when clicking same column that you've sorted before
-    const studentsSortedReversed = students.reverse();
-    const newDirection = direction === 'ascending' ?
+    return direction === 'ascending' ?
       'descending' : 'ascending';
+  };
 
+  const handleSort = (clickedColumn, activePage) => () => {
+    console.log("clickedColumn::", clickedColumn);
+    console.log("Previous Column/sortBy::", sortBy);
+
+    if (sortBy !== clickedColumn) {
+      setSortBy(clickedColumn);
+    }
+    const newDirection = getDirection(clickedColumn);
     setDirection(newDirection);
-    setStudents(studentsSortedReversed);
+
+    console.log("newDirection::", newDirection);
+    console.log("New Column/sortBy::", sortBy);
+    console.log("activePage::", activePage);
+
+    const newDirectionURL = newDirection === "ascending" ? "asc" : "desc";
+    console.log("newDirectionForBE::", newDirectionURL);
+
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${clickedColumn}&direction=${newDirectionURL}`;
+
+    api()
+      .get(statusUrl)
+      .then(({ data }) => {
+        setStudents(data.completeStudentStatusesSorted);
+        setLastAddedStudentStatusID(null);
+        return setTotalCount(data.totalCount);
+      })
+      .catch(err => err);
   }
 
   return (
