@@ -187,13 +187,12 @@ const FieldTripDetails = ({ match }) => {
   };
 
   const onPaginationChange = activePage => {
-    const newDirection = direction === "ascending" ? "asc" : "desc";
-    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${newDirection}`;
+    const shortDirection = shortenDirection(direction);
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${shortDirection}`;
 
     api()
       .get(statusUrl)
       .then(({ data }) => {
-        console.log("students ALL::", data);
         setStudents(data.completeStudentStatusesSorted);
         setLastAddedStudentStatusID(null);
         return setTotalCount(data.totalCount);
@@ -231,24 +230,19 @@ const FieldTripDetails = ({ match }) => {
       'descending' : 'ascending';
   };
 
-  const handleSort = (clickedColumn, activePage) => () => {
-    console.log("clickedColumn::", clickedColumn);
-    console.log("Previous Column/sortBy::", sortBy);
+  function shortenDirection (newDirection) {
+    return newDirection === "ascending" ? "asc" : "desc";
+  }
 
+  const handleSort = (clickedColumn, activePage) => () => {
     if (sortBy !== clickedColumn) {
       setSortBy(clickedColumn);
     }
     const newDirection = getDirection(clickedColumn);
     setDirection(newDirection);
+    const shortDirection = shortenDirection(newDirection);
 
-    console.log("newDirection::", newDirection);
-    console.log("New Column/sortBy::", sortBy);
-    console.log("activePage::", activePage);
-
-    const newDirectionURL = newDirection === "ascending" ? "asc" : "desc";
-    console.log("newDirectionForBE::", newDirectionURL);
-
-    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${clickedColumn}&direction=${newDirectionURL}`;
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${clickedColumn}&direction=${shortDirection}`;
 
     api()
       .get(statusUrl)
