@@ -6,6 +6,7 @@ import {
   Form,
   Header,
   Icon,
+  Input,
   Message,
   Modal,
   Pagination,
@@ -131,8 +132,21 @@ const TeacherFieldTripDetailView = (
               </Modal>
             </Segment>
 
-            <Segment size="big" attached="top">
-              {/*{5 of 10 attending*/} {totalCount} Total
+            <Segment
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+              size="big"
+              attached="top"
+            >
+              <span>
+                {totalCount} Total
+              </span>
+              <Input
+                icon={{ name: 'search' }}
+                iconPosition='left'
+                placeholder='Search a student...'
+                size="mini"
+                onChange={() => {}}
+              />
             </Segment>
 
             <Table style={{marginBottom: 50}}
