@@ -25,6 +25,7 @@ const FieldTripDetails = ({ match }) => {
   const tripItemID = match.params.id;
   const [sortBy, setSortBy] = useState("last_name");
   const [direction, setDirection] = useState("ascending");
+  const [activePage, setActivePage] = useState(1);
 
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`;
@@ -254,6 +255,8 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   }
 
+  // Add Search method here
+
   return (
     <>
       {/* trip is our local state data */}
@@ -307,6 +310,8 @@ const FieldTripDetails = ({ match }) => {
           students={students}
           totalCount={totalCount}
           totalPages={totalPages}
+          activePage={activePage}
+          setActivePage={setActivePage}
           handleSort={handleSort}
           sortBy={sortBy}
           direction={direction}

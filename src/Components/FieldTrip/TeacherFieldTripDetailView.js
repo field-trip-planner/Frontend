@@ -27,7 +27,11 @@ const TeacherFieldTripDetailView = (
     students,
     totalCount,
     totalPages,
+    activePage,
+    setActivePage,
     handleSort,
+    onKeyDownSearchChange,
+    query,
     sortBy,
     direction,
     onPaginationChange,
@@ -46,7 +50,6 @@ const TeacherFieldTripDetailView = (
     match,
   }) => {
   const [ user ] = useGlobal("user");
-  const [activePage, setActivePage] = useState(1);
 
   return (
     <>
@@ -145,7 +148,8 @@ const TeacherFieldTripDetailView = (
                 iconPosition='left'
                 placeholder='Search a student...'
                 size="mini"
-                onChange={() => {}}
+                value={query}
+                onChange={onKeyDownSearchChange}
               />
             </Segment>
 
