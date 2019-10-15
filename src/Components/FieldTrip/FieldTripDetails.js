@@ -26,6 +26,7 @@ const FieldTripDetails = ({ match }) => {
   const [sortBy, setSortBy] = useState("last_name");
   const [direction, setDirection] = useState("ascending");
   const [activePage, setActivePage] = useState(1);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`;
@@ -189,7 +190,7 @@ const FieldTripDetails = ({ match }) => {
 
   const onPaginationChange = activePage => {
     const shortDirection = shortenDirection(direction);
-    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${shortDirection}`;
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${shortDirection}&query=${query}`;
 
     api()
       .get(statusUrl)
@@ -243,7 +244,7 @@ const FieldTripDetails = ({ match }) => {
     setDirection(newDirection);
     const shortDirection = shortenDirection(newDirection);
 
-    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${clickedColumn}&direction=${shortDirection}`;
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${clickedColumn}&direction=${shortDirection}&query=${query}`;
 
     api()
       .get(statusUrl)
@@ -255,7 +256,47 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   }
 
-  // Add Search method here
+  const onKeyDownSearchChange = (e) => {
+    const { value } = e.target;
+    console.log("SEARCH-VALUE::", value);
+    setQuery(value)
+    console.log("SEARCH-STUDENT-QUERY::", query);
+
+    if (!value) {
+      api()
+        .get(`students_fieldtrips/${tripItemID}/statuses`)
+        .then(({ data }) => {
+          console.log("ALL STATUS:", data);
+          setStudents(data.completeStudentStatusesSorted);
+          setTotalCount(data.totalCount);
+          setTotalPages(data.totalPages);
+
+          // resetting state to default
+          setSortBy("last_name");
+          direction("ascending");
+          setActivePage(1);
+        })
+        .catch(err => err);
+      return;
+    }
+
+    const searchUrl = `students_fieldtrips/${tripItemID}/statuses/search?query=${value}`;
+    api()
+      .get(searchUrl)
+      .then(({ data }) => {
+        const {
+          searchedStudentStatus,
+          totalPagesOnSearchResult,
+          countOnSearchResult
+        } = data;
+        console.log("SEARCH_DATA::", data)
+        setStudents(searchedStudentStatus);
+        setLastAddedStudentStatusID(null);
+        setTotalPages(totalPagesOnSearchResult);
+        return setTotalCount(countOnSearchResult);
+      })
+      .catch(err => err);
+  }
 
   return (
     <>
@@ -313,6 +354,8 @@ const FieldTripDetails = ({ match }) => {
           activePage={activePage}
           setActivePage={setActivePage}
           handleSort={handleSort}
+          onKeyDownSearchChange={onKeyDownSearchChange}
+          query={query}
           sortBy={sortBy}
           direction={direction}
           onPaginationChange={onPaginationChange}
