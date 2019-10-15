@@ -11,17 +11,20 @@ import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
 let perPage;
-
-const FieldTripDetails = ({ match } ) => {
+const FieldTripDetails = ({ match }) => {
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [lastAddedStudentStatusID, setLastAddedStudentStatusID] = useState(null);
+  const [lastAddedStudentStatusID, setLastAddedStudentStatusID] = useState(
+    null
+  );
   const [chaperones, setChaperones] = useState([]);
   const [user] = useGlobal("user");
   const [parentList, setParentList] = useState([]);
   const tripItemID = match.params.id;
+  const [sortBy, setSortBy] = useState("last_name");
+  const [direction, setDirection] = useState("ascending");
 
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`;
@@ -183,30 +186,30 @@ const FieldTripDetails = ({ match } ) => {
     setStudents(updatedStudents);
   };
 
-  const onPaginationChange = (activePage) => {
-    const tripItemID = match.params.id;
-    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}`;
-    api
+  const onPaginationChange = activePage => {
+    const shortDirection = shortenDirection(direction);
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${shortDirection}`;
+
+    api()
       .get(statusUrl)
       .then(({ data }) => {
-        console.log("students ALL::", data);
         setStudents(data.completeStudentStatusesSorted);
         setLastAddedStudentStatusID(null);
         return setTotalCount(data.totalCount);
       })
       .catch(err => err);
-  }
+  };
 
   const onDeleteMessageConfirmation = (studentFieldTripId, currentPage) => {
     const url = `students_fieldtrips/${studentFieldTripId}`;
     const currentPageStatusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${currentPage}`;
 
-    api
+    api()
       .delete(url)
       .then(({ data }) => {
         console.log("DELETED STUDENT::", data);
         // Get deleted student's name here
-        api
+        api()
           .get(currentPageStatusUrl)
           .then(({ data }) => {
             console.log("ALL STUDENTS AFTER A DELETE::", data);
@@ -215,6 +218,38 @@ const FieldTripDetails = ({ match } ) => {
             return setTotalPages(data.totalPages);
           })
           .catch(err => err);
+      })
+      .catch(err => err);
+  };
+
+  const getDirection = (clickedColumn) => {
+    if (sortBy !== clickedColumn) {
+      return 'ascending';
+    }
+    return direction === 'ascending' ?
+      'descending' : 'ascending';
+  };
+
+  function shortenDirection (newDirection) {
+    return newDirection === "ascending" ? "asc" : "desc";
+  }
+
+  const handleSort = (clickedColumn, activePage) => () => {
+    if (sortBy !== clickedColumn) {
+      setSortBy(clickedColumn);
+    }
+    const newDirection = getDirection(clickedColumn);
+    setDirection(newDirection);
+    const shortDirection = shortenDirection(newDirection);
+
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${clickedColumn}&direction=${shortDirection}`;
+
+    api()
+      .get(statusUrl)
+      .then(({ data }) => {
+        setStudents(data.completeStudentStatusesSorted);
+        setLastAddedStudentStatusID(null);
+        return setTotalCount(data.totalCount);
       })
       .catch(err => err);
   }
@@ -272,6 +307,9 @@ const FieldTripDetails = ({ match } ) => {
           students={students}
           totalCount={totalCount}
           totalPages={totalPages}
+          handleSort={handleSort}
+          sortBy={sortBy}
+          direction={direction}
           onPaginationChange={onPaginationChange}
           onDeleteMessageConfirmation={onDeleteMessageConfirmation}
           lastAddedStudentStatusID={lastAddedStudentStatusID}
