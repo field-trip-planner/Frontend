@@ -7,8 +7,7 @@ import "./teacherRegistration.css";
 
 const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
   const [user, setUser] = useGlobal("user");
-  const [school_id, setSchool] = useGlobal("school");
-  console.log("PRIOR TO HANDLECHANGE", school_id)
+  const [school, setSchool] = useGlobal("school");
   
   const [teacherCreds, setTeacherCreds] = useState({
     first_name: "",
@@ -20,7 +19,7 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     phone_number: "",
     googleId: null
   });
-console.log("CREDS After TO USESTATE ", teacherCreds)
+
   const [info, setInfo] = useState({
     email: "",
     password: ""
@@ -28,48 +27,27 @@ console.log("CREDS After TO USESTATE ", teacherCreds)
 
   const handleChange = e => {
     const { name, value } = e.target;
-    console.log("TEACHER CREDS BEFORE SETCREDS", teacherCreds)
     setTeacherCreds({
       ...teacherCreds,
-      school_id: school_id,
+      school_id: school,
       [name]: value
     });
-    
-    console.log("INHANDLECHANGE school ID SET", school_id);
-    console.log("TEACHERCREDS IN HANDLE", teacherCreds);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log("SCHOOL STATE", school_id);
-    //const newTeacher = { ...teacherCreds };
-    //console.log("NEWTEACHER", newTeacher)
-    //console.log("SCHOOL STATE after Newteacher", school);
-    console.log("TEACHERCREDS IN SUBMITHANDLE", teacherCreds);
-
-
-    
     try {
       const newRegister = await api().post("register", teacherCreds);
       const newLogin = await api().post("login", {
-        // email: newTeacher.email,
-        // password: newTeacher.password
         email: teacherCreds.email,
         password: teacherCreds.password
       });
       setUser(newLogin.data.user);
-      console.log("NEWREGISTER", newRegister)
-      //console.log("newLogin.data.user", newLogin.data.user)
-
-      
       history.push("/dashboard");
-    
-      
     } catch (e) {
       console.log(e);
     }
   };
-//console.log("EMPTY SCHOOL", school)
   return (
     <Modal
       size="small"
@@ -115,16 +93,6 @@ console.log("CREDS After TO USESTATE ", teacherCreds)
               onChange={handleChange}
             />
           </Form.Field>
-
-          {/* <Form.Field>
-            <label>Username</label>
-            <input
-              placeholder='Username'
-              name="username"
-              value = {teacherCreds.username}
-              onChange={handleChange}
-            />
-            </Form.Field> */}
 
           <Form.Field>
             <label>Password</label>
