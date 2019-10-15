@@ -14,7 +14,8 @@ const CreateTripModal = props => {
     cost: "",
     field_trip_details: "",
     school_id: user.school_id,
-    creator_id: user.id
+    creator_id: user.id,
+    chaperoneTasks: ""
   });
 
   const _handleChange = e => {
@@ -28,7 +29,7 @@ const CreateTripModal = props => {
 
   const _handleSubmit = e => {
     e.preventDefault();
-    api
+    api()
       .post("fieldtrips", fieldTripInfo)
       .then(({ data }) => {
         setfieldTripInfo({
@@ -37,9 +38,12 @@ const CreateTripModal = props => {
           address: "",
           supplies: "",
           cost: "",
-          school_id: ""
+          school_id: "",
+          field_trip_details: "",
+          chaperoneTasks: ""
         });
-        setTrips([...trips, data[0]])
+        setTrips([...trips, data[0]]);
+        props.setOpen(!props.open);
       })
       .catch(err => err);
     console.log(fieldTripInfo);
@@ -47,78 +51,93 @@ const CreateTripModal = props => {
 
   return (
     <>
-      {
-        user.role === "teacher" && (
-          <Modal
-            trigger={
-              <Button floated="right" primary>
-                <Icon name="add" />
-                Create Trip
-              </Button>
-            }
-          >
-            <Modal.Header className="modalHeader">Create Your Trip!</Modal.Header>
-            <Modal.Content>
-              <Container>
-                <Form onSubmit={_handleSubmit}>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="Field Trip Name"
-                      name="name"
-                      value={fieldTripInfo.name}
-                      onChange={_handleChange}
-                    />
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="Date"
-                      name="date"
-                      value={fieldTripInfo.date}
-                      onChange={_handleChange}
-                      placeholder="MM/DD/YYYY"
-                    />
-                    <Form.Input
-                      fluid
-                      label="Address"
-                      name="address"
-                      value={fieldTripInfo.address}
-                      onChange={_handleChange}
-                    />
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      fluid
-                      label="Supplies"
-                      name="supplies"
-                      value={fieldTripInfo.supplies}
-                      onChange={_handleChange}
-                    />
-                    <Form.Input
-                      fluid
-                      label="Cost"
-                      name="cost"
-                      value={fieldTripInfo.cost}
-                      onChange={_handleChange}
-                      width="7"
-                    />
-                  </Form.Group>
-                  {/* adding 'fluid' in Form.TextArea causes error */}
+      {user.role === "teacher" && (
+        <Modal
+          open={props.open}
+          closeIcon
+          onClose={() => props.setOpen(!props.open)}
+          trigger={
+            <Button
+              floated="right"
+              primary
+              onClick={() => props.setOpen(!props.open)}
+            >
+              <Icon name="add" />
+              Create Trip
+            </Button>
+          }
+        >
+          <Modal.Header className="modalHeader">Create Your Trip!</Modal.Header>
+          <Modal.Content>
+            <Container>
+              <Form onSubmit={_handleSubmit}>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Field Trip Name"
+                    name="name"
+                    value={fieldTripInfo.name}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Date"
+                    type="date"
+                    name="date"
+                    value={fieldTripInfo.date}
+                    onChange={_handleChange}
+                  />
+                  <Form.Input
+                    fluid
+                    label="Address"
+                    name="address"
+                    value={fieldTripInfo.address}
+                    onChange={_handleChange}
+                  />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    label="Supplies"
+                    name="supplies"
+                    value={fieldTripInfo.supplies}
+                    onChange={_handleChange}
+                  />
+                  <Form.Input
+                    fluid
+                    label="Cost"
+                    type="number"
+                    name="cost"
+                    value={fieldTripInfo.cost}
+                    onChange={_handleChange}
+                    width="5"
+                  />
+                </Form.Group>
+                {/* adding 'fluid' in Form.TextArea causes error */}
+                <Form.Group widths="equal">
                   <Form.TextArea
                     label="Field Trip Details"
                     name="field_trip_details"
                     value={fieldTripInfo.field_trip_details}
                     onChange={_handleChange}
-                    width="7"
+                    width=""
                   />
-                  <Form.Button primary>Submit</Form.Button>
-                </Form>
-              </Container>
-            </Modal.Content>
-          </Modal>
-        )
-      }
+                  <Form.TextArea
+                    label="Chaperone Tasks"
+                    name="chaperoneTasks"
+                    value={fieldTripInfo.chaperoneTasks}
+                    onChange={_handleChange}
+                    width=""
+                  />
+                </Form.Group>
+                <Form.Button primary>Submit</Form.Button>
+              </Form>
+            </Container>
+          </Modal.Content>
+        </Modal>
+      )}
     </>
   );
 };
