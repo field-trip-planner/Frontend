@@ -32,6 +32,7 @@ const TeacherFieldTripDetailView = (
     handleSort,
     onKeyDownSearchChange,
     query,
+    onSearchClear,
     sortBy,
     direction,
     onPaginationChange,
@@ -146,6 +147,11 @@ const TeacherFieldTripDetailView = (
               <Input
                 icon={{ name: 'search' }}
                 iconPosition='left'
+                action={
+                  <Button onClick={onSearchClear}
+                          icon='cancel'
+                  />
+                }
                 placeholder='Search a student...'
                 size="mini"
                 value={query}

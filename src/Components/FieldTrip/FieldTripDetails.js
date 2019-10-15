@@ -298,6 +298,24 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   }
 
+  const onSearchClear = () => {
+    setQuery("");
+    api()
+      .get(`students_fieldtrips/${tripItemID}/statuses`)
+      .then(({ data }) => {
+        const {completeStudentStatusesSorted, totalCount, totalPages} = data;
+        setStudents(completeStudentStatusesSorted);
+        setTotalCount(totalCount);
+        setTotalPages(totalPages);
+
+        // resetting state to default
+        setSortBy("last_name");
+        direction("ascending");
+        setActivePage(1);
+      })
+      .catch(err => err);
+  }
+
   return (
     <>
       {/* trip is our local state data */}
@@ -356,6 +374,7 @@ const FieldTripDetails = ({ match }) => {
           handleSort={handleSort}
           onKeyDownSearchChange={onKeyDownSearchChange}
           query={query}
+          onSearchClear={onSearchClear}
           sortBy={sortBy}
           direction={direction}
           onPaginationChange={onPaginationChange}
