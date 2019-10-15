@@ -23,6 +23,8 @@ const FieldTripDetails = ({ match }) => {
   const [user] = useGlobal("user");
   const [parentList, setParentList] = useState([]);
   const tripItemID = match.params.id;
+  const [sortBy, setSortBy] = useState("last_name");
+  const [direction, setDirection] = useState("ascending");
 
   useEffect(() => {
     const url = `fieldtrips/${tripItemID}`;
@@ -185,12 +187,12 @@ const FieldTripDetails = ({ match }) => {
   };
 
   const onPaginationChange = activePage => {
-    const tripItemID = match.params.id;
-    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}`;
+    const shortDirection = shortenDirection(direction);
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${sortBy}&direction=${shortDirection}`;
+
     api()
       .get(statusUrl)
       .then(({ data }) => {
-        console.log("students ALL::", data);
         setStudents(data.completeStudentStatusesSorted);
         setLastAddedStudentStatusID(null);
         return setTotalCount(data.totalCount);
@@ -219,6 +221,38 @@ const FieldTripDetails = ({ match }) => {
       })
       .catch(err => err);
   };
+
+  const getDirection = (clickedColumn) => {
+    if (sortBy !== clickedColumn) {
+      return 'ascending';
+    }
+    return direction === 'ascending' ?
+      'descending' : 'ascending';
+  };
+
+  function shortenDirection (newDirection) {
+    return newDirection === "ascending" ? "asc" : "desc";
+  }
+
+  const handleSort = (clickedColumn, activePage) => () => {
+    if (sortBy !== clickedColumn) {
+      setSortBy(clickedColumn);
+    }
+    const newDirection = getDirection(clickedColumn);
+    setDirection(newDirection);
+    const shortDirection = shortenDirection(newDirection);
+
+    const statusUrl = `students_fieldtrips/${tripItemID}/statuses?page=${activePage}&sortBy=${clickedColumn}&direction=${shortDirection}`;
+
+    api()
+      .get(statusUrl)
+      .then(({ data }) => {
+        setStudents(data.completeStudentStatusesSorted);
+        setLastAddedStudentStatusID(null);
+        return setTotalCount(data.totalCount);
+      })
+      .catch(err => err);
+  }
 
   return (
     <>
@@ -273,6 +307,9 @@ const FieldTripDetails = ({ match }) => {
           students={students}
           totalCount={totalCount}
           totalPages={totalPages}
+          handleSort={handleSort}
+          sortBy={sortBy}
+          direction={direction}
           onPaginationChange={onPaginationChange}
           onDeleteMessageConfirmation={onDeleteMessageConfirmation}
           lastAddedStudentStatusID={lastAddedStudentStatusID}
