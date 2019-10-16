@@ -15,6 +15,7 @@ const FieldTripDetails = ({ match }) => {
   const [trip, setTrip] = useState({}); // local state
   const [students, setStudents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [statusIncompleteCount, setStatusIncompleteCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [lastAddedStudentStatusID, setLastAddedStudentStatusID] = useState(
     null
@@ -43,10 +44,16 @@ const FieldTripDetails = ({ match }) => {
       .get(`students_fieldtrips/${tripItemID}/statuses`)
       .then(({ data }) => {
         console.log("ALL STATUS:", data);
-        // {completeStudentStatusesSorted, totalCount, totalPages}
-        setStudents(data.completeStudentStatusesSorted);
-        setTotalCount(data.totalCount);
-        setTotalPages(data.totalPages);
+        const {
+          completeStudentStatusesSorted,
+          numberOfIncompleteStatus,
+          totalCount,
+          totalPages
+        } = data;
+        setStudents(completeStudentStatusesSorted);
+        setTotalCount(totalCount);
+        setStatusIncompleteCount(numberOfIncompleteStatus);
+        setTotalPages(totalPages);
         perPage = data.perPage;
       })
       .catch(err => err);
@@ -367,6 +374,7 @@ const FieldTripDetails = ({ match }) => {
           studentInfo={studentInfo}
           trip={trip}
           students={students}
+          statusIncompleteCount={statusIncompleteCount}
           totalCount={totalCount}
           totalPages={totalPages}
           activePage={activePage}

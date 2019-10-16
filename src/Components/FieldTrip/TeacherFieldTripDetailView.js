@@ -25,6 +25,7 @@ const TeacherFieldTripDetailView = (
     chaperonesToAssign,
     studentInfo,
     students,
+    statusIncompleteCount,
     totalCount,
     totalPages,
     activePage,
@@ -141,9 +142,11 @@ const TeacherFieldTripDetailView = (
               size="big"
               attached="top"
             >
-              <span>
-                {totalCount} Total
-              </span>
+              <Header
+                as='h3'
+                content={`${totalCount} Total`}
+                subheader={!query && `${statusIncompleteCount} of ${totalCount} with incomplete status`}
+              />
               <Input
                 icon={{ name: 'search' }}
                 iconPosition='left'
