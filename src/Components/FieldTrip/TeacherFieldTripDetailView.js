@@ -145,7 +145,8 @@ const TeacherFieldTripDetailView = (
               <Header
                 as='h3'
                 content={`${totalCount} Total`}
-                subheader={!query && `${statusIncompleteCount} of ${totalCount} with incomplete status`}
+                subheader={!query && `${statusIncompleteCount} are incomplete`}
+                style={{marginBottom: 0}}
               />
               <Input
                 icon={{ name: 'search' }}
@@ -165,7 +166,7 @@ const TeacherFieldTripDetailView = (
             <Table style={{marginBottom: 50}}
                    celled
                    striped
-                   selectable
+                   selectable={students.length > 0}
                    attached="bottom"
                    sortable
             >
@@ -210,6 +211,16 @@ const TeacherFieldTripDetailView = (
               </Table.Header>
 
               <Table.Body>
+                {
+                  !students.length &&
+                   <Table.Row>
+                      <Table.Cell textAlign="center" colSpan="7">
+                        <div style={{padding: 20, fontSize: 16}}>
+                          Sorry, no students were found
+                        </div>
+                      </Table.Cell>
+                    </Table.Row>
+                }
                 {
                   students.map((student) => {
                     const status = getStatus(student);
@@ -256,36 +267,36 @@ const TeacherFieldTripDetailView = (
                           </div>
                         </Table.Cell>
                         <Table.Cell negative={!isComplete} positive={isComplete}>
-                            <div style={{display: 'flex', alignItems: 'center', width: 95}}>
-                              <MaybeCheckmarkWithWarning isComplete={isComplete} />
-                              <span>
+                          <div style={{display: 'flex', alignItems: 'center', width: 95}}>
+                            <MaybeCheckmarkWithWarning isComplete={isComplete} />
+                            <span>
                                 {status}
                               </span>
-                            </div>
+                          </div>
                         </Table.Cell>
-                          <Popup
-                            trigger={
-                              <Table.Cell
-                                collapsing
-                                selectable
-                                textAlign="center"
-                              >
-                                <div style={{cursor: 'pointer'}}>
-                                  <Icon name="trash alternate outline" />
-                                </div>
-                              </Table.Cell>
-                            }
-                            content={
-                              <Button color='red'
-                                      content='Really delete?'
-                                      onClick={() =>{
-                                        onDeleteMessageConfirmation(student.id, activePage);
-                                      }}
-                              />
-                            }
-                            on='click'
-                            position='top center'
-                          />
+                        <Popup
+                          trigger={
+                            <Table.Cell
+                              collapsing
+                              selectable
+                              textAlign="center"
+                            >
+                              <div style={{cursor: 'pointer'}}>
+                                <Icon name="trash alternate outline" />
+                              </div>
+                            </Table.Cell>
+                          }
+                          content={
+                            <Button color='red'
+                                    content='Really delete?'
+                                    onClick={() =>{
+                                      onDeleteMessageConfirmation(student.id, activePage);
+                                    }}
+                            />
+                          }
+                          on='click'
+                          position='top center'
+                        />
                       </Table.Row>
                     )
                   })
