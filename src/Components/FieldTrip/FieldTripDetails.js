@@ -46,13 +46,13 @@ const FieldTripDetails = ({ match }) => {
         console.log("ALL STATUS:", data);
         const {
           completeStudentStatusesSorted,
-          numberOfIncompleteStatus,
+          statusIncompleteCount,
           totalCount,
           totalPages
         } = data;
         setStudents(completeStudentStatusesSorted);
         setTotalCount(totalCount);
-        setStatusIncompleteCount(numberOfIncompleteStatus);
+        setStatusIncompleteCount(statusIncompleteCount);
         setTotalPages(totalPages);
         perPage = data.perPage;
       })
@@ -265,9 +265,7 @@ const FieldTripDetails = ({ match }) => {
 
   const onKeyDownSearchChange = (e) => {
     const { value } = e.target;
-    console.log("SEARCH-VALUE::", value);
-    setQuery(value)
-    console.log("SEARCH-STUDENT-QUERY::", query);
+    setQuery(value);
 
     if (!value) {
       api()
