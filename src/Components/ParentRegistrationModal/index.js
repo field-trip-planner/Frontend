@@ -28,6 +28,7 @@ const ParentRegistrationModal = props => {
     last_name: "",
     email: "",
     password: "",
+    school_id:"",
     role: "parent",
     confirm_password: "",
     phone_number: "",
@@ -38,9 +39,11 @@ const ParentRegistrationModal = props => {
     const { name, value } = e.target;
     setInfo({
       ...info,
+      school_id: school,
       [name]: value
     });
   };
+ 
   const _handleSubmit = async () => {
     const newUser = { ...info }; //
     delete newUser.confirm_password;
@@ -69,6 +72,7 @@ const ParentRegistrationModal = props => {
             last_name: "",
             email: "",
             password: "",
+            school_id:"",
             confirm_password: "",
             phone_number: ""
           });
@@ -86,7 +90,7 @@ const ParentRegistrationModal = props => {
   };
   return (
     <>
-      <Modal trigger={<Button>Sign Up</Button>}>
+      <Modal trigger={<Button>Register</Button>}>
         <Modal.Header className="modalHeader">Parent Registration</Modal.Header>
         <Modal.Content>
           {handleState.success && (
@@ -154,16 +158,7 @@ const ParentRegistrationModal = props => {
                   required
                 />
               </Form.Group>
-              <select name="school_id" id="" onChange={_handleChange}>
-                <option value="default">Choose your school</option>
-                {schools.map(school => {
-                  return (
-                    <option key={school.id} value={school.id}>
-                      {school.school_name}
-                    </option>
-                  );
-                })}
-              </select>
+              
               <Form.Button primary>Submit</Form.Button>
             </Form>
           </Container>
