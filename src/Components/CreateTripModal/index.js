@@ -6,6 +6,7 @@ import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 const CreateTripModal = props => {
   const [user] = useGlobal("user");
   const [trips, setTrips] = useGlobal("trips");
+  const [loading, setLoading] = useState(false);
   const [fieldTripInfo, setfieldTripInfo] = useState({
     name: "",
     date: "",
@@ -15,7 +16,9 @@ const CreateTripModal = props => {
     field_trip_details: "",
     school_id: user.school_id,
     creator_id: user.id,
-    chaperoneTasks: ""
+    chaperoneTasks: "",
+    image: "",
+    largeImage: ""
   });
 
   const _handleChange = e => {
@@ -40,13 +43,39 @@ const CreateTripModal = props => {
           cost: "",
           school_id: "",
           field_trip_details: "",
-          chaperoneTasks: ""
+          chaperoneTasks: "",
+          image: "",
+          largeImage: ""
         });
         setTrips([...trips, data[0]]);
         props.setOpen(!props.open);
       })
       .catch(err => err);
     console.log(fieldTripInfo);
+  };
+
+  const _handleUpload = async e => {
+    setLoading(true);
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "fieldtrip");
+    console.log(data);
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/myfieldtrip/image/upload`,
+      {
+        method: "POST",
+        body: data
+      }
+    );
+    const file = await res.json();
+    setfieldTripInfo({
+      ...fieldTripInfo,
+      image: file.secure_url,
+      largeImage: file.eager[0].secure_url
+    });
+    console.log(fieldTripInfo);
+    setLoading(false);
   };
 
   return (
@@ -122,17 +151,23 @@ const CreateTripModal = props => {
                     name="field_trip_details"
                     value={fieldTripInfo.field_trip_details}
                     onChange={_handleChange}
-
                   />
                   <Form.TextArea
                     label="Chaperone Tasks"
                     name="chaperoneTasks"
                     value={fieldTripInfo.chaperoneTasks}
                     onChange={_handleChange}
-
                   />
                 </Form.Group>
-                <Form.Button primary>Submit</Form.Button>
+                <Form.Input
+                  onChange={_handleUpload}
+                  type="file"
+                  name="file"
+                  placeholder="Upload an Image"
+                />
+                <Form.Button primary loading={loading}>
+                  Submit
+                </Form.Button>
               </Form>
             </Container>
           </Modal.Content>
