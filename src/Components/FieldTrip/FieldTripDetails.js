@@ -137,6 +137,7 @@ const FieldTripDetails = ({ match }) => {
         setTotalPages(updatedTotalPages);
 
         setLastAddedStudentStatusID(data.id);
+        setStatusIncompleteCount(statusIncompleteCount + 1);
 
         setStudentInfo({
           first_name: "",

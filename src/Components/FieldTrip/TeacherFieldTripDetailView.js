@@ -18,6 +18,18 @@ import AddChaperoneModal from './AddChaperoneModal';
 import { MaybeCheckmarkWithWarning } from '../Shared/MaybeCheckmark';
 import getStatus from '../../Utils/getStatus';
 
+const EmptyView = ({children}) => {
+  return (
+    <Table.Row>
+      <Table.Cell textAlign="center" colSpan="7">
+        <div style={{padding: 20, fontSize: 16}}>
+          {children}
+        </div>
+      </Table.Cell>
+    </Table.Row>
+  )
+}
+
 const TeacherFieldTripDetailView = (
   { setStudentInfo,
     setChaperones,
@@ -52,6 +64,24 @@ const TeacherFieldTripDetailView = (
     match,
   }) => {
   const [ user ] = useGlobal("user");
+  const isOrAre = statusIncompleteCount > 1 ? 'are' : 'is';
+
+  const getEmptyView = () => {
+    if (!students.length) {
+      if (query) {
+        return (
+          <EmptyView>
+            Sorry, no students were found!
+          </EmptyView>
+        )
+      }
+      return (
+        <EmptyView>
+          So far, no attendees.
+        </EmptyView>
+      )
+    }
+  }
 
   return (
     <>
@@ -145,7 +175,7 @@ const TeacherFieldTripDetailView = (
               <Header
                 as='h3'
                 content={`${totalCount} Total`}
-                subheader={!query && `${statusIncompleteCount} are incomplete`}
+                subheader={!query && `${statusIncompleteCount} ${isOrAre} incomplete`}
                 style={{marginBottom: 0}}
               />
               <Input
@@ -211,16 +241,7 @@ const TeacherFieldTripDetailView = (
               </Table.Header>
 
               <Table.Body>
-                {
-                  !students.length &&
-                   <Table.Row>
-                      <Table.Cell textAlign="center" colSpan="7">
-                        <div style={{padding: 20, fontSize: 16}}>
-                          Sorry, no students were found
-                        </div>
-                      </Table.Cell>
-                    </Table.Row>
-                }
+                { getEmptyView() }
                 {
                   students.map((student) => {
                     const status = getStatus(student);
