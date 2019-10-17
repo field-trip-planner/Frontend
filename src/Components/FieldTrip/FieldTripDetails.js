@@ -42,6 +42,7 @@ const FieldTripDetails = ({ match }) => {
       .then(({ data }) => {
         console.log("ALL STATUS:", data);
         // {completeStudentStatusesSorted, totalCount, totalPages}
+
         setStudents(data.completeStudentStatusesSorted);
         setTotalCount(data.totalCount);
         setTotalPages(data.totalPages);
