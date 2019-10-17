@@ -6,6 +6,7 @@ import { Container, Button, Modal, Form, Icon } from "semantic-ui-react";
 const CreateTripModal = props => {
   const [user] = useGlobal("user");
   const [trips, setTrips] = useGlobal("trips");
+  const [loading, setLoading] = useState(false);
   const [fieldTripInfo, setfieldTripInfo] = useState({
     name: "",
     date: "",
@@ -54,6 +55,7 @@ const CreateTripModal = props => {
   };
 
   const _handleUpload = async e => {
+    setLoading(true);
     const files = e.target.files;
     const data = new FormData();
     data.append("file", files[0]);
@@ -73,6 +75,7 @@ const CreateTripModal = props => {
       largeImage: file.eager[0].secure_url
     });
     console.log(fieldTripInfo);
+    setLoading(false);
   };
 
   return (
@@ -162,7 +165,9 @@ const CreateTripModal = props => {
                   name="file"
                   placeholder="Upload an Image"
                 />
-                <Form.Button primary>Submit</Form.Button>
+                <Form.Button primary loading={loading}>
+                  Submit
+                </Form.Button>
               </Form>
             </Container>
           </Modal.Content>
