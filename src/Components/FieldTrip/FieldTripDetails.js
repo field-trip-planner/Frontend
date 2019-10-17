@@ -174,7 +174,16 @@ const FieldTripDetails = ({ match }) => {
       })
       .then(({ data }) => {
         console.log("STUDENT_STATUS_DATA::", data);
-
+        api()
+          .get(`students_fieldtrips/${tripItemID}/statuses`)
+          .then(({ data }) => {
+            console.log("ALL STATUS:", data);
+            const {
+              statusIncompleteCount,
+            } = data;
+            setStatusIncompleteCount(statusIncompleteCount);
+          })
+          .catch(err => err);
         return data;
       })
       .catch(err => {
@@ -191,7 +200,6 @@ const FieldTripDetails = ({ match }) => {
       return student;
     });
     console.log("updatedStudents:", updatedStudents);
-
     setStudents(updatedStudents);
   };
 
