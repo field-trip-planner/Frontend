@@ -1,10 +1,17 @@
 import React from "react";
-import { Grid, Card, Icon, Image,Container } from "semantic-ui-react";
+import { Grid, Card, Icon, Image, Container } from "semantic-ui-react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 // import { tsPropertySignature } from "@babel/types";
 
 const TripItem = ({ trip }) => {
+  const formatDate = time => {
+    let date = new Date(time).toLocaleDateString();
+    return date;
+  };
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   return (
     <Card>
       <Card.Content>
@@ -14,27 +21,30 @@ const TripItem = ({ trip }) => {
           <Card.Header>{trip.name}</Card.Header>
           <Card.Meta>
             <span>Location: {trip.address}</span>
-            <p>Date of Trip: {trip.date}</p>
+            <p>Date of Trip: {formatDate(trip.date)}</p>
           </Card.Meta>
 
           <Card.Description>
-            <p>Cost:{trip.cost}</p>
+            <p>Cost: ${numberWithCommas(trip.cost)}</p>
             <p>Field Trip Details: {trip.field_trip_details}</p>
           </Card.Description>
           <Card.Description>
             <p>Supplies Needed:{trip.supplies}</p>
           </Card.Description>
-          {trip.students ?
+          {trip.students ? (
             <Card.Description>
               <Container textAlign="center">
-              <Icon name='student' />
-              {trip.students.map(student => {
-                return <p>{student.first_name} {student.last_name}</p>
-              })}
+                <Icon name="student" />
+                {trip.students.map(student => {
+                  return (
+                    <p>
+                      {student.first_name} {student.last_name}
+                    </p>
+                  );
+                })}
               </Container>
-            </Card.Description> :
-            null
-          }
+            </Card.Description>
+          ) : null}
         </Link>
       </Card.Content>
     </Card>
@@ -42,12 +52,3 @@ const TripItem = ({ trip }) => {
 };
 
 export default TripItem;
-
-
-// {props.students && props.studentToFieldTrips ?
-// props.students.forEach(student => {
-
-// })
-// <p>
-
-// </p>}

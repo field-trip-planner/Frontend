@@ -11,12 +11,14 @@ const FieldTripList = props => {
   //  state, setter          // property in GlobalState
   const [trips, setTrips] = useGlobal("trips");
   const [search, updateSearch] = useState("");
+  const [open, setOpen] = useState(false);
 
   const [user] = useGlobal("user");
   //students state obj for parents' field trip cards
   // const [students, setStudents] = useState([]);
-
   useEffect(() => {
+    // setSchool("")
+    // console.log("SETTING SCHOOL ID TO BE EMPTY", school)
     /*User specific field trip population. The requests will differ based on the user role.
     Teacher, Parent, Chaperone will have different endpoints to make their requests to.*/
     if (user.role === "teacher") {
@@ -67,7 +69,7 @@ const FieldTripList = props => {
             value={search}
           />
 
-          <CreateTripModal size="small" />
+          <CreateTripModal size="small" setOpen={setOpen} open={open} />
         </div>
 
         <Header>UPCOMING FIELD TRIPS</Header>

@@ -1,25 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Button, Modal, Form, Message } from "semantic-ui-react";
 import { useGlobal } from "reactn";
 import { withRouter } from "react-router-dom";
 import api from "../../api";
 
 const ParentRegistrationModal = props => {
+  const [school, setSchool] = useGlobal("school");
+  const [schools, setSchools] = useState([]);
   const [user, setUser] = useGlobal("user");
-  const [school] = useGlobal("school");
   const [handleState, setHandleState] = useState({
     success: false,
     failed: false,
     message: ""
   });
+  useEffect(() => {
+    api()
+      .get("schools")
+      .then(({ data }) => {
+        setSchools(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
   const [info, setInfo] = useState({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
     role: "parent",
-    //school_id: "4187269f-d1fa-41fe-ad34-2e7d74a9031a",
-    school_id: school, //
     confirm_password: "",
     phone_number: "",
     googleId: null
@@ -145,7 +154,16 @@ const ParentRegistrationModal = props => {
                   required
                 />
               </Form.Group>
-
+              <select name="school_id" id="" onChange={_handleChange}>
+                <option value="default">Choose your school</option>
+                {schools.map(school => {
+                  return (
+                    <option key={school.id} value={school.id}>
+                      {school.school_name}
+                    </option>
+                  );
+                })}
+              </select>
               <Form.Button primary>Submit</Form.Button>
             </Form>
           </Container>

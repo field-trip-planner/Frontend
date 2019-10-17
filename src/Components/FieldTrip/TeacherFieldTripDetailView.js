@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGlobal } from "reactn";
 import {
   Button,
@@ -8,9 +8,11 @@ import {
   Icon,
   Message,
   Modal,
+  Pagination,
+  Popup,
   Segment,
   Table,
-} from "semantic-ui-react";
+} from 'semantic-ui-react'
 import AddChaperoneModal from './AddChaperoneModal';
 import { MaybeCheckmarkWithWarning } from '../Shared/MaybeCheckmark';
 import getStatus from '../../Utils/getStatus';
@@ -22,6 +24,14 @@ const TeacherFieldTripDetailView = (
     chaperonesToAssign,
     studentInfo,
     students,
+    totalCount,
+    totalPages,
+    handleSort,
+    sortBy,
+    direction,
+    onPaginationChange,
+    onDeleteMessageConfirmation,
+    lastAddedStudentStatusID,
     parentList,
     setIsSuccessfullyAdded,
     isSuccessfullyAdded,
@@ -35,6 +45,7 @@ const TeacherFieldTripDetailView = (
     match,
   }) => {
   const [ user ] = useGlobal("user");
+  const [activePage, setActivePage] = useState(1);
 
   return (
     <>
@@ -113,61 +124,109 @@ const TeacherFieldTripDetailView = (
                         {parentList.map(parent => <option key={parent.id} value={parent.id}>
                         {`${parent.last_name}, ${parent.first_name}`}
                       </option>)}
-                    </Form.Field>        
+                    </Form.Field>
                     <Form.Button primary>Submit</Form.Button>
                   </Form>
                 </Modal.Content>
               </Modal>
             </Segment>
 
-            <Table columns={5} style={{ marginTop: 20, marginBottom: 50 }}>
+            <Segment size="big" attached="top">
+              {/*{5 of 10 attending*/} {totalCount} Total
+            </Segment>
+
+            <Table style={{marginBottom: 50}}
+                   celled
+                   striped
+                   selectable
+                   attached="bottom"
+                   sortable
+            >
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>First Name</Table.HeaderCell>
-                  <Table.HeaderCell>Last Name</Table.HeaderCell>
-                  <Table.HeaderCell>Paid</Table.HeaderCell>
-                  <Table.HeaderCell>E-sign</Table.HeaderCell>
-                  <Table.HeaderCell>Supplies</Table.HeaderCell>
-                  <Table.HeaderCell>Status</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortBy === 'first_name' ? direction : null}
+                    onClick={handleSort('first_name', activePage)}
+                  >
+                    First Name
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortBy === 'last_name' ? direction : null}
+                    onClick={handleSort('last_name', activePage)}
+                  >
+                    Last Name
+                  </Table.HeaderCell>
+                  <Table.HeaderCell collapsing>
+                    <div style={{ width: 70 }}>
+                      Paid
+                    </div>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell singleLine collapsing>
+                    <div style={{ width: 70 }}>
+                      E-sign
+                    </div>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell collapsing>
+                    <div style={{ width: 70 }}>
+                      Supplies
+                    </div>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={sortBy === 'going_status' ? direction : null}
+                    onClick={handleSort('going_status', activePage)}
+                  >
+                    Status
+                  </Table.HeaderCell>
+                  <Table.HeaderCell collapsing >Delete</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
 
               <Table.Body>
                 {
                   students.map((student) => {
-                    const selectedStudent = students.find(s => {
-                      return s.id === student.id;
-                    });
-                    const status = getStatus(selectedStudent);
+                    const status = getStatus(student);
                     const isComplete = status === 'complete';
 
                     return (
-                      <Table.Row key={student.id}>
+                      <Table.Row
+                        key={student.id}
+                        style={
+                          lastAddedStudentStatusID === student.id ?
+                            {backgroundColor: '#ebf5ff'} : undefined
+                        }
+                      >
                         <Table.Cell>{student.first_name}</Table.Cell>
                         <Table.Cell>{student.last_name}</Table.Cell>
-                        <Table.Cell>
-                          <Checkbox checked={student.paid_status}
-                                    onClick={(e, data) => onHandleCheckbox({
-                                      studentStatusID: student.id,
-                                      paid_status: data.checked,
-                                    })}
-                          />
+                        <Table.Cell selectable>
+                          <div style={{cursor: 'pointer', padding: 11}}>
+                            <Checkbox checked={student.paid_status}
+                                      onClick={(e, data) => onHandleCheckbox({
+                                        studentStatusID: student.id,
+                                        paid_status: data.checked,
+                                      })}
+                            />
+                          </div>
                         </Table.Cell>
-                        <Table.Cell>
-                          <Checkbox checked={student.permission_status}
-                                    onClick={(e, data) => onHandleCheckbox({
-                                      studentStatusID: student.id,
-                                      permission_status: data.checked,
-                                    })}
-                          />
+                        <Table.Cell selectable>
+                          <div style={{cursor: 'pointer', padding: 11}}>
+                            <Checkbox checked={student.permission_status}
+                                      onClick={(e, data) => onHandleCheckbox({
+                                        studentStatusID: student.id,
+                                        permission_status: data.checked,
+                                      })}
+                            />
+                          </div>
                         </Table.Cell>
-                        <Table.Cell>
-                          <Checkbox checked={student.supplies_status}
-                                    onClick={(e, data) => onHandleCheckbox({
-                                      studentStatusID: student.id,
-                                      supplies_status: data.checked,
-                                    })}
-                          />
+                        <Table.Cell selectable>
+                          <div style={{cursor: 'pointer', padding: 11}}>
+                            <Checkbox checked={student.supplies_status}
+                                      onClick={(e, data) => onHandleCheckbox({
+                                        studentStatusID: student.id,
+                                        supplies_status: data.checked,
+                                      })}
+                            />
+                          </div>
                         </Table.Cell>
                         <Table.Cell negative={!isComplete} positive={isComplete}>
                             <div style={{display: 'flex', alignItems: 'center', width: 95}}>
@@ -177,6 +236,29 @@ const TeacherFieldTripDetailView = (
                               </span>
                             </div>
                         </Table.Cell>
+                          <Popup
+                            trigger={
+                              <Table.Cell
+                                collapsing
+                                selectable
+                                textAlign="center"
+                              >
+                                <div style={{cursor: 'pointer'}}>
+                                  <Icon name="trash alternate outline" />
+                                </div>
+                              </Table.Cell>
+                            }
+                            content={
+                              <Button color='red'
+                                      content='Really delete?'
+                                      onClick={() =>{
+                                        onDeleteMessageConfirmation(student.id, activePage);
+                                      }}
+                              />
+                            }
+                            on='click'
+                            position='top center'
+                          />
                       </Table.Row>
                     )
                   })
@@ -185,12 +267,22 @@ const TeacherFieldTripDetailView = (
 
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell>{students.length} Students Going</Table.HeaderCell>
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
-                  <Table.HeaderCell />
+                  <Table.HeaderCell colSpan='7'>
+                    <Pagination
+                      floated='right'
+                      boundaryRange={0}
+                      activePage={activePage}
+                      onPageChange={(e, data) => {
+                        onPaginationChange(data.activePage);
+                        setActivePage(data.activePage);
+                      }}
+                      firstItem={null}
+                      lastItem={null}
+                      siblingRange={1}
+                      totalPages={totalPages}
+                      size='mini'
+                    />
+                  </Table.HeaderCell>
                 </Table.Row>
               </Table.Footer>
             </Table>

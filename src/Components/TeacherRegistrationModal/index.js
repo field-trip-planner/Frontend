@@ -7,18 +7,19 @@ import "./teacherRegistration.css";
 
 const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
   const [user, setUser] = useGlobal("user");
-  const [school] = useGlobal("school");
-
+  const [school, setSchool] = useGlobal("school");
+  
   const [teacherCreds, setTeacherCreds] = useState({
     first_name: "",
     last_name: "",
     email: "",
     role: "teacher",
     password: "",
-    school_id: school,
+    school_id: "",
     phone_number: "",
     googleId: null
   });
+
   const [info, setInfo] = useState({
     email: "",
     password: ""
@@ -28,19 +29,18 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     const { name, value } = e.target;
     setTeacherCreds({
       ...teacherCreds,
+      school_id: school,
       [name]: value
     });
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log("school---", school);
-    const newTeacher = { ...teacherCreds };
     try {
-      const newRegister = await api().post("register", newTeacher);
+      const newRegister = await api().post("register", teacherCreds);
       const newLogin = await api().post("login", {
-        email: newTeacher.email,
-        password: newTeacher.password
+        email: teacherCreds.email,
+        password: teacherCreds.password
       });
       setUser(newLogin.data.user);
       history.push("/dashboard");
@@ -48,7 +48,6 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
       console.log(e);
     }
   };
-
   return (
     <Modal
       size="small"
@@ -94,16 +93,6 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
               onChange={handleChange}
             />
           </Form.Field>
-
-          {/* <Form.Field>
-            <label>Username</label>
-            <input
-              placeholder='Username'
-              name="username"
-              value = {teacherCreds.username}
-              onChange={handleChange}
-            />
-            </Form.Field> */}
 
           <Form.Field>
             <label>Password</label>

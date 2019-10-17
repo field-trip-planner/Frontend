@@ -7,14 +7,16 @@ import "./schoolLookupModal.css";
 import TeacherRegistrationForm from "../TeacherRegistrationModal/index.js";
 
 const SchoolLookUp = () => {
-  const [school, setSchool] = useGlobal("school");
+  const [school_id, setSchool] = useGlobal("school");
   const [schools, setSchools] = useState([]);
 
   useEffect(() => {
+    //setSchool("")
     api()
       .get("schools")
       .then(({ data }) => {
         setSchools(data);
+        console.log("DATA", data)
       })
       .catch(err => {
         console.log(err);
@@ -24,6 +26,7 @@ const SchoolLookUp = () => {
   const handleChange = e => {
     e.preventDefault();
     setSchool(e.target.value);
+    console.log("SET SCHOOL ID UPON LOOKUP", e.target.value)
   };
 
   return (
