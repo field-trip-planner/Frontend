@@ -37,7 +37,7 @@ const TripItem = ({ trip }) => {
                 <Icon name="student" />
                 {trip.students.map(student => {
                   return (
-                    <p>
+                    <p key={student.id}>
                       {student.first_name} {student.last_name}
                     </p>
                   );
