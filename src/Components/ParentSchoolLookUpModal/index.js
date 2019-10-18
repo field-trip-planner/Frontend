@@ -23,7 +23,7 @@ const ParentalSchoolLookUpModal = () => {
     const _handleChange = e => {
         e.preventDefault()
         setSchool(e.target.value)
-        console.log("SCHOOL SET FOR PARENT", e.target.value)
+        // console.log("SCHOOL SET FOR PARENT", e.target.value)
     
     }
 
