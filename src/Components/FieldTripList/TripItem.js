@@ -16,7 +16,9 @@ const TripItem = ({ trip }) => {
     <Card>
       <Card.Content>
         <Link to={`/trip/${trip.id}`}>
-          <Image src={require("../../img/water.jpg")} />
+          <Image
+            src={!trip.image ? require("../../img/water.jpg") : trip.image}
+          />
 
           <Card.Header>{trip.name}</Card.Header>
           <Card.Meta>

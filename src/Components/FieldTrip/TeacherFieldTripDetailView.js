@@ -6,6 +6,7 @@ import {
   Form,
   Header,
   Icon,
+  Input,
   Message,
   Modal,
   Pagination,
@@ -17,6 +18,18 @@ import AddChaperoneModal from './AddChaperoneModal';
 import { MaybeCheckmarkWithWarning } from '../Shared/MaybeCheckmark';
 import getStatus from '../../Utils/getStatus';
 
+const EmptyView = ({children}) => {
+  return (
+    <Table.Row>
+      <Table.Cell textAlign="center" colSpan="7">
+        <div style={{padding: 20, fontSize: 16}}>
+          {children}
+        </div>
+      </Table.Cell>
+    </Table.Row>
+  )
+}
+
 const TeacherFieldTripDetailView = (
   { setStudentInfo,
     setChaperones,
@@ -24,9 +37,15 @@ const TeacherFieldTripDetailView = (
     chaperonesToAssign,
     studentInfo,
     students,
+    statusIncompleteCount,
     totalCount,
     totalPages,
+    activePage,
+    setActivePage,
     handleSort,
+    onKeyDownSearchChange,
+    query,
+    onSearchClear,
     sortBy,
     direction,
     onPaginationChange,
@@ -45,7 +64,24 @@ const TeacherFieldTripDetailView = (
     match,
   }) => {
   const [ user ] = useGlobal("user");
-  const [activePage, setActivePage] = useState(1);
+  const isOrAre = statusIncompleteCount > 1 ? 'are' : 'is';
+
+  const getEmptyView = () => {
+    if (!students.length) {
+      if (query) {
+        return (
+          <EmptyView>
+            Sorry, no students were found!
+          </EmptyView>
+        )
+      }
+      return (
+        <EmptyView>
+          So far, no attendees.
+        </EmptyView>
+      )
+    }
+  }
 
   return (
     <>
@@ -131,14 +167,36 @@ const TeacherFieldTripDetailView = (
               </Modal>
             </Segment>
 
-            <Segment size="big" attached="top">
-              {/*{5 of 10 attending*/} {totalCount} Total
+            <Segment
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+              size="big"
+              attached="top"
+            >
+              <Header
+                as='h3'
+                content={`${totalCount} Total`}
+                subheader={!query && `${statusIncompleteCount} ${isOrAre} incomplete`}
+                style={{marginBottom: 0}}
+              />
+              <Input
+                icon={{ name: 'search' }}
+                iconPosition='left'
+                action={
+                  <Button onClick={onSearchClear}
+                          icon='cancel'
+                  />
+                }
+                placeholder='Search a student...'
+                size="mini"
+                value={query}
+                onChange={onKeyDownSearchChange}
+              />
             </Segment>
 
             <Table style={{marginBottom: 50}}
                    celled
                    striped
-                   selectable
+                   selectable={students.length > 0}
                    attached="bottom"
                    sortable
             >
@@ -183,6 +241,7 @@ const TeacherFieldTripDetailView = (
               </Table.Header>
 
               <Table.Body>
+                { getEmptyView() }
                 {
                   students.map((student) => {
                     const status = getStatus(student);
@@ -229,36 +288,36 @@ const TeacherFieldTripDetailView = (
                           </div>
                         </Table.Cell>
                         <Table.Cell negative={!isComplete} positive={isComplete}>
-                            <div style={{display: 'flex', alignItems: 'center', width: 95}}>
-                              <MaybeCheckmarkWithWarning isComplete={isComplete} />
-                              <span>
+                          <div style={{display: 'flex', alignItems: 'center', width: 95}}>
+                            <MaybeCheckmarkWithWarning isComplete={isComplete} />
+                            <span>
                                 {status}
                               </span>
-                            </div>
+                          </div>
                         </Table.Cell>
-                          <Popup
-                            trigger={
-                              <Table.Cell
-                                collapsing
-                                selectable
-                                textAlign="center"
-                              >
-                                <div style={{cursor: 'pointer'}}>
-                                  <Icon name="trash alternate outline" />
-                                </div>
-                              </Table.Cell>
-                            }
-                            content={
-                              <Button color='red'
-                                      content='Really delete?'
-                                      onClick={() =>{
-                                        onDeleteMessageConfirmation(student.id, activePage);
-                                      }}
-                              />
-                            }
-                            on='click'
-                            position='top center'
-                          />
+                        <Popup
+                          trigger={
+                            <Table.Cell
+                              collapsing
+                              selectable
+                              textAlign="center"
+                            >
+                              <div style={{cursor: 'pointer'}}>
+                                <Icon name="trash alternate outline" />
+                              </div>
+                            </Table.Cell>
+                          }
+                          content={
+                            <Button color='red'
+                                    content='Really delete?'
+                                    onClick={() =>{
+                                      onDeleteMessageConfirmation(student.id, activePage);
+                                    }}
+                            />
+                          }
+                          on='click'
+                          position='top center'
+                        />
                       </Table.Row>
                     )
                   })
