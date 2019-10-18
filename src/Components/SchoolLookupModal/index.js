@@ -7,7 +7,7 @@ import "./schoolLookupModal.css";
 import TeacherRegistrationForm from "../TeacherRegistrationModal/index.js";
 
 const SchoolLookUp = () => {
-  const [school_id, setSchool] = useGlobal("school");
+  const [school, setSchool] = useGlobal("school");
   const [schools, setSchools] = useState([]);
 
   useEffect(() => {
