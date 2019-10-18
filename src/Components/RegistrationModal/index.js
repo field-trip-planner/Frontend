@@ -3,6 +3,7 @@ import { Header, Modal, Grid, Button, Icon } from "semantic-ui-react";
 import SchoolLookupModal from "../SchoolLookupModal";
 import "./registrationModal.css";
 import ParentRegistrationModal from "../ParentRegistrationModal";
+import ParentalSchoolLookUpModal from "../ParentSchoolLookUpModal/index.js"
 
 const RegistrationModal = () => {
 
@@ -35,7 +36,9 @@ const RegistrationModal = () => {
           <Grid.Column className="gridColumn">
             <Header>For Parents</Header>
             <Modal.Actions>
-              <ParentRegistrationModal />
+              {/* <ParentRegistrationModal /> */}
+              {/* ADD PARENTAL SCHOOL LOOKUP HERE */}
+              <ParentalSchoolLookUpModal />
             </Modal.Actions>
           </Grid.Column>
         </Grid>
