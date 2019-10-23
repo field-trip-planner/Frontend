@@ -8,6 +8,7 @@ import TeacherFieldTripDetailView from "./TeacherFieldTripDetailView";
 import ChaperoneFieldTripDetailView from "./ChaperoneFieldTripDetailView";
 import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
+import TripGMap from './TripGMap';
 import "./FieldTripDetails.css";
 
 let perPage;
@@ -351,10 +352,7 @@ const FieldTripDetails = ({ match }) => {
             </Grid.Column>
 
             <Grid.Column className="wrapper-border">
-              <div className="trip-details-wrapper">
-                <Image src="https://via.placeholder.com/400" />
-                <p>GOOGLE MAP HERE</p>
-              </div>
+                <TripGMap />
             </Grid.Column>
           </Grid.Row>
 

@@ -1,12 +1,12 @@
 .trip-details-wrapper {
-    max-width: 400px;
-    margin: 0 auto;
+    /*max-width: 400px;*/
+    /*margin: 0 auto;*/
 }
 
 .wrapper-border{
-    border: 1px solid lightgray;
+    /*border: 1px solid lightgray;*/
     border-radius: 8px;
-
+    /*padding: unset*/
 }
 
 .trip-summary-wrapper {
