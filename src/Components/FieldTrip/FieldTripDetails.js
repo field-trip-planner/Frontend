@@ -331,13 +331,14 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   }
 
-  const onMapMount = (markerOptions) => {
-    const marker = new window.google.maps.Marker(
-      markerOptions
-    )
-    marker.addListener('click', () => {
-      // window.location.href = link.url
-      alert("Marker clicked");
+  const onMapMount = (markerOptions, {formatted_address}) => {
+    const marker = new window.google.maps.Marker(markerOptions);
+
+    const infowindow = new window.google.maps.InfoWindow;
+    infowindow.setContent(formatted_address);
+
+    marker.addListener('mouseover', () => {
+      infowindow.open(markerOptions.map, marker);
     })
   }
 
@@ -362,7 +363,11 @@ const FieldTripDetails = ({ match }) => {
             </Grid.Column>
 
             <Grid.Column className="wrapper-border">
-                <TripGMap onMount={onMapMount} address={trip.address} tripName={trip.name} />
+                <TripGMap
+                  onMount={onMapMount}
+                  address={trip.address}
+                  tripName={trip.name}
+                />
             </Grid.Column>
           </Grid.Row>
 

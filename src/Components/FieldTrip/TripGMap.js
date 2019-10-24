@@ -7,6 +7,7 @@ function Map({ options, onMount, className, address, tripName }) {
   useEffect(() => {
     const onLoad = () => {
       if (!address) return;
+      // initialize the map
       const map = new window.google.maps.Map(divProps.ref.current, options)
 
       const geocoder = new window.google.maps.Geocoder();
@@ -20,10 +21,14 @@ function Map({ options, onMount, className, address, tripName }) {
             label: '',
             title: tripName
           };
-          onMount(markerOptions);
+
+          const infoWindowOptions = {
+            formatted_address: results[0].formatted_address
+          }
+          onMount(markerOptions, infoWindowOptions);
           // console.log("Location address:", results[0])
         } else {
-          alert(`Geocode failed due to the following reason: ${status}`);
+          alert(`Geocode failed due to: ${status}`);
         }
       });
     };
@@ -53,6 +58,7 @@ const shouldUpdate = (prevProps, nextProps) => {
 export default React.memo(Map, shouldUpdate);
 
 Map.defaultProps = {
+  // default options for the map
   options: {
     zoom: 16,
   },
