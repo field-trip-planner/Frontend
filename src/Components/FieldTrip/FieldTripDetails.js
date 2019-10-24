@@ -3,6 +3,7 @@ import { useGlobal } from "reactn";
 import { Container, Divider, Grid, Header, Image } from "semantic-ui-react";
 
 import api from "../../api";
+import formatDate from "../../Utils/formatDate"
 import MainMenu from "../layout/Menu.js";
 import TeacherFieldTripDetailView from "./TeacherFieldTripDetailView";
 import ChaperoneFieldTripDetailView from "./ChaperoneFieldTripDetailView";
@@ -356,9 +357,9 @@ const FieldTripDetails = ({ match }) => {
             <Grid.Column className="wrapper-border">
               <div className="trip-details-wrapper content-wrapper">
                 <h2>Location: {trip.address}</h2>
-                <h2>Date of Trip: {trip.date}</h2>
+                <h2>Date of Trip: {formatDate(trip.date)}</h2>
                 <h2>Supplies: {trip.supplies}</h2>
-                <h2>Cost: {trip.cost}</h2>
+                <h2>Cost: ${trip.cost}</h2>
               </div>
             </Grid.Column>
 
