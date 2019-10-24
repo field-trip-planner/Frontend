@@ -331,6 +331,16 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   }
 
+  const onMapMount = (markerOptions) => {
+    const marker = new window.google.maps.Marker(
+      markerOptions
+    )
+    marker.addListener('click', () => {
+      // window.location.href = link.url
+      alert("Marker clicked");
+    })
+  }
+
   return (
     <>
       {/* trip is our local state data */}
@@ -352,7 +362,7 @@ const FieldTripDetails = ({ match }) => {
             </Grid.Column>
 
             <Grid.Column className="wrapper-border">
-                <TripGMap />
+                <TripGMap onMount={onMapMount} address={trip.address} tripName={trip.name} />
             </Grid.Column>
           </Grid.Row>
 
