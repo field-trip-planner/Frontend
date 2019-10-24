@@ -1,26 +1,37 @@
 import { functions, isEqual, omit } from 'lodash'
 import React, { useEffect, useRef } from 'react'
 
-function Map({ options, onMount, className }) {
-  const divProps = { ref: useRef(), className }
+function Map({ options, onMount, className, address, tripName }) {
+  const divProps = { ref: useRef(), className };
 
   useEffect(() => {
     const onLoad = () => {
+      if (!address) return;
       const map = new window.google.maps.Map(divProps.ref.current, options)
-      onMount && onMount(map)
+
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({'address': address}, function(results, status) {
+        if (status === 'OK') {
+          map.setCenter(results[0].geometry.location);
+
+          const markerOptions = {
+            map,
+            position: results[0].geometry.location,
+            label: '',
+            title: tripName
+          };
+          onMount(markerOptions);
+          // console.log("Location address:", results[0])
+        } else {
+          alert(`Geocode failed due to the following reason: ${status}`);
+        }
+      });
+    };
+    if (window.google) {
+      // console.log("Loading Called:");
+      onLoad();
     }
-    if (!window.google) {
-      const script = document.createElement(`script`)
-      script.type = `text/javascript`
-      script.src =
-        `https://maps.googleapis.com/maps/api/js?key=` +
-        process.env.REACT_APP_MAPS_API_KEY
-      const headScript = document.getElementsByTagName(`script`)[0]
-      headScript.parentNode.insertBefore(script, headScript)
-      script.addEventListener(`load`, onLoad)
-      return () => script.removeEventListener(`load`, onLoad)
-    } else onLoad()
-  }, [divProps.ref, onMount, options])
+  }, [divProps.ref, onMount, options, address]);
 
   return (
     <div
@@ -39,11 +50,11 @@ const shouldUpdate = (prevProps, nextProps) => {
   )
 }
 
-export default React.memo(Map, shouldUpdate)
+export default React.memo(Map, shouldUpdate);
 
 Map.defaultProps = {
   options: {
-    center: { lat: 48, lng: 8 },
-    zoom: 5,
+    zoom: 16,
   },
+  onMount: () => {}
 }
