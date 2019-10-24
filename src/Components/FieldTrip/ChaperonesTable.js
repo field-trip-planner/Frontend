@@ -10,11 +10,10 @@ import {
   Button
 } from 'semantic-ui-react'
 import api from '../../api';
+import './ChaperonesTable.css'
 
 const ChaperonesTable = ({ chaperones, setChaperones, fieldTripId }) => {
   const [user] = useGlobal("user");
-  const [newPopup, setNewPopup] = useState(false);
-  const [doNotShowThis, setDoNotShowThis] = useState(false);
 
   const handleRemoveChaperone = (e) => {
     //Once the api call is made, will await for an ok status from api call before updating state
@@ -30,12 +29,8 @@ const ChaperonesTable = ({ chaperones, setChaperones, fieldTripId }) => {
           setChaperones(newChaperones);
         }
       }).catch(err => console.log(err))
-
   }
 
-  const handleShowNewPopup = (e) => {
-    setNewPopup(true);
-  }
 
   return (
     <>
@@ -77,66 +72,33 @@ const ChaperonesTable = ({ chaperones, setChaperones, fieldTripId }) => {
               <Table.Body>
                 {chaperones.map(chaperone => {
                   return (
-                    <Popup flowing hoverable position='top left'
-                      trigger={
-                        <Table.Row key={chaperone.id}>
-                          <Table.Cell>
-                            {`${chaperone.first_name}, ${chaperone.last_name}`}
-                          </Table.Cell>
-                        </Table.Row>
-                      }>
+                    <Table.Row key={chaperone.id}>
+                      <Table.Cell className="chaperoneCell" selectable collapsing>
+                      <div className="chaperoneCell">
+                        <div className="chaperoneName">
 
-
-
-
-
-                      {/* <Grid centered columns={1}>
-                        <Grid.Column textAlign='center'>
-
-                          <Button value={chaperone.id} negative
-                            onClick={(e) => handleRemoveChaperone(e)}
-                          >Remove Chaperone</Button>
-                        </Grid.Column>
-                      </Grid> */}
-
-                      {newPopup ?
-                        <Grid centered columns={1}>
-                          <Grid.Column textAlign='center'>
-                            <h3>Are You Sure?</h3>
-                            <Button value={chaperone.id} positive
-                              onClick={(e) => {
-                                handleRemoveChaperone(e);
-                                setNewPopup(false)
-                              }}
-                            >Yes</Button>
-                            <Button value={chaperone.id} negative
-                              onClick={(e) => setNewPopup(false)}
-                            >No</Button>
-                          </Grid.Column>
-                        </Grid>
-                        :
-                        <Grid centered columns={1}>
-                          <Grid.Column textAlign='center'>
-                            <h3>Remove From Field Trip</h3>
-                            <Button value={chaperone.id} negative
-                              onClick={(e) => {
-                                if (doNotShowThis) {
-                                  handleRemoveChaperone(e)
-                                }else{
-                                  handleShowNewPopup(e)
-                                }
-
-                              }}
-                            >Remove Chaperone</Button>
-                          </Grid.Column>
-                        </Grid>
-                      }
-
-
-
-
-
-                    </Popup>
+                      {`${chaperone.first_name}, ${chaperone.last_name}`}
+                      </div>
+                      <Popup
+                        trigger={
+                            <div className = "chaperoneTrash" style={{ cursor: 'pointer' }}>
+                              <Icon name="trash alternate outline" />
+                            </div>
+                        }
+                        content={
+                          <Button negative
+                            value={chaperone.id}
+                            content='Really delete?'
+                            onClick={(e) => handleRemoveChaperone(e)
+                            }
+                          />
+                        }
+                        on='click'
+                        position='top center'
+                      />
+                      </div>
+                    </Table.Cell>
+                    </Table.Row>
                   );
                 })}
               </Table.Body>
