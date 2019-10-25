@@ -353,7 +353,13 @@ const FieldTripDetails = ({ match }) => {
         <Divider style={{ marginBottom: "80px" }} />
 
         <Grid>
-          <Grid.Row columns={2}>
+          <Grid.Row columns={2}
+                    style={{
+                      backgroundColor: "#f9df6a17",
+                      borderRadius: 4,
+                      padding: 30
+                    }}
+          >
             <Grid.Column className="wrapper-border">
               <div className="trip-details-wrapper content-wrapper">
                 <h2>Location: {trip.address}</h2>
