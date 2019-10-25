@@ -15,7 +15,7 @@ import {
   Table,
 } from 'semantic-ui-react'
 import AddChaperoneModal from './AddChaperoneModal';
-import { MaybeCheckmarkWithWarning } from '../Shared/MaybeCheckmark';
+import { MaybeCheckmark, MaybeCheckmarkWithWarning } from '../Shared/MaybeCheckmark'
 import getStatus from '../../Utils/getStatus';
 
 const EmptyView = ({children}) => {
@@ -85,12 +85,12 @@ const TeacherFieldTripDetailView = (
 
   return (
     <>
-      {
-        user.role === "teacher" && (
-          <>
+
             <Segment basic clearing style={{ padding: "unset", marginTop: 120 }}>
               <Header as='h2' floated='left'>Students</Header>
-              <Modal
+              {
+                user.role === "teacher" &&
+                <Modal
                 trigger={
                   <Button floated="right" primary>
                     <Icon name="add" />
@@ -165,6 +165,7 @@ const TeacherFieldTripDetailView = (
                   </Form>
                 </Modal.Content>
               </Modal>
+              }
             </Segment>
 
             <Segment
@@ -215,17 +216,17 @@ const TeacherFieldTripDetailView = (
                     Last Name
                   </Table.HeaderCell>
                   <Table.HeaderCell collapsing>
-                    <div style={{ width: 70 }}>
+                    <div style={{ width: 70, cursor: 'auto' }}>
                       Paid
                     </div>
                   </Table.HeaderCell>
                   <Table.HeaderCell singleLine collapsing>
-                    <div style={{ width: 70 }}>
+                    <div style={{ width: 70, cursor: 'auto' }}>
                       E-sign
                     </div>
                   </Table.HeaderCell>
                   <Table.HeaderCell collapsing>
-                    <div style={{ width: 70 }}>
+                    <div style={{ width: 70, cursor: 'auto' }}>
                       Supplies
                     </div>
                   </Table.HeaderCell>
@@ -236,7 +237,7 @@ const TeacherFieldTripDetailView = (
                   >
                     Status
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing >Delete</Table.HeaderCell>
+                  {user.role === "teacher" && <Table.HeaderCell collapsing >Delete</Table.HeaderCell>}
                 </Table.Row>
               </Table.Header>
 
@@ -258,33 +259,53 @@ const TeacherFieldTripDetailView = (
                         <Table.Cell>{student.first_name}</Table.Cell>
                         <Table.Cell>{student.last_name}</Table.Cell>
                         <Table.Cell selectable>
-                          <div style={{cursor: 'pointer', padding: 11}}>
-                            <Checkbox checked={student.paid_status}
-                                      onClick={(e, data) => onHandleCheckbox({
-                                        studentStatusID: student.id,
-                                        paid_status: data.checked,
-                                      })}
-                            />
+                          <div style={{cursor: user.role === "teacher" ? 'pointer' : 'auto', padding: 11}}>
+
+                            {
+
+                              user.role === "teacher" ? (<Checkbox checked={student.paid_status}
+                                                                   onClick={(e, data) => onHandleCheckbox({
+                                                                     studentStatusID: student.id,
+                                                                     paid_status: data.checked,
+                                                                   })}
+                              />)
+                                :
+                                <MaybeCheckmark isComplete={student.paid_status} />
+                            }
+
+
+
                           </div>
                         </Table.Cell>
                         <Table.Cell selectable>
-                          <div style={{cursor: 'pointer', padding: 11}}>
-                            <Checkbox checked={student.permission_status}
-                                      onClick={(e, data) => onHandleCheckbox({
-                                        studentStatusID: student.id,
-                                        permission_status: data.checked,
-                                      })}
-                            />
+                          <div style={{cursor: user.role === "teacher" ? 'pointer' : 'auto', padding: 11}}>
+                            {
+                              user.role === "teacher" ? (<Checkbox checked={student.permission_status}
+                                                                  onClick={(e, data) => onHandleCheckbox({
+                                                                    studentStatusID: student.id,
+                                                                    permission_status: data.checked,
+                                                                  })}
+                              />)
+                              :
+                              <MaybeCheckmark isComplete={student.permission_status} />
+
+                            }
+
                           </div>
                         </Table.Cell>
                         <Table.Cell selectable>
-                          <div style={{cursor: 'pointer', padding: 11}}>
-                            <Checkbox checked={student.supplies_status}
-                                      onClick={(e, data) => onHandleCheckbox({
-                                        studentStatusID: student.id,
-                                        supplies_status: data.checked,
-                                      })}
-                            />
+                          <div style={{cursor: user.role === "teacher" ? 'pointer' : 'auto', padding: 11}}>
+                            {
+                              user.role === "teacher" ? (<Checkbox checked={student.supplies_status}
+                                                                   onClick={(e, data) => onHandleCheckbox({
+                                                                     studentStatusID: student.id,
+                                                                     supplies_status: data.checked,
+                                                                   })}
+                              />)
+                                :
+                                <MaybeCheckmark isComplete={student.supplies_status} />
+                            }
+
                           </div>
                         </Table.Cell>
                         <Table.Cell negative={!isComplete} positive={isComplete}>
@@ -295,7 +316,7 @@ const TeacherFieldTripDetailView = (
                               </span>
                           </div>
                         </Table.Cell>
-                        <Popup
+                        { user.role === "teacher" && <Popup
                           trigger={
                             <Table.Cell
                               collapsing
@@ -317,7 +338,7 @@ const TeacherFieldTripDetailView = (
                           }
                           on='click'
                           position='top center'
-                        />
+                        />}
                       </Table.Row>
                     )
                   })
@@ -345,23 +366,21 @@ const TeacherFieldTripDetailView = (
                 </Table.Row>
               </Table.Footer>
             </Table>
-
-            <AddChaperoneModal
-              error={error}
-              setError={setError}
-              isSuccessfullyAdded={isSuccessfullyAdded}
-              setIsSuccessfullyAdded={setIsSuccessfullyAdded}
-              setChaperones={setChaperones}
-              chaperones={chaperones}
-              setChaperonesToAssign={setChaperonesToAssign}
-              chaperonesToAssign={chaperonesToAssign}
-              trip={trip}
-              match={match}
-              user={user}
-            />
-          </>
-        )
-      }
+            { user.role === "teacher" &&
+              <AddChaperoneModal
+                error={error}
+                setError={setError}
+                isSuccessfullyAdded={isSuccessfullyAdded}
+                setIsSuccessfullyAdded={setIsSuccessfullyAdded}
+                setChaperones={setChaperones}
+                chaperones={chaperones}
+                setChaperonesToAssign={setChaperonesToAssign}
+                chaperonesToAssign={chaperonesToAssign}
+                trip={trip}
+                match={match}
+                user={user}
+              />
+            }
     </>
   );
 }
