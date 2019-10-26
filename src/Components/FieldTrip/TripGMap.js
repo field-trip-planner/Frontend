@@ -1,7 +1,8 @@
 import { functions, isEqual, omit } from 'lodash'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 function Map({ options, onMount, className, address, tripName }) {
+  const [isGeocodeSuccessful, setIsGeocodeSuccessful] = useState(false)
   const divProps = { ref: useRef(), className };
 
   useEffect(() => {
@@ -13,6 +14,7 @@ function Map({ options, onMount, className, address, tripName }) {
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
+          setIsGeocodeSuccessful(true);
           map.setCenter(results[0].geometry.location);
 
           const markerOptions = {
@@ -28,7 +30,8 @@ function Map({ options, onMount, className, address, tripName }) {
           onMount(markerOptions, infoWindowOptions);
           // console.log("Location address:", results[0])
         } else {
-          alert(`Geocode failed due to: ${status}`);
+          setIsGeocodeSuccessful(false);
+          console.log(`Geocode failed due to: ${status}`);
         }
       });
     };
@@ -40,7 +43,13 @@ function Map({ options, onMount, className, address, tripName }) {
 
   return (
     <div
-      style={{ height: 500, width: "100%", borderRadius: "0.5em" }}
+      style={{
+        height: 500,
+        width: "100%",
+        borderRadius: ".28571429rem",
+        borderTopLeftRadius: "unset",
+        borderBottomLeftRadius: "unset"
+      }}
       {...divProps}
     />
   )

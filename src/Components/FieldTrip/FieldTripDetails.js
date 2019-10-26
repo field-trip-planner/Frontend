@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useGlobal } from "reactn";
-import { Container, Divider, Grid, Header, Image } from "semantic-ui-react";
+import { Container, Divider, Grid, Header, Image, Segment } from "semantic-ui-react";
 
 import api from "../../api";
 import formatDate from "../../Utils/formatDate"
@@ -351,33 +351,36 @@ const FieldTripDetails = ({ match }) => {
         {trip.name && <Header>{trip.name.toUpperCase()}</Header>}
 
         <Divider style={{ marginBottom: "80px" }} />
+        <Segment>
+          <Grid>
+            <Grid.Row columns={2}
+                      style={{
+                        backgroundColor: "#F9FAFB",
+                        borderRadius: 4,
+                        padding: 'unset'
+                      }}
+            >
+              <Grid.Column className="wrapper-details">
+                <div className="trip-details-wrapper content-wrapper">
+                  <h2>Location: {trip.address}</h2>
+                  <h2>Date of Trip: {formatDate(trip.date)}</h2>
+                  <h2>Supplies: {trip.supplies}</h2>
+                  <h2>Cost: ${trip.cost}</h2>
+                </div>
+              </Grid.Column>
+
+              <Grid.Column className="wrapper-map">
+                  <TripGMap
+                    onMount={onMapMount}
+                    address={trip.address}
+                    tripName={trip.name}
+                  />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
 
         <Grid>
-          <Grid.Row columns={2}
-                    style={{
-                      backgroundColor: "#f9df6a17",
-                      borderRadius: 4,
-                      padding: 30
-                    }}
-          >
-            <Grid.Column className="wrapper-border">
-              <div className="trip-details-wrapper content-wrapper">
-                <h2>Location: {trip.address}</h2>
-                <h2>Date of Trip: {formatDate(trip.date)}</h2>
-                <h2>Supplies: {trip.supplies}</h2>
-                <h2>Cost: ${trip.cost}</h2>
-              </div>
-            </Grid.Column>
-
-            <Grid.Column className="wrapper-border">
-                <TripGMap
-                  onMount={onMapMount}
-                  address={trip.address}
-                  tripName={trip.name}
-                />
-            </Grid.Column>
-          </Grid.Row>
-
           <Grid.Row columns={1}>
             <Grid.Column>
               <div className="trip-summary-wrapper">
