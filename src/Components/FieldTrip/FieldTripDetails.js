@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useGlobal } from "reactn";
-import { Container, Divider, Grid, Header, Image, Segment } from "semantic-ui-react";
+import { Container, Divider, Grid, Header, Icon, Image, Segment } from "semantic-ui-react";
 
 import api from "../../api";
 import formatDate from "../../Utils/formatDate"
@@ -351,7 +351,7 @@ const FieldTripDetails = ({ match }) => {
         {trip.name && <Header>{trip.name.toUpperCase()}</Header>}
 
         <Divider style={{ marginBottom: "80px" }} />
-        <Segment>
+        <Segment raised>
           <Grid>
             <Grid.Row columns={2}
                       style={{
@@ -362,10 +362,48 @@ const FieldTripDetails = ({ match }) => {
             >
               <Grid.Column className="wrapper-details">
                 <div className="trip-details-wrapper content-wrapper">
-                  <h2>Location: {trip.address}</h2>
-                  <h2>Date of Trip: {formatDate(trip.date)}</h2>
-                  <h2>Supplies: {trip.supplies}</h2>
-                  <h2>Cost: ${trip.cost}</h2>
+                  <Header as='h2' style={{ display: "flex", marginBottom: 10 }}>
+                    <Icon name='map marker alternate' style={{color: "gray", marginRight: 20}} />
+                    <Header.Content style={{width: "100%"}}>
+                      Location
+                      <Header.Subheader>
+                        {trip.address}
+                      </Header.Subheader>
+                      <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                    </Header.Content>
+                  </Header>
+
+                  <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
+                    <Icon name='calendar outline' style={{color: "gray", marginRight: 20}} />
+                    <Header.Content style={{width: "100%"}}>
+                      Date
+                      <Header.Subheader>
+                        {formatDate(trip.date)}
+                      </Header.Subheader>
+                      <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                    </Header.Content>
+                  </Header>
+
+                  <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
+                    <Icon name='cut' style={{color: "gray", marginRight: 20}} />
+                    <Header.Content style={{width: "100%"}}>
+                      Supplies
+                      <Header.Subheader>
+                        {trip.supplies}
+                      </Header.Subheader>
+                      <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                    </Header.Content>
+                  </Header>
+
+                  <Header as='h2' style={{ display: "flex"}}>
+                    <Icon name='money bill alternate outline' style={{color: "gray", marginRight: 20}} />
+                    <Header.Content>
+                      Cost
+                      <Header.Subheader>
+                        ${trip.cost}
+                      </Header.Subheader>
+                    </Header.Content>
+                  </Header>
                 </div>
               </Grid.Column>
 
