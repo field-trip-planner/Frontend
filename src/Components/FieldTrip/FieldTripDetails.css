@@ -1,29 +1,24 @@
-.trip-details-wrapper {
-    /*max-width: 400px;*/
-    /*margin: 0 auto;*/
-}
-
-.wrapper-border {
-    /*border: 1px solid lightgray;*/
-    /*border-radius: 8px;*/
-    /*padding: unset*/
-}
-
-.wrapper-details {
-    margin: auto 0 !important;
-    padding: 50px !important;
-}
-
-.wrapper-map {
-    padding: unset !important;
-}
-
 .trip-summary-wrapper {
     margin-top: 40px;
     /*border: 1px solid lightgray;*/
 }
 
+.wrapper-details {
+    border-left: 10px solid #FFDA1B;
+}
+
+.trip-details-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 .content-wrapper {
     /*margin-top: 60px;*/
     /*padding: 30px;*/
+}
+
+.wrapper-map {
+    padding: unset !important;
 }

@@ -361,58 +361,96 @@ const FieldTripDetails = ({ match }) => {
                       }}
             >
               <Grid.Column className="wrapper-details">
-                <div className="trip-details-wrapper content-wrapper">
-                  <Header as='h2' style={{ display: "flex", marginBottom: 10 }}>
-                    <Icon name='map marker alternate' style={{color: "gray", marginRight: 20}} />
-                    <Header.Content style={{width: "100%"}}>
-                      Location
-                      <Header.Subheader>
-                        {trip.address}
-                      </Header.Subheader>
-                      <Divider style={{marginTop: 20, marginBottom: 10}}/>
-                    </Header.Content>
-                  </Header>
+                <div className="trip-details-wrapper">
+                  <div className="content-wrapper">
+                    <Header as='h2' style={{ display: "flex", marginBottom: 10 }}>
+                      <div>
+                        <Icon name='map marker alternate'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content style={{width: "100%"}}>
+                        Location
+                        <Header.Subheader>
+                          {trip.address}
+                        </Header.Subheader>
+                        <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                      </Header.Content>
+                    </Header>
 
-                  <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
-                    <Icon name='calendar outline' style={{color: "gray", marginRight: 20}} />
-                    <Header.Content style={{width: "100%"}}>
-                      Date
-                      <Header.Subheader>
-                        {formatDate(trip.date)}
-                      </Header.Subheader>
-                      <Divider style={{marginTop: 20, marginBottom: 10}}/>
-                    </Header.Content>
-                  </Header>
+                    <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
+                      <div>
+                        <Icon name='calendar outline'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content style={{width: "100%"}}>
+                        Date
+                        <Header.Subheader>
+                          {formatDate(trip.date)}
+                        </Header.Subheader>
+                        <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                      </Header.Content>
+                    </Header>
 
-                  <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
-                    <Icon name='cut' style={{color: "gray", marginRight: 20}} />
-                    <Header.Content style={{width: "100%"}}>
-                      Supplies
-                      <Header.Subheader>
-                        {trip.supplies}
-                      </Header.Subheader>
-                      <Divider style={{marginTop: 20, marginBottom: 10}}/>
-                    </Header.Content>
-                  </Header>
+                    <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
+                      <div>
+                        <Icon name='cut'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content style={{width: "100%"}}>
+                        Supplies
+                        <Header.Subheader>
+                          {trip.supplies}
+                        </Header.Subheader>
+                        <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                      </Header.Content>
+                    </Header>
 
-                  <Header as='h2' style={{ display: "flex"}}>
-                    <Icon name='money bill alternate outline' style={{color: "gray", marginRight: 20}} />
-                    <Header.Content>
-                      Cost
-                      <Header.Subheader>
-                        ${trip.cost}
-                      </Header.Subheader>
-                    </Header.Content>
-                  </Header>
+                    <Header as='h2' style={{ display: "flex"}}>
+                      <div>
+                        <Icon name='money bill alternate outline'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content>
+                        Cost
+                        <Header.Subheader>
+                          ${trip.cost}
+                        </Header.Subheader>
+                      </Header.Content>
+                    </Header>
+                  </div>
                 </div>
               </Grid.Column>
 
               <Grid.Column className="wrapper-map">
-                  <TripGMap
-                    onMount={onMapMount}
-                    address={trip.address}
-                    tripName={trip.name}
-                  />
+                <TripGMap
+                  onMount={onMapMount}
+                  address={trip.address}
+                  tripName={trip.name}
+                />
               </Grid.Column>
             </Grid.Row>
           </Grid>
