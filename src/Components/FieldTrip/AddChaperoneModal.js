@@ -108,7 +108,7 @@ const AddChaperoneModal = ({
             .catch(err => err);
         }}
         trigger={
-          <Button floated="right" primary>
+          <Button floated="right" style={{color: "black", backgroundColor: "#FFDA1B"}}>
             <Icon name="add" />
             Add Chaperone
           </Button>
