@@ -6,7 +6,6 @@ import api from "../../api";
 import MainMenu from "../layout/Menu.js";
 import TeacherFieldTripDetailView from "./TeacherFieldTripDetailView";
 import ChaperoneFieldTripDetailView from "./ChaperoneFieldTripDetailView";
-import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
 import "./FieldTripDetails.css";
 
@@ -371,8 +370,6 @@ const FieldTripDetails = ({ match }) => {
             <ChaperoneFieldTripDetailView trip={trip} />
           ) : null}
         </Grid>
-
-        <StudentsReadOnlyTable students={students} />
 
         <TeacherFieldTripDetailView
           setError={setError}
