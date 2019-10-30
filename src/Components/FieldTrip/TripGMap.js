@@ -1,5 +1,5 @@
-import { functions, isEqual, omit } from 'lodash'
-import React, { useEffect, useRef, useState } from 'react'
+import { functions, isEqual, omit } from 'lodash';
+import React, { useEffect, useRef, useState } from 'react';
 
 function Map({ options, onMount, className, address, tripName }) {
   const [isGeocodeSuccessful, setIsGeocodeSuccessful] = useState(false)
@@ -25,7 +25,8 @@ function Map({ options, onMount, className, address, tripName }) {
           };
 
           const infoWindowOptions = {
-            formatted_address: results[0].formatted_address
+            formatted_address: results[0].formatted_address,
+            tripName
           }
           onMount(markerOptions, infoWindowOptions);
           // console.log("Location address:", results[0])

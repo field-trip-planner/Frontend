@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useGlobal } from "reactn";
-import { Container, Divider, Grid, Header, Icon, Image, Segment } from "semantic-ui-react";
+import { Container, Divider, Grid, Header, Icon, Segment } from "semantic-ui-react";
 
 import api from "../../api";
 import formatDate from "../../Utils/formatDate"
@@ -332,11 +332,13 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   }
 
-  const onMapMount = (markerOptions, {formatted_address}) => {
+  const onMapMount = (markerOptions, {formatted_address, tripName}) => {
     const marker = new window.google.maps.Marker(markerOptions);
 
-    const infowindow = new window.google.maps.InfoWindow;
-    infowindow.setContent(formatted_address);
+    const infowindowHTML = '<div class="infowindow">' + tripName + '</div>' + '<div><a href="https://www.google.com/maps/place/'+ formatted_address + '"  target="_blank">View on Google Maps</a></div>';
+
+    const infowindow = new window.google.maps.InfoWindow();
+    infowindow.setContent(infowindowHTML);
 
     marker.addListener('mouseover', () => {
       infowindow.open(markerOptions.map, marker);
