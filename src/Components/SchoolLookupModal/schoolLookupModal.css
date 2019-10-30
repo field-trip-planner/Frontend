@@ -7,8 +7,10 @@
   margin-bottom: 40px;
 }
 
- .modalHeader {
-  text-align: center
+ .modalHeadersauce {
+  text-align: left;
+
+  color: blueviolet;
 }
 
 .schoolLookUpSearchBar{
