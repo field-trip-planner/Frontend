@@ -1,19 +1,32 @@
-.trip-details-wrapper {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.wrapper-border{
-    border: 1px solid lightgray;
-    border-radius: 8px;
-
-}
-
 .trip-summary-wrapper {
     margin-top: 40px;
     /*border: 1px solid lightgray;*/
 }
 
+.wrapper-details {
+    border-left: 10px solid #FFDA1B;
+}
+
+.trip-details-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 30px;
+}
+
 .content-wrapper {
-    margin-top: 60px;
+    /*margin-top: 60px;*/
+    /*padding: 30px;*/
+}
+
+.wrapper-map {
+    padding: unset !important;
+}
+
+.infowindow {
+    border-bottom: 1px solid rgb(204, 204, 204);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
