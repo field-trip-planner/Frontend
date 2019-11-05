@@ -159,7 +159,7 @@ const ParentRegistrationModal = props => {
                 />
               </Form.Group>
               
-              <Form.Button primary>Submit</Form.Button>
+              <Form.Button>Submit</Form.Button>
             </Form>
           </Container>
         </Modal.Content>

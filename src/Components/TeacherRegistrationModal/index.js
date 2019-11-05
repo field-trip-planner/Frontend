@@ -119,7 +119,7 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
             <Checkbox label='I agree to the Terms and Conditions' />
             </Form.Field> */}
 
-          <Form.Button primary>Submit</Form.Button>
+          <Form.Button>Submit</Form.Button>
         </Form>
       </Modal.Content>
     </Modal>
