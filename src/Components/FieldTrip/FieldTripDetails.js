@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useGlobal } from "reactn";
-import { Container, Divider, Grid, Header, Image } from "semantic-ui-react";
+import { Container, Divider, Grid, Header, Icon, Segment } from "semantic-ui-react";
 
 import api from "../../api";
+import formatDate from "../../Utils/formatDate"
 import MainMenu from "../layout/Menu.js";
 import TeacherFieldTripDetailView from "./TeacherFieldTripDetailView";
 import ChaperoneFieldTripDetailView from "./ChaperoneFieldTripDetailView";
-import StudentsReadOnlyTable from "./StudentsReadOnlyTable";
 import ChaperonesTable from "./ChaperonesTable";
+import TripGMap from './TripGMap';
 import "./FieldTripDetails.css";
 
 let perPage;
@@ -330,6 +331,19 @@ const FieldTripDetails = ({ match }) => {
       .catch(err => err);
   }
 
+  const onMapMount = (markerOptions, {formatted_address, tripName}) => {
+    const marker = new window.google.maps.Marker(markerOptions);
+
+    const infowindowHTML = '<div class="infowindow">' + tripName + '</div>' + '<div><a href="https://www.google.com/maps/place/'+ formatted_address + '"  target="_blank">View on Google Maps</a></div>';
+
+    const infowindow = new window.google.maps.InfoWindow();
+    infowindow.setContent(infowindowHTML);
+
+    marker.addListener('mouseover', () => {
+      infowindow.open(markerOptions.map, marker);
+    })
+  }
+
   return (
     <>
       {/* trip is our local state data */}
@@ -338,26 +352,112 @@ const FieldTripDetails = ({ match }) => {
         {trip.name && <Header>{trip.name.toUpperCase()}</Header>}
 
         <Divider style={{ marginBottom: "80px" }} />
+        <Segment raised>
+          <Grid>
+            <Grid.Row columns={2}
+                      style={{
+                        backgroundColor: "#F9FAFB",
+                        borderRadius: 4,
+                        padding: 'unset'
+                      }}
+            >
+              <Grid.Column className="wrapper-details">
+                <div className="trip-details-wrapper">
+                  <div className="content-wrapper">
+                    <Header as='h2' style={{ display: "flex", marginBottom: 10 }}>
+                      <div>
+                        <Icon name='map marker alternate'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content style={{width: "100%"}}>
+                        Location
+                        <Header.Subheader>
+                          {trip.address}
+                        </Header.Subheader>
+                        <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                      </Header.Content>
+                    </Header>
+
+                    <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
+                      <div>
+                        <Icon name='calendar outline'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content style={{width: "100%"}}>
+                        Date
+                        <Header.Subheader>
+                          {formatDate(trip.date)}
+                        </Header.Subheader>
+                        <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                      </Header.Content>
+                    </Header>
+
+                    <Header as='h2' style={{ display: "flex", marginBottom: 10}}>
+                      <div>
+                        <Icon name='cut'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content style={{width: "100%"}}>
+                        Supplies
+                        <Header.Subheader>
+                          {trip.supplies}
+                        </Header.Subheader>
+                        <Divider style={{marginTop: 20, marginBottom: 10}}/>
+                      </Header.Content>
+                    </Header>
+
+                    <Header as='h2' style={{ display: "flex"}}>
+                      <div>
+                        <Icon name='money bill alternate outline'
+                              style={{
+                                color: "#fff",
+                                backgroundColor: "#757575",
+                                marginRight: 20
+                              }}
+                              circular
+                        />
+                      </div>
+                      <Header.Content>
+                        Cost
+                        <Header.Subheader>
+                          ${trip.cost}
+                        </Header.Subheader>
+                      </Header.Content>
+                    </Header>
+                  </div>
+                </div>
+              </Grid.Column>
+
+              <Grid.Column className="wrapper-map">
+                <TripGMap
+                  onMount={onMapMount}
+                  address={trip.address}
+                  tripName={trip.name}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
 
         <Grid>
-          <Grid.Row columns={2}>
-            <Grid.Column className="wrapper-border">
-              <div className="trip-details-wrapper content-wrapper">
-                <h2>Location: {trip.address}</h2>
-                <h2>Date of Trip: {trip.date}</h2>
-                <h2>Supplies: {trip.supplies}</h2>
-                <h2>Cost: {trip.cost}</h2>
-              </div>
-            </Grid.Column>
-
-            <Grid.Column className="wrapper-border">
-              <div className="trip-details-wrapper">
-                <Image src="https://via.placeholder.com/400" />
-                <p>GOOGLE MAP HERE</p>
-              </div>
-            </Grid.Column>
-          </Grid.Row>
-
           <Grid.Row columns={1}>
             <Grid.Column>
               <div className="trip-summary-wrapper">
@@ -371,8 +471,6 @@ const FieldTripDetails = ({ match }) => {
             <ChaperoneFieldTripDetailView trip={trip} />
           ) : null}
         </Grid>
-
-        <StudentsReadOnlyTable students={students} />
 
         <TeacherFieldTripDetailView
           setError={setError}
