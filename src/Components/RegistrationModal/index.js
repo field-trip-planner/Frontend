@@ -17,7 +17,7 @@ const RegistrationModal = () => {
       className="modal"
       size="large"
       trigger={
-        <Button primary size="huge">
+        <Button size="huge">
           Get Started
           <Icon name="right arrow" />
         </Button>

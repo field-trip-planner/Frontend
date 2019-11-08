@@ -1,0 +1,7 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+@background: #FFDA1B;
+@textColor: #010204;
+@hoverColor: #010204;
+@hoverBackgroundColor: #E8C719;

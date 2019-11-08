@@ -5,6 +5,7 @@ import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as serviceWorker from "./serviceWorker";
 import GlobalState from "./GlobalState";
+import 'semantic-ui-less/semantic.less'
 
 // GlobalState();
 
