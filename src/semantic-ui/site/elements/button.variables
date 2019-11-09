@@ -3,5 +3,12 @@
 *******************************/
 @background: #FFDA1B;
 @textColor: #010204;
+
 @hoverColor: #010204;
 @hoverBackgroundColor: #E8C719;
+
+@downBackgroundColor: #010204;
+@downColor: #FFDA1B;
+
+@focusBackgroundColor: #FFDA1B;
+@focusColor: #010204; 

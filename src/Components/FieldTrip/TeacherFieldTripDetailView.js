@@ -92,7 +92,7 @@ const TeacherFieldTripDetailView = (
                 user.role === "teacher" &&
                 <Modal
                 trigger={
-                  <Button floated="right" style={{color: "black", backgroundColor: "#FFDA1B"}}>
+                  <Button floated="right">
                     <Icon name="add" />
                     Add Student
                   </Button>
