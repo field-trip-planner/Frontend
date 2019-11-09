@@ -20,7 +20,7 @@ function AppHeader() {
   return (
     <>
       <div>
-        <Menu borderless>
+        <Menu borderless fixed="top">
           <Menu.Item header>
             <Link to="/">
               <img className="logo" src="/favicon-16x16.png"/>
