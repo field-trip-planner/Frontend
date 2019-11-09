@@ -10,12 +10,12 @@ const RegistrationModal = () => {
   return (
     /*We want the open prop to have a false/neutral value before clicking on the trigger.
     Once the trigger is clicked the value on the open prop will switch to true and the
-    modal will open. Once we click on the button to close the modal the value on the 
+    modal will open. Once we click on the button to close the modal the value on the
     open prop will switch to false*/
 
     <Modal
       className="modal"
-      size="large"
+      size="tiny"
       trigger={
         <Button size="huge">
           Get Started

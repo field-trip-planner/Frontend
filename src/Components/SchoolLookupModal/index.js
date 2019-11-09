@@ -31,7 +31,7 @@ const SchoolLookUp = () => {
 
   return (
     <>
-      <Modal className="modal" size="large" trigger={<Button>Sign Up</Button>}>
+      <Modal className="modal" size="tiny" trigger={<Button>Sign Up</Button>}>
         <Modal.Header className="modalHeader">School Look Up</Modal.Header>
         <Modal.Content>
           <Container className="contentContainer" textAlign="center">

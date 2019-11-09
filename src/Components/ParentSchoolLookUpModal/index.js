@@ -29,7 +29,7 @@ const ParentalSchoolLookUpModal = () => {
 
     return(
         <>
-        <Modal size="large" trigger={<Button>Sign Up </Button>}> 
+        <Modal size="tiny" trigger={<Button>Sign Up </Button>}> 
             <Modal.Header>School Look Up</Modal.Header>
             <Modal.Content>
                 <Container fluid>
