@@ -83,13 +83,13 @@ const AddChaperoneModal = ({
     return (
       <Card.Content>
         <Icon.Group size="large">
-          <Icon  name="user" 
-          style={{
-            color: "#fff",
-            backgroundColor: "#757575",
-            marginRight: 20
-          }}
-          circular
+          <Icon name="add user"
+            style={{
+              color: "#fff",
+              backgroundColor: "#757575",
+              marginRight: 20,
+            }}
+            circular
           />
         </Icon.Group>
         <Button key={id} id={id} onClick={_handleAddChap}>
@@ -121,7 +121,7 @@ const AddChaperoneModal = ({
         }
         closeIcon
       >
-        <Modal.Header className="modalHeader">Add Chaperone!</Modal.Header>
+        <Modal.Header className="modalHeader">Add a Chaperone</Modal.Header>
         <Modal.Content>
           {isSuccessfullyAdded && (
             <Message positive>
