@@ -19,7 +19,7 @@ const MainMenu = props => {
     setTrips([]);
   };
   return (
-    <Menu>
+    <Menu fixed="top">
       <Menu.Item header>
         <Link to="/dashboard">
           <img className="logo" src="/favicon-16x16.png" />
