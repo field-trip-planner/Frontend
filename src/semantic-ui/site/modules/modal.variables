@@ -3,3 +3,4 @@
 *******************************/
 @headerColor: #010204;
 @headerBackground: #FAFBFF;
+@headerBorder: 4px solid #FFDA1B;

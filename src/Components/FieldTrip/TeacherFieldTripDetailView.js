@@ -161,7 +161,7 @@ const TeacherFieldTripDetailView = (
                         {`${parent.last_name}, ${parent.first_name}`}
                       </option>)}
                     </Form.Field>
-                    <Form.Button primary>Submit</Form.Button>
+                    <Form.Button>Submit</Form.Button>
                   </Form>
                 </Modal.Content>
               </Modal>
