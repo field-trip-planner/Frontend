@@ -88,7 +88,6 @@ const CreateTripModal = props => {
           trigger={
             <Button
               floated="right"
-              primary
               onClick={() => props.setOpen(!props.open)}
             >
               <Icon name="add" />
@@ -165,7 +164,7 @@ const CreateTripModal = props => {
                   name="file"
                   placeholder="Upload an Image"
                 />
-                <Form.Button primary loading={loading}>
+                <Form.Button loading={loading}>
                   Submit
                 </Form.Button>
               </Form>
