@@ -7,6 +7,8 @@ import TripItem from "./TripItem";
 import CreateTripModal from "../CreateTripModal/";
 import MainMenu from "../layout/Menu";
 
+import "./FieldTripList.css";
+
 const FieldTripList = props => {
   //  state, setter          // property in GlobalState
   const [trips, setTrips] = useGlobal("trips");
@@ -58,7 +60,7 @@ const FieldTripList = props => {
     <>
       <MainMenu />
       <Container>
-        <div>
+        <div className="search-create-trip-wrapper">
           <Input
             onChange={_handleSearch}
             size="large"
@@ -71,10 +73,10 @@ const FieldTripList = props => {
 
           <CreateTripModal size="small" setOpen={setOpen} open={open} />
         </div>
-
-        <Header>UPCOMING FIELD TRIPS</Header>
-
-        <Divider />
+        <div className="upcoming-title">
+          <Header>UPCOMING FIELD TRIPS</Header>
+          <Divider />
+        </div>
         {search === "" ? (
           <Card.Group itemsPerRow={3}>
             {trips.map(trip => (

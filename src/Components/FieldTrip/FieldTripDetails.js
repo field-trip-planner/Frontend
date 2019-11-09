@@ -349,7 +349,12 @@ const FieldTripDetails = ({ match }) => {
       {/* trip is our local state data */}
       <MainMenu />
       <Container style={{ marginTop: "60px" }}>
-        {trip.name && <Header>{trip.name.toUpperCase()}</Header>}
+        {
+          trip.name &&
+            <div className="trip-name-title">
+              <Header >{trip.name.toUpperCase()}</Header>
+            </div>
+        }
 
         <Divider style={{ marginBottom: "80px" }} />
         <Segment raised>
