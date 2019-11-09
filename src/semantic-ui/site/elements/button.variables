@@ -7,8 +7,8 @@
 @hoverColor: #010204;
 @hoverBackgroundColor: #E8C719;
 
-@downBackgroundColor: #010204;
-@downColor: #FFDA1B;
+@downBackgroundColor: #FFDA1B;
+@downColor: #010204;
 
 @focusBackgroundColor: #FFDA1B;
 @focusColor: #010204; 
