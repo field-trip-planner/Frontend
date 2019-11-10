@@ -1,9 +1,8 @@
-.contentContainer{
-  /*height: 300px;*/
-  /*padding-top: 90px;*/
+.contentContainer {
     height: 100%;
 }
-.contentContainer p{
+
+.contentContainer p {
   margin-top: 20px;
   margin-bottom: 40px;
 }
@@ -14,8 +13,27 @@
   color: blueviolet;
 }
 
-.schoolLookUpSearchBar{
+.schoolLookUpSearchBar {
   width: 50%
+}
+
+.modal-header-wrapper {
+    display: flex;
+}
+
+.flex-wrapper-arrow-left {
+    display: flex;
+    cursor: pointer;
+    width: 40%;
+}
+
+.flex-wrapper {
+    display: flex;
+    width: 50%;
+}
+
+.arrow-back-wrapper {
+    color: gray;
 }
 
 .modal {

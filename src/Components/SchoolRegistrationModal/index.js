@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import {
   Modal,
   Input,
-  Form
-} from "semantic-ui-react";
+  Form, Icon
+} from 'semantic-ui-react'
 import "./schoolRegistrationModal.css";
 import { useGlobal } from "reactn";
 import api from "../../api";
+import "../SchoolLookupModal/schoolLookupModal.css";
+
 
 const initialSchoolInfoState = {
   school_name: "",
@@ -17,7 +19,7 @@ const initialSchoolInfoState = {
   category: ""
 }
 
-const SchoolRegistration = () => {
+const SchoolRegistration = ({ setStepNumber, stepNumber }) => {
   const [school, setSchool] = useGlobal("school");
 
   const [schoolInfo, setSchoolInfo] = useState(initialSchoolInfoState);
@@ -48,7 +50,22 @@ const SchoolRegistration = () => {
 
   return (
       <>
-        <Modal.Header className="modalHeader">School Registration</Modal.Header>
+        <Modal.Header className="modalHeader">
+          <div className="modal-header-wrapper">
+            <div className="flex-wrapper-arrow-left">
+              <div onClick={() => setStepNumber(stepNumber - 1)}>
+                <Icon name="arrow left"/>
+                back
+              </div>
+            </div>
+
+            <div className="flex-wrapper">
+            <span>
+              School Registration
+            </span>
+            </div>
+          </div>
+        </Modal.Header>
         <Modal.Content>
           <Form className="schoolForm" onSubmit={onSchoolRegister}>
             <Form.Group widths="equal">

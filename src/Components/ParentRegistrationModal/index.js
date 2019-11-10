@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Container, Modal, Form, Message } from "semantic-ui-react";
+import { Container, Modal, Form, Message, Icon } from 'semantic-ui-react'
 import { useGlobal } from "reactn";
 import { withRouter } from "react-router-dom";
 import api from "../../api";
+
+import './parentRegistrationModal.css';
+import "../SchoolLookupModal/schoolLookupModal.css";
 
 const ParentRegistrationModal = props => {
   const [school, setSchool] = useGlobal("school");
@@ -90,7 +93,22 @@ const ParentRegistrationModal = props => {
   };
   return (
       <>
-        <Modal.Header className="modalHeader">Parent Registration</Modal.Header>
+        <Modal.Header className="modalHeader">
+          <div className="modal-header-wrapper">
+            <div className="flex-wrapper-arrow-left">
+              <div onClick={() => props.setStepNumber(props.stepNumber - 1)}>
+                <Icon name="arrow left"/>
+                back
+              </div>
+            </div>
+
+            <div className="flex-wrapper">
+            <span>
+              Parent Registration
+            </span>
+            </div>
+          </div>
+        </Modal.Header>
         <Modal.Content>
           {handleState.success && (
             <Message positive content={handleState.message} />
@@ -157,8 +175,9 @@ const ParentRegistrationModal = props => {
                   required
                 />
               </Form.Group>
-
-              <Form.Button>Submit</Form.Button>
+              <div className="register-parent-btn">
+                <Form.Button>Submit</Form.Button>
+              </div>
             </Form>
           </Container>
         </Modal.Content>

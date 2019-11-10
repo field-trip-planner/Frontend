@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useGlobal } from "reactn";
 import api from "../../api/index.js";
 import { withRouter } from "react-router-dom";
-import { Modal, Form, Input } from "semantic-ui-react";
+import { Modal, Form, Input, Icon } from 'semantic-ui-react'
 import "./teacherRegistration.css";
+import "../SchoolLookupModal/schoolLookupModal.css";
 
-const TeacherRegistrationForm = ({ history }) => {
+
+const TeacherRegistrationForm = ({ history, setStepNumber, stepNumber }) => {
   const [user, setUser] = useGlobal("user");
   const [school, setSchool] = useGlobal("school");
 
@@ -45,7 +47,22 @@ const TeacherRegistrationForm = ({ history }) => {
   };
   return (
     <>
-      <Modal.Header className="modalHeader">Teacher Registration</Modal.Header>
+      <Modal.Header className="modalHeader">
+        <div className="modal-header-wrapper">
+          <div className="flex-wrapper-arrow-left">
+            <div onClick={() => setStepNumber(stepNumber - 2)}>
+              <Icon name="arrow left"/>
+              back
+            </div>
+          </div>
+
+          <div className="flex-wrapper">
+            <span>
+              Teacher Registration
+            </span>
+          </div>
+        </div>
+      </Modal.Header>
       <Modal.Content>
         <Form onSubmit={handleSubmit}>
           <Form.Field>

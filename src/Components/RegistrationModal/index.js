@@ -27,6 +27,7 @@ const RegistrationModal = () => {
         return (
           <SchoolLookUpForTeacher
             setStepNumber={setStepNumber}
+            stepNumber={stepNumber}
           />
         )
       }
@@ -34,6 +35,7 @@ const RegistrationModal = () => {
         return (
           <SchoolRegistration
             setStepNumber={setStepNumber}
+            stepNumber={stepNumber}
           />
         )
       }
@@ -41,6 +43,7 @@ const RegistrationModal = () => {
         return (
           <TeacherRegistrationForm
             setStepNumber={setStepNumber}
+            stepNumber={stepNumber}
           />
         )
       }
@@ -59,6 +62,7 @@ const RegistrationModal = () => {
         return (
           <ParentalSchoolLookUp
             setStepNumber={setStepNumber}
+            stepNumber={stepNumber}
           />
         )
       }
@@ -66,6 +70,7 @@ const RegistrationModal = () => {
         return (
           <ParentRegistrationModal
             setStepNumber={setStepNumber}
+            stepNumber={stepNumber}
           />
         )
       }
@@ -80,7 +85,7 @@ const RegistrationModal = () => {
 
     <Modal
       className="modal"
-      size="tiny"
+      size="small"
       closeIcon
       trigger={
         <Button size="huge">

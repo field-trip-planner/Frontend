@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Container } from "semantic-ui-react";
+import { Button, Modal, Container, Icon } from "semantic-ui-react";
 import api from "../../api";
 import { useGlobal } from "reactn";
 import School from '../SVGs/School'
 import "./schoolLookupModal.css";
 
-const SchoolLookUpForTeacher = ({setStepNumber}) => {
+const SchoolLookUpForTeacher = ({ setStepNumber, stepNumber }) => {
   const [school, setSchool] = useGlobal("school");
   const [schools, setSchools] = useState([]);
 
@@ -30,7 +30,22 @@ const SchoolLookUpForTeacher = ({setStepNumber}) => {
 
   return (
     <>
-      <Modal.Header className="modalHeader">School Look Up</Modal.Header>
+      <Modal.Header className="modalHeader">
+        <div className="modal-header-wrapper">
+          <div className="flex-wrapper-arrow-left">
+            <div onClick={() => setStepNumber(stepNumber - 1)}>
+              <Icon name="arrow left"/>
+              back
+            </div>
+          </div>
+
+          <div className="flex-wrapper">
+            <span>
+              School Look Up
+            </span>
+          </div>
+        </div>
+      </Modal.Header>
       <Modal.Content className="school-modal-content">
         <Container className="contentContainer" textAlign="center">
           {/* <Input
