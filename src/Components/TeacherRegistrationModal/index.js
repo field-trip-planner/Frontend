@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useGlobal } from "reactn";
 import api from "../../api/index.js";
 import { withRouter } from "react-router-dom";
-import { Button, Checkbox, Modal, Form, Input } from "semantic-ui-react";
+import { Modal, Form, Input } from "semantic-ui-react";
 import "./teacherRegistration.css";
 
-const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
+const TeacherRegistrationForm = ({ history }) => {
   const [user, setUser] = useGlobal("user");
   const [school, setSchool] = useGlobal("school");
-  
+
   const [teacherCreds, setTeacherCreds] = useState({
     first_name: "",
     last_name: "",
@@ -18,11 +18,6 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     school_id: "",
     phone_number: "",
     googleId: null
-  });
-
-  const [info, setInfo] = useState({
-    email: "",
-    password: ""
   });
 
   const handleChange = e => {
@@ -49,17 +44,7 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     }
   };
   return (
-    <Modal
-      size="small"
-      trigger={
-        taco === "school" ? (
-          <Button onClick={onSchoolRegister}>Register School</Button>
-        ) : (
-          <Button>Register</Button>
-        )
-      }
-      closeIcon
-    >
+    <>
       <Modal.Header className="modalHeader">Teacher Registration</Modal.Header>
       <Modal.Content>
         <Form onSubmit={handleSubmit}>
@@ -122,7 +107,7 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
           <Form.Button>Submit</Form.Button>
         </Form>
       </Modal.Content>
-    </Modal>
+    </>
   );
 };
 

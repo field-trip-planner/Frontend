@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Container, Input, Dropdown } from "semantic-ui-react";
+import { Button, Modal, Container } from "semantic-ui-react";
 import api from "../../api";
 import { useGlobal } from "reactn";
-import SchoolRegistrationModal from "../SchoolRegistrationModal";
+import School from '../SVGs/School'
 import "./schoolLookupModal.css";
-import TeacherRegistrationForm from "../TeacherRegistrationModal/index.js";
 
-const SchoolLookUp = () => {
+const SchoolLookUpForTeacher = ({setStepNumber}) => {
   const [school, setSchool] = useGlobal("school");
   const [schools, setSchools] = useState([]);
 
@@ -16,7 +15,7 @@ const SchoolLookUp = () => {
       .get("schools")
       .then(({ data }) => {
         setSchools(data);
-        console.log("DATA", data)
+        // console.log("DATA", data)
       })
       .catch(err => {
         console.log(err);
@@ -26,45 +25,69 @@ const SchoolLookUp = () => {
   const handleChange = e => {
     e.preventDefault();
     setSchool(e.target.value);
-    console.log("SET SCHOOL ID UPON LOOKUP", e.target.value)
+    // console.log("SET SCHOOL ID UPON LOOKUP", e.target.value)
   };
 
   return (
     <>
-      <Modal className="modal" size="tiny" trigger={<Button>Sign Up</Button>}>
-        <Modal.Header className="modalHeader">School Look Up</Modal.Header>
-        <Modal.Content>
-          <Container className="contentContainer" textAlign="center">
-            {/* <Input
-              className="schoolLookUpSearchBar"
-              size="large"
-              icon="building"
-              iconPosition="left"
-              placeholder="Search Schools..."
-            /> */}
+      <Modal.Header className="modalHeader">School Look Up</Modal.Header>
+      <Modal.Content className="school-modal-content">
+        <Container className="contentContainer" textAlign="center">
+          {/* <Input
+            className="schoolLookUpSearchBar"
+            size="large"
+            icon="building"
+            iconPosition="left"
+            placeholder="Search Schools..."
+          /> */}
+          <div className="flex-container">
+            <div className="school-lookup-wrapper">
 
-            <select name="school" id="" onChange={handleChange}>
-              <option value="default">Choose your school</option>
-              {schools.map(school => {
-                return (
-                  <option key={school.id} value={school.id}>
-                    {school.school_name}
-                  </option>
-                );
-              })}
-            </select>
+              <div className="school-icon">
+                <School />
+              </div>
 
-            <p>
-              Don't see your school?
-              <SchoolRegistrationModal />
-            </p>
+              <select name="school" id="" onChange={handleChange}>
+                <option value="default">Choose your school</option>
+                {schools.map(school => {
+                  return (
+                    <option key={school.id} value={school.id}>
+                      {school.school_name}
+                    </option>
+                  );
+                })}
+              </select>
+              <div className="school-teacher-reg-btn">
+                <Button onClick={() => setStepNumber(4)}>Register</Button>
+              </div>
 
-            <TeacherRegistrationForm />
-          </Container>
-        </Modal.Content>
-      </Modal>
+              <div className="school-redirect-wrapper">
+                <p>
+                  <span className="school-redirect-text">
+                    Don't see your school?
+                  </span>
+                  <Button className="school-redirect-btn"
+                          size="mini"
+                          style={{
+                            backgroundColor: "transparent",
+                            textDecoration: "underline",
+                            fontSize: 14,
+                            padding: "unset",
+                            fontWeight: "unset",
+                            fontStyle: "italic"
+                          }}
+                          onClick={() => setStepNumber(3)}
+                  >
+                    Register your school.
+                  </Button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Modal.Content>
     </>
   );
 };
 
-export default SchoolLookUp;
+export default SchoolLookUpForTeacher;

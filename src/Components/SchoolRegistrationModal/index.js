@@ -1,87 +1,56 @@
 import React, { useState } from "react";
 import {
   Modal,
-  Container,
-  Button,
   Input,
-  Form,
-  Dropdown
+  Form
 } from "semantic-ui-react";
 import "./schoolRegistrationModal.css";
-import TeacherRegistrationForm from "../TeacherRegistrationModal/index.js";
 import { useGlobal } from "reactn";
 import api from "../../api";
 
-// const gradeLevels = [
-//
-//   {
-//     key: 'Elementary School',
-//     text: 'Elementary School',
-//     value: 'Elementary School',
-//   },
-//   {
-//     key: 'Middle School',
-//     text: 'Middle School',
-//     value: 'Middle School',
-//   },
-//   {
-//     key: 'High School',
-//     text: 'High School',
-//     value: 'High School',
-//   },
-//
-// ]
+const initialSchoolInfoState = {
+  school_name: "",
+  address: "",
+  city: "",
+  state: "",
+  zip_code: "",
+  category: ""
+}
 
 const SchoolRegistration = () => {
   const [school, setSchool] = useGlobal("school");
 
-  const [schoolInfo, setSchoolInfo] = useState({
-    school_name: "",
-    address: "",
-    city: "",
-    state: "",
-    zip_code: "",
-    category: ""
-  });
+  const [schoolInfo, setSchoolInfo] = useState(initialSchoolInfoState);
 
   const _handleChange = e => {
     const { name, value } = e.target;
-
-    console.log("SElected:::", value);
 
     setSchoolInfo({
       ...schoolInfo,
       [name]: value
     });
-
-    console.log("schoolINFO:", schoolInfo);
+    // console.log("schoolINFO:", schoolInfo);
   };
 
   const onSchoolRegister = async e => {
     e.preventDefault();
-    console.log("WORKING?????");
 
     try {
       const school = await api().post("schools", schoolInfo);
-
-      console.log("School ID::", school.data.id);
-
+      // console.log("School ID::", school.data.id);
       setSchool(school.data.id);
+
+      setSchoolInfo(initialSchoolInfoState);
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <>
-      <Modal
-        className="modal"
-        size="large"
-        trigger={<span className="schoolRegRedirect">Click here</span>}
-      >
+      <>
         <Modal.Header className="modalHeader">School Registration</Modal.Header>
         <Modal.Content>
-          <Form className="schoolForm">
+          <Form className="schoolForm" onSubmit={onSchoolRegister}>
             <Form.Group widths="equal">
               <Form.Field
                 control={Input}
@@ -142,17 +111,12 @@ const SchoolRegistration = () => {
                 onChange={_handleChange}
               />
             </Form.Group>
+            <div className="register-school-button">
+              <Form.Button>Register School</Form.Button>
+            </div>
           </Form>
-
-          {/*<Button onClick={onSchoolRegister}> hello </Button>*/}
-
-          <TeacherRegistrationForm
-            onSchoolRegister={onSchoolRegister}
-            taco={"school"}
-          />
         </Modal.Content>
-      </Modal>
-    </>
+      </>
   );
 };
 

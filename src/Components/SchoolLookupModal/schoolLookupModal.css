@@ -1,6 +1,7 @@
 .contentContainer{
-  height: 300px;
-  padding-top: 90px;
+  /*height: 300px;*/
+  /*padding-top: 90px;*/
+    height: 100%;
 }
 .contentContainer p{
   margin-top: 20px;
@@ -15,8 +16,57 @@
 
 .schoolLookUpSearchBar{
   width: 50%
-} 
+}
 
 .modal {
   height: 500px;
+}
+
+.school-icon {
+    /*margin-bottom: 40px;*/
+    margin: 0 auto;
+    width: 100px;
+}
+
+.flex-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-container-parent {
+    height: 80%;
+}
+
+.school-modal-content {
+    height: calc(100% - 64px)
+}
+
+.school-lookup-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.school-teacher-reg-btn {
+    margin-top: 20px;
+}
+
+.school-parent-reg-btn {
+    margin-top: 40px;
+}
+
+.school-redirect-wrapper {
+    margin-top: 40px;
+}
+
+.school-redirect-text {
+    margin-right: 8px;
+    font-style: italic;
+}
+
+.school-redirect-btn {
+
 }

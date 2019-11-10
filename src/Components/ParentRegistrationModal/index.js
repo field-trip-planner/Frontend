@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Modal, Form, Message } from "semantic-ui-react";
+import { Container, Modal, Form, Message } from "semantic-ui-react";
 import { useGlobal } from "reactn";
 import { withRouter } from "react-router-dom";
 import api from "../../api";
@@ -43,7 +43,7 @@ const ParentRegistrationModal = props => {
       [name]: value
     });
   };
- 
+
   const _handleSubmit = async () => {
     const newUser = { ...info }; //
     delete newUser.confirm_password;
@@ -89,8 +89,7 @@ const ParentRegistrationModal = props => {
     }
   };
   return (
-    <>
-      <Modal trigger={<Button>Register</Button>}>
+      <>
         <Modal.Header className="modalHeader">Parent Registration</Modal.Header>
         <Modal.Content>
           {handleState.success && (
@@ -158,13 +157,12 @@ const ParentRegistrationModal = props => {
                   required
                 />
               </Form.Group>
-              
+
               <Form.Button>Submit</Form.Button>
             </Form>
           </Container>
         </Modal.Content>
-      </Modal>
-    </>
+      </>
   );
 };
 
