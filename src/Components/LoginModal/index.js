@@ -48,7 +48,7 @@ const LoginModal = props => {
           <Container className="login-container">
             <Grid textAlign="center" verticalAlign="middle">
               <Grid.Column style={{ maxWidth: 450 }}>
-                <Header as="h2" color="teal" textAlign="center">
+                <Header as="h2" textAlign="center">
                   Log-in to your account
                 </Header>
                 <Form onSubmit={_handleSubmit} size="large">
@@ -71,7 +71,7 @@ const LoginModal = props => {
                       onChange={_handleChange}
                     />
 
-                    <Button color="teal" fluid size="large">
+                    <Button fluid size="large">
                       Login
                     </Button>
 

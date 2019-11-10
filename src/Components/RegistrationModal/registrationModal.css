@@ -3,7 +3,7 @@
 }
 
 .modalHeader {
-  text-align: center
+  text-align: center;
 }
 
 .gridContainer{
@@ -13,4 +13,13 @@
 .gridColumn{
   text-align: center;
   margin: 100px 0px 100px 0px;
+}
+
+.svg-icon-wrapper {
+  margin: 0 auto;
+  width: 100px;
+}
+
+.grid-column-border {
+  border-left: 2px solid #d3d3d35c;
 }

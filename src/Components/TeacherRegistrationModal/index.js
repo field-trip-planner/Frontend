@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { useGlobal } from "reactn";
 import api from "../../api/index.js";
 import { withRouter } from "react-router-dom";
-import { Button, Checkbox, Modal, Form, Input } from "semantic-ui-react";
+import { Modal, Form, Input, Icon } from 'semantic-ui-react'
 import "./teacherRegistration.css";
+import "../SchoolLookupModal/schoolLookupModal.css";
 
-const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
+
+const TeacherRegistrationForm = ({ history, setStepNumber, stepNumber }) => {
   const [user, setUser] = useGlobal("user");
   const [school, setSchool] = useGlobal("school");
-  
+
   const [teacherCreds, setTeacherCreds] = useState({
     first_name: "",
     last_name: "",
@@ -18,11 +20,6 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     school_id: "",
     phone_number: "",
     googleId: null
-  });
-
-  const [info, setInfo] = useState({
-    email: "",
-    password: ""
   });
 
   const handleChange = e => {
@@ -49,18 +46,23 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
     }
   };
   return (
-    <Modal
-      size="small"
-      trigger={
-        taco === "school" ? (
-          <Button onClick={onSchoolRegister}>Register School</Button>
-        ) : (
-          <Button>Register</Button>
-        )
-      }
-      closeIcon
-    >
-      <Modal.Header className="modalHeader">Teacher Registration</Modal.Header>
+    <>
+      <Modal.Header className="modalHeader">
+        <div className="modal-header-wrapper">
+          <div className="flex-wrapper-arrow-left">
+            <div onClick={() => setStepNumber(stepNumber - 2)}>
+              <Icon name="arrow left"/>
+              back
+            </div>
+          </div>
+
+          <div className="flex-wrapper">
+            <span>
+              Teacher Registration
+            </span>
+          </div>
+        </div>
+      </Modal.Header>
       <Modal.Content>
         <Form onSubmit={handleSubmit}>
           <Form.Field>
@@ -119,10 +121,10 @@ const TeacherRegistrationForm = ({ taco, onSchoolRegister, history }) => {
             <Checkbox label='I agree to the Terms and Conditions' />
             </Form.Field> */}
 
-          <Form.Button primary>Submit</Form.Button>
+          <Form.Button>Submit</Form.Button>
         </Form>
       </Modal.Content>
-    </Modal>
+    </>
   );
 };
 
