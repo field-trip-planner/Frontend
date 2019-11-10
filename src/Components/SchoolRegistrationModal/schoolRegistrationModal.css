@@ -8,16 +8,20 @@
 }
 
 .schoolRegRedirect{
-  color: rgb(150,0,150);
-  margin-left: 10px;
+  /*color: rgb(150,0,150);*/
+  /*margin-left: 10px;*/
 }
 
 .schoolRegRedirect:hover{
   cursor: pointer;
-  color: rgb(250, 0, 250);
+  /*color: rgb(250, 0, 250);*/
 }
 
 .schoolForm{
   height: 100%;
 
+}
+
+.register-school-button {
+  margin-top: 40px;
 }
