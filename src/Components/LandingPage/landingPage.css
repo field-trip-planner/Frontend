@@ -30,8 +30,30 @@
 .content-text {
   font-size: 30px;
   font-weight: bold;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .content-text {
+    font-size: 24px;
+    padding-right: 10px;
+    padding-left: 10px;
+    text-align: center;
+  }
 }
 
 .anchor-tag {
   color: rgba(0, 0, 0, 0.87);
+}
+
+/*
+The styling code below overrides semanticUI. This is necessary
+as we needed to properly stack in reverse certain sections
+of the landing page (for mobile).
+ */
+
+@media (max-width: 767px) {
+  .ui.reverseStackable > .row.landing-page-column {
+    flex-direction: column-reverse;
+  }
 }
