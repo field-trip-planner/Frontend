@@ -6,6 +6,7 @@ import {
   Divider,
   Segment,
   List,
+  Icon,
 
 } from 'semantic-ui-react';
 
@@ -19,7 +20,7 @@ function Footer() {
 
 
         <Divider inverted section />
-        <Image centered size='mini' src='https://via.placeholder.com/25' />
+        <Icon name="bus" style={{display: "block", margin: '0 auto'}}/>
         <List horizontal inverted divided link size='small'>
           <List.Item as='a' href='#'>
             Contact Us

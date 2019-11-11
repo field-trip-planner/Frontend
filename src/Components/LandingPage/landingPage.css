@@ -17,3 +17,21 @@
 .siblingFade:hover span:not(:hover) {
   opacity: 0.5;
 }
+
+.landing-page-img-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.content-text-wrapper {
+  margin: auto !important;
+}
+
+.content-text {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.anchor-tag {
+  color: rgba(0, 0, 0, 0.87);
+}
