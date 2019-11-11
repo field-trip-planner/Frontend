@@ -11,7 +11,7 @@ const MainContent = () => {
   return (
     <>
       <Container style={{ marginTop: "70px", marginBottom: "70px" }}>
-        <Grid stackable reversed="reverseStackable">
+        <Grid stackable>
           <Grid.Row columns={2} className="landing-page-column">
             <Grid.Column>
               <div id="sign-up-gif" className="landing-page-img-wrapper">
@@ -55,7 +55,7 @@ const MainContent = () => {
       </Container>
 
       <Container>
-        <Grid stackable reversed="reverseStackable">
+        <Grid stackable>
           <Grid.Row columns={2} className="landing-page-column">
             <Grid.Column>
               <div className="landing-page-img-wrapper">

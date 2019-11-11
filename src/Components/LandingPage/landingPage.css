@@ -53,7 +53,7 @@ of the landing page (for mobile).
  */
 
 @media (max-width: 767px) {
-  .ui.reverseStackable > .row.landing-page-column {
+  .ui.grid > .row.landing-page-column {
     flex-direction: column-reverse;
   }
 }
