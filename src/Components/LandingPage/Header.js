@@ -15,7 +15,7 @@ function AppHeader() {
         <Menu borderless fixed="top">
           <Menu.Item header>
             <Link to="/">
-              <img className="logo" src="/favicon-16x16.png"/>
+              <img alt="bus favicon" className="logo" src="/favicon-16x16.png"/>
               <span className="logo-text">MyFieldTripp</span>
             </Link>
           </Menu.Item>

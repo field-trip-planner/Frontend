@@ -11,8 +11,8 @@ const MainContent = () => {
   return (
     <>
       <Container style={{ marginTop: "70px", marginBottom: "70px" }}>
-        <Grid>
-          <Grid.Row columns={2}>
+        <Grid stackable>
+          <Grid.Row columns={2} className="landing-page-column">
             <Grid.Column>
               <div id="sign-up-gif" className="landing-page-img-wrapper">
                 <Image src={signUpGif} />
@@ -33,7 +33,7 @@ const MainContent = () => {
       </Container>
 
       <Container>
-        <Grid>
+        <Grid stackable>
           <Grid.Row columns={2}>
             <Grid.Column className="content-text-wrapper">
               <div className="landing-page-img-wrapper">
@@ -55,8 +55,8 @@ const MainContent = () => {
       </Container>
 
       <Container>
-        <Grid>
-          <Grid.Row columns={2}>
+        <Grid stackable>
+          <Grid.Row columns={2} className="landing-page-column">
             <Grid.Column>
               <div className="landing-page-img-wrapper">
                 <Image src={studentTableGif} />
@@ -65,7 +65,7 @@ const MainContent = () => {
 
             <Grid.Column className="content-text-wrapper">
               <div className="landing-page-img-wrapper">
-                <p className="content-text">Keeping track of your students' statuses will no longer be a burden with this sortable and searchable table</p>
+                <p className="content-text">Keeping track of students' statuses will no longer be a burden with this sortable and searchable table</p>
               </div>
             </Grid.Column>
           </Grid.Row>
